@@ -16,6 +16,13 @@
   -->
 
 <resources>
-    <string name="app_name">HARServiceLib</string>
-    <integer name="harlib_version">10000</integer>
+  <string name="app_name">HARServiceLib</string>
+  <string name="installed_message">Open Activity Recognition Service is not installed. Install it with Google Play Store</string>
+  <integer name="harlib_version">10000</integer>
+  <string name="activity_recognition_perm_label">Requires access to wearable sensor/activity data</string>
+  <string name="activity_recognition_perm_desc">Allows the app to access data from wearable sensors,
+    such as heart rate monitors. Can receive periodic updates on physical activity levels.</string>
+  <string name="activity_collection_perm_label">Requires access and send wearable sensor/activity data</string>
+  <string name="activity_collection_perm_desc">Allows the app to access data from wearable sensors,
+    such as heart rate monitors. Can send periodic updates on physical activity levels.</string>
 </resources>

@@ -21,13 +21,18 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.ResolveInfo;
+import android.content.pm.ServiceInfo;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.harservice.android.api.ActivityRecognitionApi;
 import org.harservice.android.api.ConnectionApi;
 import org.harservice.android.common.IActivityRecognitionManager;
+
+import java.util.List;
 
 /**
  * The main entry point for Activity Recognition Service integration
@@ -41,14 +46,38 @@ public class ActivityRecognitionClient implements ConnectionApi {
     private boolean connected = false;
     private boolean connecting = false;
     private ActivityRecognitionManager apiManager = null;
+    private ComponentName componentName = null;
+
     public ActivityRecognitionClient(Context context) {
-        this.context = context;
+        this.context = context.getApplicationContext();
+
+        checkInstalledService();
+    }
+
+    private boolean checkInstalledService() {
+        Intent implicit = new Intent(IActivityRecognitionManager.class.getName());
+        List<ResolveInfo> matches = this.context.getPackageManager()
+                .queryIntentServices(implicit, 0);
+        if (matches.size() == 0) {
+            Toast.makeText(this.context, R.string.installed_message, Toast.LENGTH_SHORT).show();
+            // TODO: Lanzar a google play store
+            return false;
+        }
+        else {
+            ServiceInfo svcInfo = matches.get(0).serviceInfo;
+            componentName = new ComponentName(svcInfo.applicationInfo.packageName, svcInfo.name);
+            return true;
+        }
     }
 
     @Override
     public void connect() {
-        if (!this.context.bindService(new Intent(IActivityRecognitionManager.class.getName()),
-                connection, Context.BIND_AUTO_CREATE)) {
+        if (componentName == null && !checkInstalledService()) {
+            return;
+        }
+        Intent explicit = new Intent(IActivityRecognitionManager.class.getName());
+        explicit.setComponent(componentName);
+        if (!this.context.bindService(explicit, connection, Context.BIND_AUTO_CREATE)) {
             this.connected = false;
             this.connecting = false;
             Log.w(TAG, "Failed to bind service");

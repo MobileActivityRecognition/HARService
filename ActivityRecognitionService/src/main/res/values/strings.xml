@@ -17,10 +17,4 @@
 
 <resources>
   <string name="app_name">ActivityRecognitionService</string>
-  <string name="activity_recognition_perm_label">Requires access to wearable sensor/activity data</string>
-  <string name="activity_recognition_perm_desc">Allows the app to access data from wearable sensors,
-    such as heart rate monitors. Can receive periodic updates on physical activity levels.</string>
-  <string name="activity_collection_perm_label">Requires access and send wearable sensor/activity data</string>
-  <string name="activity_collection_perm_desc">Allows the app to access data from wearable sensors,
-    such as heart rate monitors. Can send periodic updates on physical activity levels.</string>
 </resources>
