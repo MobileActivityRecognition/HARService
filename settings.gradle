@@ -1,1 +1,1 @@
-include ':ActivityRecognitionLib', ':ActivityRecognitionService'
+include ':ActivityRecognitionLib', ':ActivityRecognitionService', ':ActivityRecognitionSurvey'

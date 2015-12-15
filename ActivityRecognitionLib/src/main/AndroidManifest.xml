@@ -2,10 +2,10 @@
     package="org.harservice.android.client">
     <permission android:name="org.harservice.android.permission.ACTIVITY_RECOGNITION"
         android:label="@string/activity_recognition_perm_label"
-        android:protectionLevel="normal" android:permissionGroup="android.permission-group.PERSONAL_INFO"
+        android:protectionLevel="signature" android:permissionGroup="android.permission-group.PERSONAL_INFO"
         android:description="@string/activity_recognition_perm_desc"/>
     <permission android:name="org.harservice.android.permission.ACTIVITY_RECOGNITION_DATA"
         android:label="@string/activity_collection_perm_label"
-        android:protectionLevel="normal" android:permissionGroup="android.permission-group.PERSONAL_INFO"
+        android:protectionLevel="signature" android:permissionGroup="android.permission-group.PERSONAL_INFO"
         android:description="@string/activity_collection_perm_desc"/>
 </manifest>

@@ -15,12 +15,14 @@
  * limitations under the License.
  */
 
-package org.harservice.android.server;
+package org.harservice.android.utils;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
+import org.harservice.android.server.ActivityRecognitionService;
 
 /**
  * Boot receiver

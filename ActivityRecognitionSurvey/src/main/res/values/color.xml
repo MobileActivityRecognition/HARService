@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ HARService: Activity Recognition Service
+  ~ Copyright (C) 2015 agimenez
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~           http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <color name="card_action_inverted">@android:color/white</color>
+
+    <color name="card_content_textcolor">#444</color>
+
+    <color name="card_action_bg">#DDD</color>
+    <color name="card_action_item_bg">#F4F4F4</color>
+
+    <!-- Neutral Actions -->
+    <color name="card_action_focused">#FFE3F4FC</color>
+    <color name="card_action">#FF47B4EA</color>
+    <color name="card_action_ripple">#CC47B4EA</color>
+
+    <!-- Negative Actions -->
+    <color name="card_action_negative_focused">#FFFBCBCA</color>
+    <color name="card_action_negative">#FFF64940</color>
+    <color name="card_action_negative_ripple">#CCF64940</color>
+
+    <!-- Positive Actions -->
+    <color name="card_action_positive_focused">#FFE4F0AF</color>
+    <color name="card_action_positive">#FFA0CC00</color>
+    <color name="card_action_positive_ripple">#CCA0CC00</color>
+</resources>
