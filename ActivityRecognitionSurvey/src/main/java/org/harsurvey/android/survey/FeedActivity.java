@@ -16,17 +16,21 @@
  */
 
 package org.harsurvey.android.survey;
-
-import android.app.FragmentManager;
+;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 
 import org.harsurvey.android.cards.CardStream;
 import org.harsurvey.android.cards.CardStreamFragment;
+import org.harsurvey.android.cards.OnCardClickListener;
+import org.harsurvey.android.data.HumanActivityData;
+
+import java.util.List;
 
 /**
  * Show CardView Feed activity
  */
-public class FeedActivity extends BaseActivity implements CardStream {
+public class FeedActivity extends BaseActivity implements CardStream, OnCardClickListener {
     private CardStreamFragment cardStreamFragment;
 
     @Override
@@ -35,7 +39,7 @@ public class FeedActivity extends BaseActivity implements CardStream {
 
         setContentView(R.layout.feed_activity);
 
-        FragmentManager fm = getFragmentManager();
+        FragmentManager fm = getSupportFragmentManager();
         FeedActivityFragment fragment = (FeedActivityFragment)
                 fm.findFragmentByTag(FeedActivityFragment.TAG);
 
@@ -54,5 +58,14 @@ public class FeedActivity extends BaseActivity implements CardStream {
                     getSupportFragmentManager().findFragmentById(R.id.fragment_cardstream);
         }
         return cardStreamFragment;
+    }
+
+    public List<HumanActivityData> getUpdates() {
+        return app.getActivitiesUpdates();
+    }
+
+    @Override
+    public void onCardClick(int id, String tag) {
+
     }
 }

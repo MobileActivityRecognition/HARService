@@ -18,6 +18,7 @@
 package org.harsurvey.android.cards;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -157,7 +158,7 @@ public class Card {
         }
 
         public Card build(Activity activity) {
-            LayoutInflater inflater = activity.getLayoutInflater();
+            LayoutInflater inflater = LayoutInflater.from(activity);
             // Inflating the card.
             ViewGroup cardView = (ViewGroup) inflater.inflate(card.layoutId,
                     (ViewGroup) activity.findViewById(R.id.card_stream), false);
@@ -179,7 +180,6 @@ public class Card {
             } else if (viewDesc != null) {
                 cardView.findViewById(R.id.card_content).setVisibility(View.GONE);
             }
-
 
             ViewGroup actionArea = (ViewGroup) cardView.findViewById(R.id.card_actionarea);
 

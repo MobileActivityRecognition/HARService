@@ -17,26 +17,49 @@
 
 package org.harsurvey.android.survey;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
+import android.view.ViewGroup;
 
 import org.harsurvey.android.cards.Card;
 import org.harsurvey.android.cards.CardStreamFragment;
+import org.harsurvey.android.cards.DetectedActivitiesAdapter;
 import org.harsurvey.android.cards.OnCardClickListener;
+import org.harsurvey.android.data.HumanActivityData;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Card Stream Fragment
  */
-public class FeedActivityFragment extends Fragment implements OnCardClickListener {
-    public static final String TAG = FeedActivity.class.getSimpleName();
-    private CardStreamFragment cards;
+public class FeedActivityFragment extends Fragment {
+    public static final String TAG = FeedActivityFragment.class.getSimpleName();
+    private FeedActivity activity;
 
     @Override
     public void onResume() {
         super.onResume();
 
-        CardStreamFragment stream = getCardStream();
+        activity = (FeedActivity) getActivity();
+        CardStreamFragment stream = activity.getCardStream();
+        FeedActivity activity = (FeedActivity) getActivity();
+        List<HumanActivityData> activities = new ArrayList<>();
         if (stream.getCardCount() < 1) {
-            initializeCards();
+            activities = activity.getUpdates();
+            initializeCards(activities);
+        }
+    }
+
+    private void initializeCards(List<HumanActivityData> activities) {
+        for (HumanActivityData ha: activities) {
+            activity.getCardStream().addCard(new Card.Builder(activity, "intro")
+                    .setTitle(ha.activity.toString())
+                    .setDescription(String.valueOf(ha.confidence))
+                    .addAction("OK", 0, Card.ACTION_POSITIVE)
+                    .addAction("NO OK", 1, Card.ACTION_NEGATIVE)
+                    .build(this.activity)
+            );
         }
     }
 
@@ -46,24 +69,4 @@ public class FeedActivityFragment extends Fragment implements OnCardClickListene
         // TODO: Listeners
     }
 
-    private void initializeCards() {
-        Card c = new Card.Builder(this, "intro")
-                .setTitle(getString(R.string.intro_title))
-                .setDescription(getString(R.string.intro_message))
-                .build(getActivity());
-        getCardStream().addCard(c);
-    }
-
-
-    public CardStreamFragment getCardStream() {
-        if (cards == null) {
-            cards = ((FeedActivity) getActivity()).getCardStream();
-        }
-        return cards;
-    }
-
-    @Override
-    public void onCardClick(int id, String tag) {
-
-    }
 }

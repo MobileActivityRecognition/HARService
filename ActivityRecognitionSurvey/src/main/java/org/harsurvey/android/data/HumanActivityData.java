@@ -64,19 +64,19 @@ public class HumanActivityData {
         if (values.containsKey(Contract._ID)) {
             this.id= values.getAsLong(Contract._ID);
         }
-        else if (values.containsKey(Contract.C_CREATED)) {
+        if (values.containsKey(Contract.C_CREATED)) {
             this.created = new Date(values.getAsLong(Contract.C_CREATED));
         }
-        else if (values.containsKey(Contract.C_ACTIVITY_TYPE)) {
+        if (values.containsKey(Contract.C_ACTIVITY_TYPE)) {
             this.activity = HumanActivity.Type.valueOf(values.getAsString(Contract.C_ACTIVITY_TYPE));
         }
-        else if (values.containsKey(Contract.C_ACTIVITY_CONFIDENCE)) {
+        if (values.containsKey(Contract.C_ACTIVITY_CONFIDENCE)) {
             this.confidence = values.getAsInteger(Contract.C_ACTIVITY_CONFIDENCE);
         }
-        else if (values.containsKey(Contract.C_STATUS)) {
+        if (values.containsKey(Contract.C_STATUS)) {
             this.status = Status.valueOf(values.getAsString(Contract.C_STATUS));
         }
-        else if (values.containsKey(Contract.C_FEEDBACK)) {
+        if (values.containsKey(Contract.C_FEEDBACK)) {
             this.feedback = values.getAsBoolean(Contract.C_FEEDBACK);
         }
     }

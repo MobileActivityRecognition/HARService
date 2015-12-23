@@ -24,6 +24,8 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.util.List;
+
 /**
  * Activity Feed From Database
  */
@@ -35,8 +37,8 @@ public class HumanActivityFeed {
         this.database = databaseHelper;
     }
 
-    public HumanActivityData[] getActivityUpdates(String status) {
-        HumanActivityData[] result = null;
+    public List<HumanActivityData> getActivityUpdates(String status) {
+        List<HumanActivityData> result = null;
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
         qb.setTables(HumanActivityData.Contract.TABLE);
@@ -72,7 +74,7 @@ public class HumanActivityFeed {
 
     public void update(HumanActivityData activityData) {
         ContentValues values =  activityData.getValues();
-        Log.d(TAG, "Insert or ignore " + values);
+        Log.d(TAG, "Update " + values);
         SQLiteDatabase db = this.database.getWritableDatabase();
         String where = String.format("%s = %d", HumanActivityData.Contract._ID, activityData.id);
         try {

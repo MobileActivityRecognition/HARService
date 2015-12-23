@@ -21,24 +21,23 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * From Cursor to HumanActivityFeed Model
  */
 public class HumanActivityDataCreator {
 
-    public HumanActivityData[] createFromCursor(Cursor cursor) {
-        HumanActivityData[] result = this.newArray(cursor.getCount());
+    public List<HumanActivityData> createFromCursor(Cursor cursor) {
+        ArrayList<HumanActivityData> result = new ArrayList<>();
         int i = 0;
         ContentValues values = new ContentValues();
         while (cursor.moveToNext()) {
             DatabaseUtils.cursorRowToContentValues(cursor, values);
-            result[i] = new HumanActivityData(values);
+            result.add(new HumanActivityData(values));
         }
-
         return result;
     }
 
-    public HumanActivityData[] newArray(int size) {
-        return new HumanActivityData[size];
-    }
 }

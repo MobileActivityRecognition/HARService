@@ -34,12 +34,17 @@ public class Config {
      */
     public static final int INTERVAL_DEFAULT = 1*MINUTE;
 
+    public static enum SyncType {
+        GPRS,
+        WIFI
+    }
+
     /**
      * Declaring KEYS for saving data
      */
     public static final String PREFERENCE_KEY = "SURVEY_PREFERENCES";
     public static final String IMEI_KEY = "IMEI";
 
-    public static final String DATABASE_NAME = "humanactivity.db";
+    public static final String DATABASE_NAME = "activities.db";
     public static final int DATABASE_VERSION = 1;
 }

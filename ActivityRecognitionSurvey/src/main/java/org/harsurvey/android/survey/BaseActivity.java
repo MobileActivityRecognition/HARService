@@ -28,27 +28,25 @@ import android.view.MenuItem;
 
 public class BaseActivity extends AppCompatActivity {
     public static final String TAG = BaseActivity.class.getSimpleName();
-    SurveyApplication application;
 
-    private String phoneImei;
+    SurveyApplication app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.application = (SurveyApplication) getApplication();
+        app = (SurveyApplication) getApplication();
         if (savedInstanceState != null) {
-            this.phoneImei = savedInstanceState.getString(Config.IMEI_KEY);
-        }
-        else {
+            app.setPhoneImei(savedInstanceState.getString(Config.IMEI_KEY));
+        } else {
             TelephonyManager telephonyManager = (TelephonyManager)
                     getSystemService(Context.TELEPHONY_SERVICE);
-            this.phoneImei = telephonyManager.getDeviceId();
+            app.setPhoneImei(telephonyManager.getDeviceId());
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        outState.putString(Config.IMEI_KEY, this.phoneImei);
+        outState.putString(Config.IMEI_KEY, app.getPhoneImei());
         super.onSaveInstanceState(outState, outPersistentState);
     }
 
@@ -75,5 +73,4 @@ public class BaseActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 }
