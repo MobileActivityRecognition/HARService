@@ -38,12 +38,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         Log.d(TAG, "Creating database: " + Config.DATABASE_NAME);
         db.execSQL(HumanActivityData.Contract.SQL_CREATE);
+        db.execSQL(FeatureData.Contract.SQL_CREATE);
         // TODO: Incluir otros modelos
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldV, int newV) {
         db.execSQL(HumanActivityData.Contract.SQL_DROP);
+        db.execSQL(FeatureData.Contract.SQL_DROP);
         // TODO: Incluir otros modelos
         this.onCreate(db);
     }

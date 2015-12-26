@@ -47,11 +47,17 @@ public class ActivityRecognitionClient implements ConnectionApi {
     private boolean connecting = false;
     private ActivityRecognitionManager apiManager = null;
     private ComponentName componentName = null;
+    private OnClientConnectionListener listener = null;
 
     public ActivityRecognitionClient(Context context) {
         this.context = context.getApplicationContext();
 
         checkInstalledService();
+    }
+
+    public ActivityRecognitionClient(Context context, OnClientConnectionListener listener) {
+        this(context);
+        this.listener = listener;
     }
 
     private boolean checkInstalledService() {
@@ -129,11 +135,17 @@ public class ActivityRecognitionClient implements ConnectionApi {
             self.apiManager = new ActivityRecognitionManager(
                     self, iBinder, self.context
                     );
+            if (listener != null) {
+                listener.onConnect(ActivityRecognitionClient.this);
+            }
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
             Log.d(TAG, "Service IBINDER disconnected");
+            if (listener != null) {
+                listener.onDisconnect(ActivityRecognitionClient.this);
+            }
             ActivityRecognitionClient self = ActivityRecognitionClient.this;
             self.apiManager = null;
             ActivityRecognitionClient.this.connected = false;

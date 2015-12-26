@@ -32,7 +32,7 @@ public class Config {
     /**
      * Set default INTERVAL TIME
      */
-    public static final int INTERVAL_DEFAULT = 1*MINUTE;
+    public static final int INTERVAL_DEFAULT = 30*SECOND;
 
     public static enum SyncType {
         GPRS,
@@ -46,5 +46,8 @@ public class Config {
     public static final String IMEI_KEY = "IMEI";
 
     public static final String DATABASE_NAME = "activities.db";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
+
+    public static final String DETECTED_ACTIVITY_BROADCAST = "org.harsurvey.android.survey.DETECTED_ACTIVITY_BROADCAST";
+    public static final String DETECTED_ACTIVITY_EXTRA = "org.harsurvey.android.survey.DETECTED_ACTIVITY_EXTRA";
 }

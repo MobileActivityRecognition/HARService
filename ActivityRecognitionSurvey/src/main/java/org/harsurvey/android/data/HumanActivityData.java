@@ -18,18 +18,20 @@
 package org.harsurvey.android.data;
 
 import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.provider.BaseColumns;
 
 import org.harservice.android.common.HumanActivity;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Collected Human Activity Data
  */
 public class HumanActivityData {
-
-    public static final HumanActivityDataCreator CREATOR = new HumanActivityDataCreator();
 
     public static enum Status {
         DRAFT,
@@ -38,15 +40,18 @@ public class HumanActivityData {
     }
 
     // FIELDS
-    public long id;
+    protected long id = -1;
     public Date created;
     public HumanActivity.Type activity;
-    public int confidence;
+    public int confidence = -1;
     public Status status;
-    public boolean feedback;
+    public Boolean feedback;
 
+    public HumanActivityData(long id) {
+        this.id = id;
+    }
 
-    public HumanActivityData(long id, Date created, HumanActivity.Type activity,
+    public HumanActivityData(Date created, HumanActivity.Type activity,
                              int confidence, Status status, boolean feedback) {
         this.id = id;
         this.created = created;
@@ -62,7 +67,7 @@ public class HumanActivityData {
 
     public void update(ContentValues values) {
         if (values.containsKey(Contract._ID)) {
-            this.id= values.getAsLong(Contract._ID);
+            this.id = values.getAsLong(Contract._ID);
         }
         if (values.containsKey(Contract.C_CREATED)) {
             this.created = new Date(values.getAsLong(Contract.C_CREATED));
@@ -83,13 +88,29 @@ public class HumanActivityData {
 
     public ContentValues getValues() {
         ContentValues values = new ContentValues();
-        values.put(Contract._ID, this.id);
-        values.put(Contract.C_CREATED, this.created.getTime());
-        values.put(Contract.C_ACTIVITY_TYPE, this.activity.toString());
-        values.put(Contract.C_ACTIVITY_CONFIDENCE, this.confidence);
-        values.put(Contract.C_STATUS, this.status.toString());
-        values.put(Contract.C_FEEDBACK, this.feedback);
+        if (id > 1) {
+            values.put(Contract._ID, this.id);
+        }
+        if (created != null) {
+            values.put(Contract.C_CREATED, this.created.getTime());
+        }
+        if (activity != null) {
+            values.put(Contract.C_ACTIVITY_TYPE, this.activity.toString());
+        }
+        if (confidence > 0) {
+            values.put(Contract.C_ACTIVITY_CONFIDENCE, this.confidence);
+        }
+        if (status != null) {
+            values.put(Contract.C_STATUS, this.status.toString());
+        }
+        if (feedback != null) {
+            values.put(Contract.C_FEEDBACK, this.feedback);
+        }
         return values;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public static final class Contract implements BaseColumns {
@@ -118,4 +139,6 @@ public class HumanActivityData {
 
         public static final String SQL_DROP = "DROP TABLE IF EXITS " + TABLE;
     }
+
+    public static final DataCreator<HumanActivityData> CREATOR = new DataCreator<>(HumanActivityData.class);
 }

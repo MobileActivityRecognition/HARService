@@ -25,19 +25,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * From Cursor to HumanActivityFeed Model
+ * Data Creator
  */
-public class HumanActivityDataCreator {
+public class DataCreator<T> {
+    Class<T> clazz;
 
-    public List<HumanActivityData> createFromCursor(Cursor cursor) {
-        ArrayList<HumanActivityData> result = new ArrayList<>();
-        int i = 0;
-        ContentValues values = new ContentValues();
-        while (cursor.moveToNext()) {
-            DatabaseUtils.cursorRowToContentValues(cursor, values);
-            result.add(new HumanActivityData(values));
-        }
-        return result;
+    public DataCreator(Class<T> clazz) {
+        this.clazz = clazz;
     }
 
+    public List<T> createFromCursor(Cursor cursor) {
+        try {
+            ArrayList<T> result = new ArrayList<>();
+            ContentValues values = new ContentValues();
+            while (cursor.moveToNext()) {
+                DatabaseUtils.cursorRowToContentValues(cursor, values);
+                result.add(clazz.getConstructor(ContentValues.class).newInstance(values));
+            }
+            return result;
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

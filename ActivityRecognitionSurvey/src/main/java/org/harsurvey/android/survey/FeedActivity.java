@@ -17,11 +17,18 @@
 
 package org.harsurvey.android.survey;
 ;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
+import android.widget.Toast;
 
-import org.harsurvey.android.cards.CardStream;
-import org.harsurvey.android.cards.CardStreamFragment;
+import org.harservice.android.common.HumanActivity;
+import org.harsurvey.android.cards.Card;
+import org.harsurvey.android.cards.CardStreamLinearLayout;
+import org.harsurvey.android.cards.DetectedActivitiesAdapter;
 import org.harsurvey.android.cards.OnCardClickListener;
 import org.harsurvey.android.data.HumanActivityData;
 
@@ -30,34 +37,34 @@ import java.util.List;
 /**
  * Show CardView Feed activity
  */
-public class FeedActivity extends BaseActivity implements CardStream, OnCardClickListener {
-    private CardStreamFragment cardStreamFragment;
+public class FeedActivity extends BaseActivity implements OnCardClickListener {
+    CardStreamLinearLayout listView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.feed_activity);
-
-        FragmentManager fm = getSupportFragmentManager();
-        FeedActivityFragment fragment = (FeedActivityFragment)
-                fm.findFragmentByTag(FeedActivityFragment.TAG);
-
-        if (fragment == null) {
-            fm.beginTransaction()
-                    .add(new FeedActivityFragment(), FeedActivityFragment.TAG)
-                    .commit();
-        }
+        setContentView(R.layout.cardstream);
+        listView = (CardStreamLinearLayout) findViewById(R.id.card_stream);
+        List<HumanActivityData> activities = getUpdates();
+        listView.setAdapter(new DetectedActivitiesAdapter(this, activities, this));
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        app.connect();
+        if (!app.isClientConnected()) {
+            Toast.makeText(this, getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
+        }
+        LocalBroadcastManager.getInstance(this).registerReceiver(activityReceiver,
+                new IntentFilter(Config.DETECTED_ACTIVITY_BROADCAST));
+    }
 
     @Override
-    public CardStreamFragment getCardStream() {
-        if (cardStreamFragment == null) {
-            cardStreamFragment = (CardStreamFragment)
-                    getSupportFragmentManager().findFragmentById(R.id.fragment_cardstream);
-        }
-        return cardStreamFragment;
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(activityReceiver);
     }
 
     public List<HumanActivityData> getUpdates() {
@@ -65,7 +72,20 @@ public class FeedActivity extends BaseActivity implements CardStream, OnCardClic
     }
 
     @Override
-    public void onCardClick(int id, String tag) {
-
+    public void onCardClick(int action, String tag) {
+        Long id = Long.valueOf(tag.split("_")[1]);
+        if (action == Card.ACTION_POSITIVE) {
+            app.acceptActivity(id);
+        }
+        else {
+            app.rejectActivity(id);
+        }
     }
+
+    private BroadcastReceiver activityReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            app.addActivity((HumanActivity) intent.getParcelableExtra(Config.DETECTED_ACTIVITY_EXTRA));
+        }
+    };
 }
