@@ -98,7 +98,9 @@ public class ActivityRecognitionManager implements ActivityRecognitionApi {
         try {
             this.service.requestSingleUpdates(this.updatesReceiver);
         } catch (RemoteException e) {
-            Log.e(TAG, e.getMessage());
+            if (e.getMessage() != null) {
+                Log.e(TAG, e.getMessage());
+            }
         }
     }
 
@@ -115,7 +117,9 @@ public class ActivityRecognitionManager implements ActivityRecognitionApi {
                 return null;
             }
         } catch (RemoteException e) {
-            Log.e(TAG, e.getMessage());
+            if (e.getMessage() != null) {
+                Log.e(TAG, e.getMessage());
+            }
             return null;
         }
     }
@@ -126,7 +130,9 @@ public class ActivityRecognitionManager implements ActivityRecognitionApi {
                 this.service.requestActivityUpdates(detectionIntervalMillis, this.updatesReceiver);
             }
         } catch (RemoteException e) {
-            Log.e(TAG, e.getMessage());
+            if (e.getMessage() != null) {
+                Log.e(TAG, e.getMessage());
+            }
         }
     }
 
@@ -136,7 +142,9 @@ public class ActivityRecognitionManager implements ActivityRecognitionApi {
                 this.service.removeActivityUpdates(this.updatesReceiver);
             }
         } catch (RemoteException e) {
-            Log.e(TAG, e.getMessage());
+            if (e.getMessage() != null) {
+                Log.e(TAG, e.getMessage());
+            }
         }
     }
 

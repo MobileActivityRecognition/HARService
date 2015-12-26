@@ -33,7 +33,7 @@
     <string name="pref_title_session_duration">Intervalo de duración</string>
 
     <string name="pref_default_display_name">Tu nombre completo</string>
-    <string name="pref_default_session_duration">30</string>
+    <string name="pref_default_session_duration">1</string>
     <string name="pref_default_sync_method">WIFI</string>
     <string name="pref_title_sync_data">Sincronizar Datos</string>
     <string name="pref_sum_sync_data">Active sincronización de datos</string>
@@ -42,6 +42,7 @@
     <string name="pref_data_usage">Uso de datos</string>
     <string name="titleFeed">Registro de Actividades</string>
     <string-array name="pref_session_duration_titles">
+        <item>1 minuto</item>
         <item>15 minutos</item>
         <item>30 minutos</item>
         <item>1 hora</item>
@@ -49,6 +50,7 @@
         <item>6 horas</item>
     </string-array>
     <string-array name="pref_session_duration_values">
+        <item>1</item>
         <item>15</item>
         <item>30</item>
         <item>60</item>
@@ -71,7 +73,7 @@
             <p>This sample demonstrates the use of the two step sensors (step detector and counter) and
             sensor batching.</p>
             <p>It shows how to register a SensorEventListener with and without
-            batching and shows how these events are received.</p>
+            batching anda shows how these events are received.</p>
             <p>The Step Detector sensor fires an
             event when a step is detected, while the step counter returns the total number of
             steps since a listener was first registered for this sensor.
@@ -82,4 +84,15 @@
             covered in this sample.</p>
         ]]>
     </string>
+
+    <!-- Activity detection strings -->
+    <string name="in_vehicle">In a vehicle</string>
+    <string name="on_bicycle">On a bicycle</string>
+    <string name="running">Running</string>
+    <string name="still">Still</string>
+    <string name="tilting">Tilting</string>
+    <string name="unknown">Unknown activity</string>
+    <string name="walking">Walking</string>
+    <string name="unidentifiable_activity">Unidentifiable activity: %1$s</string>
+    <string name="not_connected">ActivityClient is not yet connected. Try again.</string>
 </resources>

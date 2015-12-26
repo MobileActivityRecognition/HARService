@@ -15,11 +15,14 @@
  * limitations under the License.
  */
 
-package org.harsurvey.android.cards;
+package org.harservice.android.client;
+
+import org.harservice.android.api.ConnectionApi;
 
 /**
- * CardStream Interface
+ * Conection listener for connection changes
  */
-public interface CardStream {
-    public CardStreamFragment getCardStream();
+public interface OnClientConnectionListener {
+    public void onConnect(ConnectionApi client);
+    public void onDisconnect(ConnectionApi client);
 }

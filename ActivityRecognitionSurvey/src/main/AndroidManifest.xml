@@ -44,6 +44,8 @@
             </intent-filter>
         </activity>
 
+        <service android:name=".DetectedActivitiesService" android:exported="false" />
+
     </application>
 
 </manifest>

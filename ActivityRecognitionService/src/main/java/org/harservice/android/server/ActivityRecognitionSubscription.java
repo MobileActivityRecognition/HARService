@@ -67,7 +67,9 @@ public class ActivityRecognitionSubscription extends TimerTask {
                 this.manager.removeActivityUpdates(listener);
             }
         } catch (RemoteException e) {
-            Log.e(TAG, e.getMessage());
+            if (e.getMessage() != null) {
+                Log.e(TAG, e.getMessage());
+            }
         }
     }
 }
