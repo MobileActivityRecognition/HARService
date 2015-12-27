@@ -18,12 +18,21 @@
 package org.harsurvey.android.data;
 
 import android.content.ContentValues;
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
  * Feature Class Data
  */
 public class FeatureData {
+    // PROVIDER
+    public static final Uri CONTENT_URI = Uri.parse("content://" +
+            HumanActivityFeed.AUTHORITY + "/" + Contract.TABLE);
+    public static final String FEATURE_TYPE_DIR =
+            "vnd.android.cursor.dir/org.harsurvey.android.data." + Contract.TABLE;
+    public static final String FEATURE_TYPE_ITEM =
+            "vnd.android.cursor.item/org.harsurvey.android.data." + Contract.TABLE;
+
     // FIELDS
     protected long id = -1;
     public long activityId;

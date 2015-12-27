@@ -19,47 +19,99 @@ package org.harsurvey.android.cards;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
+import android.database.Cursor;
+import android.provider.BaseColumns;
+import android.text.format.DateUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CursorAdapter;
+import android.widget.TextView;
 
+import org.harservice.android.common.HumanActivity;
 import org.harsurvey.android.data.HumanActivityData;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.harsurvey.android.survey.R;
 
 /**
  * Adapter for cards
  */
-public class DetectedActivitiesAdapter extends ArrayAdapter<HumanActivityData> {
-    private final OnCardClickListener listener;
-    private ArrayList<Card> cards = new ArrayList<>();
+public class DetectedActivitiesAdapter extends CursorAdapter {
+    private View.OnClickListener listener;
 
-    public DetectedActivitiesAdapter(Context context, List<HumanActivityData> activities,
-                                     OnCardClickListener listener) {
-        super(context, 0, activities);
+    public DetectedActivitiesAdapter(Context context, Cursor c, View.OnClickListener listener) {
+        super(context, c, 0);
         this.listener = listener;
     }
 
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
-        HumanActivityData ha = getItem(position);
-        if (view == null) {
-            if (position > cards.size()) {
-                Card card = new Card.Builder(listener, "ACTIVITY_" + ha.getId())
-                        .setTitle(ha.activity.toString())
-                        .setDescription(String.valueOf(ha.confidence))
-                        .addAction("OK", 0, Card.ACTION_POSITIVE)
-                        .addAction("NO OK", 1, Card.ACTION_NEGATIVE)
-                        .build((Activity) this.getContext());
-                cards.add(card);
-            }
-            view = cards.get(position).getView();
+    public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
+        String tag = "ACT_" + cursor.getLong(cursor.getColumnIndexOrThrow(BaseColumns._ID));
+        LayoutInflater inflater = LayoutInflater.from(context);
+        Activity activity = (Activity) context;
+        // Inflating the card.
+        ViewGroup cardView = (ViewGroup) inflater.inflate(R.layout.card,
+                (ViewGroup) activity.findViewById(R.id.card_stream), false);
+
+        // Check that the layout contains a TextView with the card_title id
+        View viewTitle = cardView.findViewById(R.id.card_title);
+        if (viewTitle != null) {
+            viewTitle.setVisibility(View.GONE);
         }
-        return view;
+
+        // Check that the layout contains a TextView with the card_content id
+        View viewDesc = cardView.findViewById(R.id.card_content);
+        if (viewDesc != null) {
+            viewDesc.setVisibility(View.GONE);
+        }
+
+        ViewGroup actionArea = (ViewGroup) cardView.findViewById(R.id.card_actionarea);
+
+        actionArea.setVisibility(View.VISIBLE);
+        Button actionButtonPositive = (Button) actionArea.findViewById(R.id.card_button_positive);
+        actionButtonPositive.setOnClickListener(listener);
+
+        Button actionButtonNegative = (Button) actionArea.findViewById(R.id.card_button_negative);
+        actionButtonNegative.setOnClickListener(listener);
+
+        cardView.setTag(tag);
+
+        return cardView;
     }
 
-    public void addActivity(HumanActivityData data) {
-        this.add(data);
+    @Override
+    public void bindView(View view, Context context, Cursor cursor) {
+        HumanActivityData ha = HumanActivityData.CREATOR.createSingleFromCursor(cursor);
+        TextView viewTitle = (TextView) view.findViewById(R.id.card_title);
+        TextView viewDesc = (TextView) view.findViewById(R.id.card_content);
+        viewTitle.setText(getActivityString(context, ha.activity));
+        viewTitle.setVisibility(View.VISIBLE);
+        viewDesc.setText(String.format("%s: %d %%",
+                DateUtils.getRelativeTimeSpanString(ha.created.getTime()),
+                ha.confidence));
+        viewDesc.setVisibility(View.VISIBLE);
     }
+
+    public String getActivityString(Context context, HumanActivity.Type detectedActivityType) {
+        Resources resources = context.getResources();
+        switch(detectedActivityType) {
+            case IN_VEHICLE:
+                return resources.getString(R.string.in_vehicle);
+            case ON_BICYCLE:
+                return resources.getString(R.string.on_bicycle);
+            case RUNNING:
+                return resources.getString(R.string.running);
+            case STILL:
+                return resources.getString(R.string.still);
+            case UNKNOWN:
+                return resources.getString(R.string.unknown);
+            case WALKING:
+                return resources.getString(R.string.walking);
+            default:
+                return resources.getString(R.string.unidentifiable_activity,
+                        detectedActivityType.toString());
+        }
+    }
+
 }

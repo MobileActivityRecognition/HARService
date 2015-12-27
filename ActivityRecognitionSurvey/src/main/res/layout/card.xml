@@ -38,6 +38,22 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:src="@drawable/card_separator" />
+
+        <Button xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/card_button_positive"
+                style="@style/CardActionPositive"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/action_ok"/>
+
+        <Button xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/card_button_negative"
+                style="@style/CardActionNegative"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/action_nook"/>
     </LinearLayout>
 
 
@@ -62,16 +78,5 @@
             android:layout_below="@id/card_title"/>
 
     </LinearLayout>
-
-    <View
-        android:id="@+id/card_overlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignBottom="@id/card_contentarea"
-        android:layout_alignLeft="@id/card_contentarea"
-        android:layout_alignRight="@id/card_contentarea"
-        android:layout_alignTop="@id/card_contentarea"
-        android:layout_alignWithParentIfMissing="false"
-        android:visibility="invisible"/>
 
 </org.harsurvey.android.cards.CardLayout>

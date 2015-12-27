@@ -47,4 +47,14 @@ public class DataCreator<T> {
             return null;
         }
     }
+
+    public T createSingleFromCursor(Cursor cursor) {
+        try {
+            ContentValues values = new ContentValues();
+            DatabaseUtils.cursorRowToContentValues(cursor, values);
+            return clazz.getConstructor(ContentValues.class).newInstance(values);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

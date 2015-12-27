@@ -17,6 +17,7 @@
 
 package org.harservice.android.server;
 
+import android.os.Binder;
 import android.os.RemoteException;
 import android.util.Log;
 
@@ -64,7 +65,7 @@ public class ActivityRecognitionSubscription extends TimerTask {
                 this.listener.onResponse(this.manager.getResult());
             }
             else {
-                this.manager.removeActivityUpdates(listener);
+                this.manager.removeActivityUpdates(String.valueOf(Binder.getCallingPid()));
             }
         } catch (RemoteException e) {
             if (e.getMessage() != null) {

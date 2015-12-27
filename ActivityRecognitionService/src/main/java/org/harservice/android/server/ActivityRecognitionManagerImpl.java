@@ -108,6 +108,14 @@ public class ActivityRecognitionManagerImpl extends IActivityRecognitionManager.
     public void removeActivityUpdates(IActivityRecognitionResponseListener listener)
             throws SecurityException {
         String clientId = getClientId();
+        removeActivityUpdates(clientId);
+    }
+
+    /**
+     * Inner removes activity recognition updates for the specified PID*
+     * @param clientId
+    */
+    protected void removeActivityUpdates(String clientId) {
         if (this.clients.containsKey(clientId)) {
             Log.i(TAG, "Unsubscribing client " + clientId);
             this.clients.get(clientId).cancel();

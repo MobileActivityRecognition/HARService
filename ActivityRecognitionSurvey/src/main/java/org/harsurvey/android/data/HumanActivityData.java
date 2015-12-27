@@ -20,6 +20,7 @@ package org.harsurvey.android.data;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 import org.harservice.android.common.HumanActivity;
@@ -33,7 +34,15 @@ import java.util.List;
  */
 public class HumanActivityData {
 
-    public static enum Status {
+    // PROVIDER
+    public static final Uri CONTENT_URI = Uri.parse("content://" +
+            HumanActivityFeed.AUTHORITY + "/" + Contract.TABLE);
+    public static final String ACTIVITY_TYPE_DIR =
+            "vnd.android.cursor.dir/org.harsurvey.android.data." + Contract.TABLE;
+    public static final String ACTIVITY_TYPE_ITEM =
+            "vnd.android.cursor.item/org.harsurvey.android.data." + Contract.TABLE;
+
+    public enum Status {
         DRAFT,
         PENDING,
         SAVED
@@ -53,7 +62,6 @@ public class HumanActivityData {
 
     public HumanActivityData(Date created, HumanActivity.Type activity,
                              int confidence, Status status, boolean feedback) {
-        this.id = id;
         this.created = created;
         this.activity = activity;
         this.confidence = confidence;
@@ -67,44 +75,44 @@ public class HumanActivityData {
 
     public void update(ContentValues values) {
         if (values.containsKey(Contract._ID)) {
-            this.id = values.getAsLong(Contract._ID);
+            id = values.getAsLong(Contract._ID);
         }
         if (values.containsKey(Contract.C_CREATED)) {
-            this.created = new Date(values.getAsLong(Contract.C_CREATED));
+            created = new Date(values.getAsLong(Contract.C_CREATED));
         }
         if (values.containsKey(Contract.C_ACTIVITY_TYPE)) {
-            this.activity = HumanActivity.Type.valueOf(values.getAsString(Contract.C_ACTIVITY_TYPE));
+            activity = HumanActivity.Type.valueOf(values.getAsString(Contract.C_ACTIVITY_TYPE));
         }
         if (values.containsKey(Contract.C_ACTIVITY_CONFIDENCE)) {
-            this.confidence = values.getAsInteger(Contract.C_ACTIVITY_CONFIDENCE);
+            confidence = values.getAsInteger(Contract.C_ACTIVITY_CONFIDENCE);
         }
         if (values.containsKey(Contract.C_STATUS)) {
-            this.status = Status.valueOf(values.getAsString(Contract.C_STATUS));
+            status = Status.valueOf(values.getAsString(Contract.C_STATUS));
         }
         if (values.containsKey(Contract.C_FEEDBACK)) {
-            this.feedback = values.getAsBoolean(Contract.C_FEEDBACK);
+            feedback = values.getAsBoolean(Contract.C_FEEDBACK);
         }
     }
 
     public ContentValues getValues() {
         ContentValues values = new ContentValues();
         if (id > 1) {
-            values.put(Contract._ID, this.id);
+            values.put(Contract._ID, id);
         }
         if (created != null) {
-            values.put(Contract.C_CREATED, this.created.getTime());
+            values.put(Contract.C_CREATED, created.getTime());
         }
         if (activity != null) {
-            values.put(Contract.C_ACTIVITY_TYPE, this.activity.toString());
+            values.put(Contract.C_ACTIVITY_TYPE, activity.toString());
         }
         if (confidence > 0) {
-            values.put(Contract.C_ACTIVITY_CONFIDENCE, this.confidence);
+            values.put(Contract.C_ACTIVITY_CONFIDENCE, confidence);
         }
         if (status != null) {
-            values.put(Contract.C_STATUS, this.status.toString());
+            values.put(Contract.C_STATUS, status.toString());
         }
         if (feedback != null) {
-            values.put(Contract.C_FEEDBACK, this.feedback);
+            values.put(Contract.C_FEEDBACK, feedback);
         }
         return values;
     }
@@ -125,7 +133,7 @@ public class HumanActivityData {
                 _ID, C_CREATED, C_ACTIVITY_TYPE, C_ACTIVITY_CONFIDENCE, C_STATUS, C_FEEDBACK
         };
 
-        public static final String DEFAULT_SORT = C_CREATED + " DESC";
+        public static final String DEFAULT_SORT = C_CREATED + " ASC";
 
         public static final String SQL_CREATE = String.format(
           "CREATE TABLE %s (" +

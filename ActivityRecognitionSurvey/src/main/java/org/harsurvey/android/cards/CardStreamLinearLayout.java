@@ -18,32 +18,33 @@
 package org.harsurvey.android.cards;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
+import android.database.Cursor;
+import android.database.DataSetObserver;
+import android.provider.BaseColumns;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.widget.ArrayAdapter;
+import android.widget.CursorAdapter;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 
 /**
  * Layout
  */
-public class CardStreamLinearLayout extends LinearLayout {
+public class CardStreamLinearLayout extends LinearLayout implements View.OnClickListener {
     public static final String TAG = CardStreamLinearLayout.class.getSimpleName();
-    private ArrayAdapter adapter;
-    private List<Card> cards = new ArrayList<>();
-    private boolean layouted = false;
+    private DetectedActivitiesAdapter adapter;
+    private HashSet<String> cards = new HashSet<>();
+    private OnCardClickListener cardClickListener;
 
     public CardStreamLinearLayout(Context context) {
         super(context);
+        setOnHierarchyChangeListener(hierarchyChangeListener);
     }
 
     public CardStreamLinearLayout(Context context, AttributeSet attrs) {
@@ -55,19 +56,35 @@ public class CardStreamLinearLayout extends LinearLayout {
         super(context, attrs, defStyle);
     }
 
-    public void setAdapter(ArrayAdapter adapter) {
-        this.adapter = adapter;
-    }
-
     @Override
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
-        if (!layouted) {
-            for (int i = 0; i < adapter.getCount(); i++) {
-                addCard(adapter.getView(i, null, this));
+        for (int i = 0; i < this.getChildCount(); i++) {
+            this.getChildAt(i).setVisibility(VISIBLE);
+        }
+    }
+
+    public void setAdapter(CursorAdapter adapter) {
+        this.adapter = (DetectedActivitiesAdapter) adapter;
+        adapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                CardStreamLinearLayout.this.populate();
             }
-            layouted = true;
+        });
+    }
+
+    private void populate() {
+        Cursor cursor = adapter.getCursor();
+        View view = null;
+        while(cursor.moveToNext()) {
+            String tag = "ACT_" + cursor.getLong(cursor.getColumnIndexOrThrow(BaseColumns._ID));
+            boolean isNew = !cards.contains(tag);
+            if (isNew) {
+                view = adapter.newView(getContext(), cursor, this);
+                adapter.bindView(view, getContext(), cursor);
+                addCard(view);
+            }
         }
     }
 
@@ -77,7 +94,8 @@ public class CardStreamLinearLayout extends LinearLayout {
             if (param == null) {
                 param = generateDefaultLayoutParams();
             }
-            super.addView(cardView, -1, param);
+            super.addView(cardView, 0, param);
+            cards.add((String) cardView.getTag());
         }
     }
 
@@ -115,4 +133,22 @@ public class CardStreamLinearLayout extends LinearLayout {
         }
     };
 
+    public CursorAdapter getAdapter() {
+        return adapter;
+    }
+
+    public void setCardClickListener(OnCardClickListener cardClickListener) {
+        this.cardClickListener = cardClickListener;
+    }
+
+    @Override
+    public void onClick(View view) {
+        View cardView = (View) view.getParent().getParent();
+        String tag = (String) cardView.getTag();
+        if (tag != null) {
+            this.cardClickListener.onCardClick(view.getId(), tag);
+            this.removeView(cardView);
+            this.cards.remove(tag);
+        }
+    }
 }

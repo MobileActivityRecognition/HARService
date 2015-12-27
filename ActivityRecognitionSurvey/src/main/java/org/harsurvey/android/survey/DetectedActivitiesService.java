@@ -21,12 +21,15 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import org.harservice.android.common.ActivityRecognitionResult;
 import org.harservice.android.common.HumanActivity;
+import org.harsurvey.android.data.HumanActivityData;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,37 +50,17 @@ public class DetectedActivitiesService extends IntentService {
 
         HumanActivity activity = result.getMostProbableActivity();
 
-        List<HumanActivity> detectedActivities = result.getProbableActivities();
-
-        // Log each activity.
-        Log.i(TAG, "Activities detected");
-        for (HumanActivity da: detectedActivities) {
-            Log.d(TAG, da.getType().toString() + " " + da.getConfidence() + "%");
+        HumanActivityData activityData = new HumanActivityData(new Date(),
+                activity.getType(), activity.getConfidence(),
+                HumanActivityData.Status.DRAFT, false);
+        Uri uri = getContentResolver().insert(HumanActivityData.CONTENT_URI,
+                activityData.getValues());
+        if (uri != null) {
+            Log.d(TAG,  String.format("Saved %s: %s", activity.getType(), activity.getConfidence()));
         }
 
         localIntent.putExtra(Config.DETECTED_ACTIVITY_EXTRA, activity);
         LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
-    }
-
-    public String getActivityString(Context context, HumanActivity.Type detectedActivityType) {
-        Resources resources = context.getResources();
-        switch(detectedActivityType) {
-            case IN_VEHICLE:
-                return resources.getString(R.string.in_vehicle);
-            case ON_BICYCLE:
-                return resources.getString(R.string.on_bicycle);
-            case RUNNING:
-                return resources.getString(R.string.running);
-            case STILL:
-                return resources.getString(R.string.still);
-            case UNKNOWN:
-                return resources.getString(R.string.unknown);
-            case WALKING:
-                return resources.getString(R.string.walking);
-            default:
-                return resources.getString(R.string.unidentifiable_activity,
-                        detectedActivityType.toString());
-        }
     }
 
 }

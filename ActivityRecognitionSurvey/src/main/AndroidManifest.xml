@@ -45,6 +45,9 @@
         </activity>
 
         <service android:name=".DetectedActivitiesService" android:exported="false" />
+        <provider
+            android:authorities="org.harsurvey.android.data.HumanActivityFeed"
+            android:name="org.harsurvey.android.data.HumanActivityFeed" android:exported="false" />
 
     </application>
 

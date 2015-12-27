@@ -17,10 +17,15 @@
 
 package org.harsurvey.android.data;
 
+import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.net.Uri;
+import android.provider.BaseColumns;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -29,72 +34,182 @@ import java.util.List;
 /**
  * Activity Feed From Database
  */
-public class HumanActivityFeed {
+public class HumanActivityFeed extends ContentProvider {
     public static final String TAG = HumanActivityFeed.class.getSimpleName();
-    private final DatabaseHelper database;
+    private DatabaseHelper database;
 
-    public HumanActivityFeed(DatabaseHelper databaseHelper) {
-        this.database = databaseHelper;
+    public static final String AUTHORITY = HumanActivityFeed.class.getCanonicalName();
+    public static final int ACTIVITY_ITEM = 1;
+    public static final int ACTIVITY_DIR = 2;
+    public static final int FEATURE_ITEM = 3;
+    public static final int FEATURE_DIR = 4;
+
+    public static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+    static {
+        uriMatcher.addURI(AUTHORITY, HumanActivityData.Contract.TABLE, ACTIVITY_DIR);
+        uriMatcher.addURI(AUTHORITY, HumanActivityData.Contract.TABLE + "/#", ACTIVITY_ITEM);
+        uriMatcher.addURI(AUTHORITY, FeatureData.Contract.TABLE, FEATURE_DIR);
+        uriMatcher.addURI(AUTHORITY, FeatureData.Contract.TABLE + "/#", FEATURE_ITEM);
     }
 
-    public List<HumanActivityData> getActivityUpdates(String status) {
-        List<HumanActivityData> result = null;
-        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
-        qb.setTables(HumanActivityData.Contract.TABLE);
-        if (!TextUtils.isEmpty(status)) {
-            qb.appendWhere(String.format("%s = '%s'", HumanActivityData.Contract.C_STATUS, status));
+    public boolean onCreate() {
+        this.database = new DatabaseHelper(getContext());
+        Log.i(TAG, "Initialize database");
+        return true;
+    }
+
+    @Override
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
+                        String sortOrder) {
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+        int uriMatch = uriMatcher.match(uri);
+        String table = HumanActivityData.Contract.TABLE;
+        String defaultSortOrder = HumanActivityData.Contract.DEFAULT_SORT;
+        if (uriMatch == FEATURE_DIR || uriMatch == FEATURE_ITEM) {
+            table = FeatureData.Contract.TABLE;
+            defaultSortOrder = FeatureData.Contract.DEFAULT_SORT;
+        }
+        qb.setTables(table);
+
+        if (uriMatch == ACTIVITY_ITEM || uriMatch == FEATURE_ITEM) {
+            long id = ContentUris.parseId(uri);
+            qb.appendWhere(BaseColumns._ID + "=" + uri.getLastPathSegment());
+        }
+        else if (uriMatch != ACTIVITY_DIR && uriMatch != FEATURE_DIR) {
+            throw new IllegalArgumentException("Illegal URI");
         }
 
+        String orderBy = (TextUtils.isEmpty(sortOrder) ?
+                defaultSortOrder : sortOrder);
+
         SQLiteDatabase db = database.getReadableDatabase();
-        Cursor cursor = null;
+        Cursor cursor = qb.query(db, projection, selection, selectionArgs, null, null, orderBy);
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        Log.d(TAG, "queried record: " + cursor.getCount());
+        return cursor;
+    }
+
+    @Override
+    public String getType(Uri uri) {
+        switch (uriMatcher.match(uri)) {
+            case ACTIVITY_DIR:
+                return HumanActivityData.ACTIVITY_TYPE_DIR;
+            case ACTIVITY_ITEM:
+                return HumanActivityData.ACTIVITY_TYPE_ITEM;
+            case FEATURE_DIR:
+                return FeatureData.FEATURE_TYPE_DIR;
+            case FEATURE_ITEM:
+                return FeatureData.FEATURE_TYPE_ITEM;
+            default:
+                throw new IllegalArgumentException("Illegal uri: " + uri);
+        }
+    }
+
+    @Override
+    public Uri insert(Uri uri, ContentValues values) {
+        Uri result = null;
+
+        String table = null;
+        switch (uriMatcher.match(uri)) {
+            case ACTIVITY_DIR:
+                table = HumanActivityData.Contract.TABLE;
+                break;
+            case FEATURE_DIR:
+                table = FeatureData.Contract.TABLE;
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid URI");
+        }
+
+        SQLiteDatabase db = database.getWritableDatabase();
+
         try {
-            cursor = qb.query(db, HumanActivityData.Contract.ALL_COLUMNS, null, null, null, null,
-                    HumanActivityData.Contract.DEFAULT_SORT);
-            result = HumanActivityData.CREATOR.createFromCursor(cursor);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
+            long rowId = db.insertWithOnConflict(table, null, values,
+                    SQLiteDatabase.CONFLICT_IGNORE);
+            if (rowId != -1) {
+                long id = rowId;
+                result = ContentUris.withAppendedId(uri, id);
+                getContext().getContentResolver().notifyChange(uri, null);
             }
+        } finally {
             db.close();
         }
         return result;
     }
 
-    public void insertOrIgnore(HumanActivityData activityData) {
-        ContentValues values =  activityData.getValues();
-        Log.d(TAG, "Insert or ignore " + values);
-        SQLiteDatabase db = this.database.getWritableDatabase();
+    @Override
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
+        String where;
+
+        int uriMatch = uriMatcher.match(uri);
+        if (uriMatch == ACTIVITY_DIR || uriMatch == FEATURE_DIR) {
+            where = selection;
+        }
+        else if (uriMatch == ACTIVITY_ITEM || uriMatch == FEATURE_ITEM) {
+            long id = ContentUris.parseId(uri);
+            where = BaseColumns._ID + "=" + id +
+                    (TextUtils.isEmpty(selection) ? "" : " and (" + selection + ")");
+        }
+        else {
+            throw new IllegalArgumentException("Illegal URI");
+        }
+
+        String table = HumanActivityData.Contract.TABLE;
+        if (uriMatch == FEATURE_ITEM || uriMatch == FEATURE_DIR) {
+            table = FeatureData.Contract.TABLE;
+        }
+
+        SQLiteDatabase db = database.getWritableDatabase();
         try {
-            db.insertWithOnConflict(HumanActivityData.Contract.TABLE, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+            int ret = db.delete(table, where, selectionArgs);
+
+            if (ret > 0) {
+                getContext().getContentResolver().notifyChange(uri, null);
+            }
+            Log.d(TAG, "deleted records: " + ret);
         } finally {
             db.close();
         }
+
+        return 0;
     }
 
-    public void update(HumanActivityData activityData) {
-        ContentValues values =  activityData.getValues();
-        Log.d(TAG, "Update " + values);
-        SQLiteDatabase db = this.database.getWritableDatabase();
-        String where = String.format("%s = %d", HumanActivityData.Contract._ID, activityData.id);
+    @Override
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        String where;
+
+        int uriMatch = uriMatcher.match(uri);
+        if (uriMatch == ACTIVITY_DIR || uriMatch == FEATURE_DIR) {
+            where = selection;
+        }
+        else if (uriMatch == ACTIVITY_ITEM || uriMatch == FEATURE_ITEM) {
+            long id = ContentUris.parseId(uri);
+            where = BaseColumns._ID + "=" + id +
+                    (TextUtils.isEmpty(selection) ? "" : " and (" + selection + ")");
+        }
+        else {
+            throw new IllegalArgumentException("Illegal URI");
+        }
+
+        String table = HumanActivityData.Contract.TABLE;
+        if (uriMatch == FEATURE_ITEM || uriMatch == FEATURE_DIR) {
+            table = FeatureData.Contract.TABLE;
+        }
+
+        SQLiteDatabase db = database.getWritableDatabase();
         try {
-            db.update(HumanActivityData.Contract.TABLE, values, where, null);
+            int ret = db.update(table, values, where, selectionArgs);
+
+            if (ret > 0) {
+                getContext().getContentResolver().notifyChange(uri, null);
+            }
+            Log.d(TAG, "updated records: " + ret);
         } finally {
             db.close();
         }
-    }
 
-    public void close() {
-        this.database.close();
-    }
-
-    /**
-    * Drop database
-    */
-    public void delete() {
-        SQLiteDatabase db = this.database.getWritableDatabase();
-        db.delete(HumanActivityData.Contract.TABLE, null, null);
-        db.close();
+        return 0;
     }
 
 }

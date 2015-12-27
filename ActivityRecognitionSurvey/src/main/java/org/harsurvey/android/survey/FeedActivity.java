@@ -16,29 +16,36 @@
  */
 
 package org.harsurvey.android.survey;
-;
+
+import android.app.LoaderManager;
 import android.content.BroadcastReceiver;
+import android.content.ContentUris;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.Loader;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.widget.Toast;
 
-import org.harservice.android.common.HumanActivity;
-import org.harsurvey.android.cards.Card;
 import org.harsurvey.android.cards.CardStreamLinearLayout;
 import org.harsurvey.android.cards.DetectedActivitiesAdapter;
 import org.harsurvey.android.cards.OnCardClickListener;
 import org.harsurvey.android.data.HumanActivityData;
 
-import java.util.List;
+;
 
 /**
  * Show CardView Feed activity
  */
-public class FeedActivity extends BaseActivity implements OnCardClickListener {
+public class FeedActivity extends BaseActivity implements OnCardClickListener,
+        LoaderManager.LoaderCallbacks<Cursor> {
+    public static final String TAG = FeedActivity.class.getSimpleName();
     CardStreamLinearLayout listView;
+    CursorLoader cursorLoader;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,8 +53,9 @@ public class FeedActivity extends BaseActivity implements OnCardClickListener {
 
         setContentView(R.layout.cardstream);
         listView = (CardStreamLinearLayout) findViewById(R.id.card_stream);
-        List<HumanActivityData> activities = getUpdates();
-        listView.setAdapter(new DetectedActivitiesAdapter(this, activities, this));
+        listView.setCardClickListener(this);
+        listView.setAdapter(new DetectedActivitiesAdapter(this, null, listView));
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -65,27 +73,54 @@ public class FeedActivity extends BaseActivity implements OnCardClickListener {
     protected void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(activityReceiver);
+        getLoaderManager().destroyLoader(0);
     }
 
-    public List<HumanActivityData> getUpdates() {
-        return app.getActivitiesUpdates();
-    }
 
     @Override
     public void onCardClick(int action, String tag) {
         Long id = Long.valueOf(tag.split("_")[1]);
-        if (action == Card.ACTION_POSITIVE) {
-            app.acceptActivity(id);
+        HumanActivityData activityData = new HumanActivityData(id);
+        activityData.status = HumanActivityData.Status.PENDING;
+        if (action == R.id.card_button_positive) {
+            activityData.feedback = true;
         }
         else {
-            app.rejectActivity(id);
+            activityData.feedback = false;
+        }
+        int updated = getContentResolver().update(
+                ContentUris.withAppendedId(HumanActivityData.CONTENT_URI, id),
+                activityData.getValues(), null, null);
+        if (updated > 0) {
+            Log.d(TAG,  String.format("Saved activity %s as %s", activityData.getId(),
+                    activityData.feedback));
         }
     }
 
     private BroadcastReceiver activityReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            app.addActivity((HumanActivity) intent.getParcelableExtra(Config.DETECTED_ACTIVITY_EXTRA));
+            Log.d(TAG, "Actualizando datos");
         }
     };
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        cursorLoader = new CursorLoader(this, HumanActivityData.CONTENT_URI,
+                HumanActivityData.Contract.ALL_COLUMNS,
+                HumanActivityData.Contract.C_STATUS + " = ?",
+                new String[]{ HumanActivityData.Status.DRAFT.toString() },
+                HumanActivityData.Contract.DEFAULT_SORT);
+        return cursorLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        listView.getAdapter().swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        listView.getAdapter().swapCursor(null);
+    }
 }
