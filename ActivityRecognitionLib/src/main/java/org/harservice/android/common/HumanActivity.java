@@ -36,7 +36,7 @@ public class HumanActivity implements Parcelable {
      * Constant enum Type used to specify the activity recognized
      */
     public static enum Type {
-        UNKNOWN, STILL, WALKING, RUNNING, IN_VEHICLE, ON_BICYCLE
+        UNKNOWN, STILL, WALKING, RUNNING, IN_VEHICLE, ON_BICYCLE, TILTING
 
     }
     private Type type;

@@ -28,10 +28,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CursorAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.harservice.android.common.HumanActivity;
 import org.harsurvey.android.data.HumanActivityData;
+import org.harsurvey.android.survey.Constants;
 import org.harsurvey.android.survey.R;
 
 /**
@@ -85,33 +87,17 @@ public class DetectedActivitiesAdapter extends CursorAdapter {
         HumanActivityData ha = HumanActivityData.CREATOR.createSingleFromCursor(cursor);
         TextView viewTitle = (TextView) view.findViewById(R.id.card_title);
         TextView viewDesc = (TextView) view.findViewById(R.id.card_content);
-        viewTitle.setText(getActivityString(context, ha.activity));
+
+        viewTitle.setText(Constants.getActivityString(context, ha.activity));
         viewTitle.setVisibility(View.VISIBLE);
+        viewTitle.setCompoundDrawablesWithIntrinsicBounds(Constants.getActivityIcon(context, ha.activity),
+                null,
+                null,
+                null);
         viewDesc.setText(String.format("%s: %d %%",
                 DateUtils.getRelativeTimeSpanString(ha.created.getTime()),
                 ha.confidence));
         viewDesc.setVisibility(View.VISIBLE);
-    }
-
-    public String getActivityString(Context context, HumanActivity.Type detectedActivityType) {
-        Resources resources = context.getResources();
-        switch(detectedActivityType) {
-            case IN_VEHICLE:
-                return resources.getString(R.string.in_vehicle);
-            case ON_BICYCLE:
-                return resources.getString(R.string.on_bicycle);
-            case RUNNING:
-                return resources.getString(R.string.running);
-            case STILL:
-                return resources.getString(R.string.still);
-            case UNKNOWN:
-                return resources.getString(R.string.unknown);
-            case WALKING:
-                return resources.getString(R.string.walking);
-            default:
-                return resources.getString(R.string.unidentifiable_activity,
-                        detectedActivityType.toString());
-        }
     }
 
 }

@@ -18,9 +18,7 @@
 package org.harsurvey.android.survey;
 
 import android.app.IntentService;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -30,14 +28,12 @@ import org.harservice.android.common.HumanActivity;
 import org.harsurvey.android.data.HumanActivityData;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * Detect Activities and send broadcast
  */
 public class DetectedActivitiesService extends IntentService {
     public static final String TAG = DetectedActivitiesService.class.getSimpleName();
-    private SurveyApplication app;
 
     public DetectedActivitiesService() {
         super(TAG);
@@ -46,7 +42,7 @@ public class DetectedActivitiesService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         ActivityRecognitionResult result = ActivityRecognitionResult.extractResult(intent);
-        Intent localIntent = new Intent(Config.DETECTED_ACTIVITY_BROADCAST);
+        Intent localIntent = new Intent(Constants.DETECTED_ACTIVITY_BROADCAST);
 
         HumanActivity activity = result.getMostProbableActivity();
 
@@ -59,8 +55,9 @@ public class DetectedActivitiesService extends IntentService {
             Log.d(TAG,  String.format("Saved %s: %s", activity.getType(), activity.getConfidence()));
         }
 
-        localIntent.putExtra(Config.DETECTED_ACTIVITY_EXTRA, activity);
+        localIntent.putExtra(Constants.DETECTED_ACTIVITY_EXTRA, activity);
         LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
+
     }
 
 }

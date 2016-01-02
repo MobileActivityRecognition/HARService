@@ -22,7 +22,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import org.harsurvey.android.survey.Config;
+import org.harsurvey.android.survey.Constants;
 
 /**
  * Generic Database Helper
@@ -31,12 +31,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TAG = DatabaseHelper.class.getSimpleName();
 
     public DatabaseHelper(Context context) {
-        super(context, Config.DATABASE_NAME, null, Config.DATABASE_VERSION);
+        super(context, Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.d(TAG, "Creating database: " + Config.DATABASE_NAME);
+        Log.d(TAG, "Creating database: " + Constants.DATABASE_NAME);
         db.execSQL(HumanActivityData.Contract.SQL_CREATE);
         db.execSQL(FeatureData.Contract.SQL_CREATE);
         // TODO: Incluir otros modelos

@@ -1,0 +1,125 @@
+/*
+ * HARService: Activity Recognition Service
+ * Copyright (C) 2015 agimenez
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.harsurvey.android.survey;
+
+
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
+
+import org.harservice.android.common.HumanActivity;
+
+/**
+ * Configuration Parameters
+ */
+public class Constants {
+    /**
+     * Set default clock units
+     */
+    public static final int SECOND = 1000;
+    public static final int MINUTE = 60*SECOND;
+    public static final int HOUR = 60*MINUTE;
+
+    /**
+     * Set default INTERVAL TIME
+     */
+    public static final int INTERVAL_DEFAULT = 30*SECOND;
+
+
+
+    public static enum SyncType {
+        GPRS,
+        WIFI;
+    }
+    /**
+     * Declaring KEYS for saving data
+     */
+    public static final String PREFERENCE_KEY = "SURVEY_PREFERENCES";
+
+    public static final String IMEI_KEY = "IMEI";
+    public static final String DATABASE_NAME = "activities.db";
+
+    public static final int DATABASE_VERSION = 2;
+    public static final String DETECTED_ACTIVITY_BROADCAST = "org.harsurvey.android.survey.DETECTED_ACTIVITY_BROADCAST";
+
+    public static final String DETECTED_ACTIVITY_EXTRA = "org.harsurvey.android.survey.DETECTED_ACTIVITY_EXTRA";
+    public static String getActivityString(Context context, HumanActivity.Type detectedActivityType) {
+        Resources resources = context.getResources();
+        switch(detectedActivityType) {
+            case IN_VEHICLE:
+                return resources.getString(R.string.in_vehicle);
+            case ON_BICYCLE:
+                return resources.getString(R.string.on_bicycle);
+            case RUNNING:
+                return resources.getString(R.string.running);
+            case STILL:
+                return resources.getString(R.string.still);
+            case UNKNOWN:
+                return resources.getString(R.string.unknown);
+            case WALKING:
+                return resources.getString(R.string.walking);
+            case TILTING:
+                return resources.getString(R.string.tilting);
+            default:
+                return resources.getString(R.string.unidentifiable_activity,
+                        detectedActivityType.toString());
+        }
+    }
+
+    public static Drawable getActivityIcon(Context context, HumanActivity.Type detectedActivity) {
+        return ContextCompat.getDrawable(context, getDrawableForType(detectedActivity));
+    }
+
+    public static Bitmap getBitmapIcon(Context context, HumanActivity.Type detectedActivity) {
+        return BitmapFactory.decodeResource(context.getResources(),
+                getDrawableForType(detectedActivity));
+    }
+
+    public static Bitmap getBitmapIcon(Context context, int resource) {
+        return BitmapFactory.decodeResource(context.getResources(),
+                resource);
+    }
+
+    public static String getStringResource(Context context, int resource) {
+        return context.getResources().getString(resource);
+    }
+
+    private static int getDrawableForType(HumanActivity.Type detectedActivity) {
+        switch (detectedActivity) {
+            case IN_VEHICLE:
+                return R.drawable.ic_activity_car;
+            case ON_BICYCLE:
+                return R.drawable.ic_activity_bike;
+            case RUNNING:
+                return R.drawable.ic_activity_run;
+            case STILL:
+                return R.drawable.ic_activity_still;
+            case TILTING:
+                return R.drawable.ic_activity_tilt;
+            case UNKNOWN:
+                return R.drawable.ic_activity_unkown;
+            case WALKING:
+                return R.drawable.ic_activity_walk;
+            default:
+                return R.drawable.ic_activity_unkown;
+        }
+    }
+}

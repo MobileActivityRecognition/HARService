@@ -18,16 +18,11 @@
 package org.harsurvey.android.survey;
 
 import android.app.LoaderManager;
-import android.content.BroadcastReceiver;
 import android.content.ContentUris;
-import android.content.Context;
 import android.content.CursorLoader;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -65,14 +60,11 @@ public class FeedActivity extends BaseActivity implements OnCardClickListener,
         if (!app.isClientConnected()) {
             Toast.makeText(this, getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
         }
-        LocalBroadcastManager.getInstance(this).registerReceiver(activityReceiver,
-                new IntentFilter(Config.DETECTED_ACTIVITY_BROADCAST));
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(activityReceiver);
         getLoaderManager().destroyLoader(0);
     }
 
@@ -96,13 +88,6 @@ public class FeedActivity extends BaseActivity implements OnCardClickListener,
                     activityData.feedback));
         }
     }
-
-    private BroadcastReceiver activityReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, "Actualizando datos");
-        }
-    };
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
