@@ -20,7 +20,6 @@ package org.harsurvey.android.survey;
 import android.app.IntentService;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import org.harservice.android.common.ActivityRecognitionResult;
@@ -56,7 +55,7 @@ public class DetectedActivitiesService extends IntentService {
         }
 
         localIntent.putExtra(Constants.DETECTED_ACTIVITY_EXTRA, activity);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
+        sendBroadcast(localIntent);
 
     }
 

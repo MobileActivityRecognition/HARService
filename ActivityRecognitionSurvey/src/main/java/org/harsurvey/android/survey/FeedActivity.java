@@ -31,8 +31,6 @@ import org.harsurvey.android.cards.DetectedActivitiesAdapter;
 import org.harsurvey.android.cards.OnCardClickListener;
 import org.harsurvey.android.data.HumanActivityData;
 
-;
-
 /**
  * Show CardView Feed activity
  */
@@ -50,13 +48,14 @@ public class FeedActivity extends BaseActivity implements OnCardClickListener,
         listView = (CardStreamLinearLayout) findViewById(R.id.card_stream);
         listView.setCardClickListener(this);
         listView.setAdapter(new DetectedActivitiesAdapter(this, null, listView));
-        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        getLoaderManager().initLoader(0, null, this);
         app.connect();
+        app.setOnTop(true);
         if (!app.isClientConnected()) {
             Toast.makeText(this, getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
         }
@@ -64,22 +63,17 @@ public class FeedActivity extends BaseActivity implements OnCardClickListener,
 
     @Override
     protected void onPause() {
-        super.onPause();
+        app.setOnTop(false);
         getLoaderManager().destroyLoader(0);
+        super.onPause();
     }
-
 
     @Override
     public void onCardClick(int action, String tag) {
         Long id = Long.valueOf(tag.split("_")[1]);
         HumanActivityData activityData = new HumanActivityData(id);
         activityData.status = HumanActivityData.Status.PENDING;
-        if (action == R.id.card_button_positive) {
-            activityData.feedback = true;
-        }
-        else {
-            activityData.feedback = false;
-        }
+        activityData.feedback = (action == R.id.card_button_positive);
         int updated = getContentResolver().update(
                 ContentUris.withAppendedId(HumanActivityData.CONTENT_URI, id),
                 activityData.getValues(), null, null);

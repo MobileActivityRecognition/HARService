@@ -48,6 +48,12 @@
         <provider
             android:authorities="org.harsurvey.android.data.HumanActivityFeed"
             android:name="org.harsurvey.android.data.HumanActivityFeed" android:exported="false" />
+        <receiver android:name=".NotificationReceiver">
+            <intent-filter>
+                <action android:name="org.harsurvey.android.survey.DETECTED_ACTIVITY_BROADCAST" />
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </receiver>
 
     </application>
 

@@ -41,13 +41,13 @@ public class Constants {
     /**
      * Set default INTERVAL TIME
      */
-    public static final int INTERVAL_DEFAULT = 30*SECOND;
+    public static final int INTERVAL_DEFAULT = 1*MINUTE;
 
 
 
-    public static enum SyncType {
+    public enum SyncType {
         GPRS,
-        WIFI;
+        WIFI
     }
     /**
      * Declaring KEYS for saving data

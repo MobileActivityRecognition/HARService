@@ -17,7 +17,6 @@
 
 package org.harservice.android.server;
 
-import android.os.Binder;
 import android.os.RemoteException;
 import android.util.Log;
 
@@ -31,6 +30,7 @@ import java.util.TimerTask;
  */
 public class ActivityRecognitionSubscription extends TimerTask {
     public static final String TAG = ActivityRecognitionSubscription.class.getSimpleName();
+    private String appId;
     private ActivityRecognitionManagerImpl manager;
     private IActivityRecognitionResponseListener listener;
 
@@ -51,10 +51,12 @@ public class ActivityRecognitionSubscription extends TimerTask {
      *                                                             callback results
      */
     protected ActivityRecognitionSubscription(ActivityRecognitionManagerImpl manager,
-                                           IActivityRecognitionResponseListener listener) {
+                                           IActivityRecognitionResponseListener listener,
+                                              final String appId) {
         Log.d(TAG, "Creating new subscriber thread");
         this.manager = manager;
         this.listener = listener;
+        this.appId = appId;
     }
 
     @Override
@@ -65,9 +67,10 @@ public class ActivityRecognitionSubscription extends TimerTask {
                 this.listener.onResponse(this.manager.getResult());
             }
             else {
-                this.manager.removeActivityUpdates(String.valueOf(Binder.getCallingPid()));
+                this.manager.removeActivityUpdates(String.valueOf(appId));
             }
         } catch (RemoteException e) {
+            this.manager.removeActivityUpdates(appId);
             if (e.getMessage() != null) {
                 Log.e(TAG, e.getMessage());
             }

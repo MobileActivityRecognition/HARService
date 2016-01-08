@@ -77,7 +77,7 @@ public class ActivityRecognitionManagerImpl extends IActivityRecognitionManager.
         String clientId = getClientId();
         if (!this.clients.containsKey(clientId)) {
             Log.i(TAG, "Subscribing client " + clientId);
-            this.clients.put(clientId, new ActivityRecognitionSubscription(this, listener));
+            this.clients.put(clientId, new ActivityRecognitionSubscription(this, listener, clientId));
             this.timer.schedule(this.clients.get(clientId), detectionIntervalMillis,
                     detectionIntervalMillis);
         }
@@ -113,7 +113,7 @@ public class ActivityRecognitionManagerImpl extends IActivityRecognitionManager.
 
     /**
      * Inner removes activity recognition updates for the specified PID*
-     * @param clientId
+     * @param clientId client PID
     */
     protected void removeActivityUpdates(String clientId) {
         if (this.clients.containsKey(clientId)) {
