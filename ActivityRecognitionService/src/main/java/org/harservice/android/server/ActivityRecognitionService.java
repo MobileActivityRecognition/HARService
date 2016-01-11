@@ -20,25 +20,25 @@ package org.harservice.android.server;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.util.Log;
 
 import org.harservice.android.common.ActivityRecognitionResult;
+import org.harservice.android.common.IActivityRecognitionResponseListener;
 
-import java.util.Timer;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 
 /**
  * This class implements the Activity Recognition Service
  */
 public class ActivityRecognitionService extends Service {
     public static final String TAG = ActivityRecognitionService.class.getSimpleName();
-    public static final String ACCESS_ACTIVITY_RECOGNITION =
-            "org.harservice.android.permission.ACTIVITY_RECOGNITION";
-    public static final String SEND_ACTIVITY_RECOGNITION =
-            "org.harservice.android.permission.ACTIVITY_RECOGNITION_DATA";
     private ActivityRecognitionManagerImpl service;
-    private Timer globalTimer;
     private ActivityRecognitionWorker worker;
     private boolean running = false;
+    private final LinkedHashMap<String, ActivityRecognitionSubscription> subscriptions = new LinkedHashMap<>();
+    private ActivityRecognitionResult result;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -48,21 +48,16 @@ public class ActivityRecognitionService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        this.globalTimer = new Timer();
-        this.service = new ActivityRecognitionManagerImpl(this, this.globalTimer);
-        this.worker = new ActivityRecognitionWorker(this);
+        service = new ActivityRecognitionManagerImpl(this);
+        worker = new ActivityRecognitionWorker(this);
     }
 
     @Override
     public void onDestroy() {
+        running = false;
+        worker.stopTimer();
+        Log.i(TAG, "Activity Recognition Service destroyed");
         super.onDestroy();
-
-        this.running = false;
-        this.globalTimer.cancel();
-        this.globalTimer.purge();
-        this.globalTimer = null;
-
-        Log.v(TAG, "Activity Recognition Service destroyed");
     }
 
     @Override
@@ -74,12 +69,20 @@ public class ActivityRecognitionService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
-        if (!this.running) {
+        if (!running) {
             Log.v(TAG, "Activity Recognition Service started");
-            this.running = true;
-            this.globalTimer.schedule(this.worker, 0, ActivityRecognitionWorker.UPDATE_TIME);
+            running = true;
         }
         return START_STICKY;
+    }
+
+    /**
+     * Returns the ActivityRecognitionResult indicating the data from the last HumanActivity
+     *
+     * @return last known HumanActivity
+     */
+    protected ActivityRecognitionResult getResult() {
+        return result;
     }
 
     /**
@@ -87,7 +90,68 @@ public class ActivityRecognitionService extends Service {
      *
      * @param result {@link ActivityRecognitionResult} to be published
      */
-    public void publishResult(ActivityRecognitionResult result) {
-        this.service.setResult(result);
+    protected void publishResult(ActivityRecognitionResult result) {
+        this.result = result;
+        for (String clientId: subscriptions.keySet()) {
+            ActivityRecognitionSubscription client = subscriptions.get(clientId);
+            long now = System.currentTimeMillis();
+            if (now - client.getLastUpdateTime() > client.getDetectionInterval()) {
+                IActivityRecognitionResponseListener listener = client.getListener();
+                try {
+                    if (listener.asBinder().isBinderAlive()) {
+                        Log.d(TAG, "Updating subscriber activities");
+                        listener.onResponse(getResult());
+                        client.setLastUpdateTime(now);
+                    } else {
+                        removeClient(clientId, listener);
+                    }
+                } catch (RemoteException e) {
+                    Log.d(TAG, "Client is dead, unsubscribing");
+                    removeClient(clientId, listener);
+                }
+            }
+        }
     }
+
+    /**
+     * Constructs a client subscription that will perform request updates.
+     *
+     * @param appId client application identification
+     * @param detectionIntervalMillis time between updates
+     * @param listener {@link IActivityRecognitionResponseListener} client binder object reference to
+     *                                                             callback results
+     */
+    protected void addClient(String appId, long detectionIntervalMillis,
+                             IActivityRecognitionResponseListener listener) {
+        if (!subscriptions.containsKey(appId) && listener != null) {
+            Log.i(TAG, "Subscribing client " + appId);
+            subscriptions.put(appId, new ActivityRecognitionSubscription(appId,
+                    detectionIntervalMillis, listener));
+            ActivityRecognitionSubscription min = Collections.min(subscriptions.values(),
+                    new ActivityRecognitionSubscription.DetectionTimeComparator());
+            worker.starTimer(min.getDetectionInterval());
+        }
+    }
+
+    /**
+     * Removes a client subscription
+     * @param appId client application identification
+     * @param listener {@link IActivityRecognitionResponseListener} client binder object reference to
+     *                                                             callback results
+     */
+    protected void removeClient(String appId, IActivityRecognitionResponseListener listener) {
+        if (subscriptions.containsKey(appId) && listener != null) {
+            Log.i(TAG, "Unsubscribing client " + appId);
+            subscriptions.remove(appId);
+            if (subscriptions.size() > 0) {
+                ActivityRecognitionSubscription min = Collections.min(subscriptions.values(),
+                        new ActivityRecognitionSubscription.DetectionTimeComparator());;
+                worker.starTimer(min.getDetectionInterval());
+            }
+            else {
+                worker.stopTimer();
+            }
+        }
+    }
+
 }

@@ -17,18 +17,15 @@
 
 package org.harservice.android.server;
 
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.os.RemoteException;
 import android.util.Log;
 
 import org.harservice.android.common.ActivityRecognitionResult;
-import org.harservice.android.common.HumanActivity;
 import org.harservice.android.common.IActivityRecognitionManager;
 import org.harservice.android.common.IActivityRecognitionResponseListener;
 
-import java.util.HashMap;
 import java.util.Timer;
 
 /**
@@ -36,9 +33,7 @@ import java.util.Timer;
  */
 public class ActivityRecognitionManagerImpl extends IActivityRecognitionManager.Stub {
     public static final String TAG = ActivityRecognitionManagerImpl.class.getSimpleName();
-    private HashMap<String, ActivityRecognitionSubscription> clients = new HashMap<>();
-    private static ActivityRecognitionResult result;
-    private Context context;
+    private ActivityRecognitionService service;
     private Timer timer;
 
     /**
@@ -51,15 +46,11 @@ public class ActivityRecognitionManagerImpl extends IActivityRecognitionManager.
 
     /**
      * Constructs a {@link IActivityRecognitionManager} binder implementation
+     *  @param service Android service service
      *
-     * @param context Android service context
-     * @param timer Global timer object
      */
-    public ActivityRecognitionManagerImpl(Context context, Timer timer) {
-        this.context = context;
-        result = new ActivityRecognitionResult(new HumanActivity(HumanActivity.Type.UNKNOWN, 100),
-                0, 0);
-        this.timer = timer;
+    public ActivityRecognitionManagerImpl(ActivityRecognitionService service) {
+        this.service = service;
     }
 
     /**
@@ -75,12 +66,7 @@ public class ActivityRecognitionManagerImpl extends IActivityRecognitionManager.
                                        IActivityRecognitionResponseListener listener)
             throws SecurityException {
         String clientId = getClientId();
-        if (!this.clients.containsKey(clientId)) {
-            Log.i(TAG, "Subscribing client " + clientId);
-            this.clients.put(clientId, new ActivityRecognitionSubscription(this, listener, clientId));
-            this.timer.schedule(this.clients.get(clientId), detectionIntervalMillis,
-                    detectionIntervalMillis);
-        }
+        service.addClient(clientId, detectionIntervalMillis, listener);
     }
 
     /**
@@ -94,7 +80,7 @@ public class ActivityRecognitionManagerImpl extends IActivityRecognitionManager.
     @Override
     public void requestSingleUpdates(IActivityRecognitionResponseListener listener)
             throws SecurityException, RemoteException {
-        listener.onResponse(getResult());
+        listener.onResponse(service.getResult());
     }
 
     /**
@@ -108,19 +94,7 @@ public class ActivityRecognitionManagerImpl extends IActivityRecognitionManager.
     public void removeActivityUpdates(IActivityRecognitionResponseListener listener)
             throws SecurityException {
         String clientId = getClientId();
-        removeActivityUpdates(clientId);
-    }
-
-    /**
-     * Inner removes activity recognition updates for the specified PID*
-     * @param clientId client PID
-    */
-    protected void removeActivityUpdates(String clientId) {
-        if (this.clients.containsKey(clientId)) {
-            Log.i(TAG, "Unsubscribing client " + clientId);
-            this.clients.get(clientId).cancel();
-            this.clients.remove(clientId);
-        }
+        service.removeClient(clientId, listener);
     }
 
     /**
@@ -132,34 +106,7 @@ public class ActivityRecognitionManagerImpl extends IActivityRecognitionManager.
     @Override
     public ActivityRecognitionResult getDetectedActivities()
             throws SecurityException {
-        return getResult();
-    }
-
-    /**
-     * Returns the client subscribers count
-     *
-     * @return subscribers count
-     */
-    public int getClientCount() {
-        return this.clients.size();
-    }
-
-    /**
-     * Returns the ActivityRecognitionResult indicating the data from the last HumanActivity
-     *
-     * @return last known HumanActivity
-     */
-    public ActivityRecognitionResult getResult() {
-        return result;
-    }
-
-    /**
-     * Sets the last known HumanActivity
-     *
-     * @param otherResult last known HumanActivity
-     */
-    public synchronized void setResult(ActivityRecognitionResult otherResult) {
-        result = otherResult;
+        return service.getResult();
     }
 
     /**
@@ -169,10 +116,10 @@ public class ActivityRecognitionManagerImpl extends IActivityRecognitionManager.
      */
     private String getClientId() throws SecurityException{
         int pid = Binder.getCallingPid();
-        //String appId = this.context.getPackageManager().getPackagesForUid(pid)[0];
+        //String appId = this.service.getPackageManager().getPackagesForUid(pid)[0];
         String appId = String.valueOf(pid);
-        if (this.context.checkCallingPermission(
-                ActivityRecognitionService.ACCESS_ACTIVITY_RECOGNITION)
+        if (this.service.checkCallingPermission(
+                Constants.ACCESS_ACTIVITY_RECOGNITION)
                 == PackageManager.PERMISSION_GRANTED) {
             return appId;
         }

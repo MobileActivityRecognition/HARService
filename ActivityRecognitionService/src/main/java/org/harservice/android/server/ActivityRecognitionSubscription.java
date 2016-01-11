@@ -17,22 +17,33 @@
 
 package org.harservice.android.server;
 
-import android.os.RemoteException;
 import android.util.Log;
 
-import org.harservice.android.common.IActivityRecognitionManager;
 import org.harservice.android.common.IActivityRecognitionResponseListener;
 
-import java.util.TimerTask;
+import java.util.Comparator;
 
 /**
  * This class holds an Activity Recognition client subscription
  */
-public class ActivityRecognitionSubscription extends TimerTask {
+public class ActivityRecognitionSubscription {
+
     public static final String TAG = ActivityRecognitionSubscription.class.getSimpleName();
     private String appId;
-    private ActivityRecognitionManagerImpl manager;
+    private long detectionInterval;
+    private long lastUpdateTime;
     private IActivityRecognitionResponseListener listener;
+
+    public static class DetectionTimeComparator implements Comparator<ActivityRecognitionSubscription> {
+
+        @Override
+        public int compare(ActivityRecognitionSubscription lhs,
+                           ActivityRecognitionSubscription rhs) {
+            return Long.valueOf(rhs.getDetectionInterval()).compareTo(rhs.getDetectionInterval());
+        }
+
+    }
+
 
     /**
      * Private constructor
@@ -43,37 +54,48 @@ public class ActivityRecognitionSubscription extends TimerTask {
     }
 
     /**
-     * Constructs a client subscription that will perform request updates.
-     *
-     * @param manager {@link IActivityRecognitionManager} to remove request updates if the client
-     *                                                   binder is death
-     * @param listener {@link IActivityRecognitionResponseListener} client binder object reference to
-     *                                                             callback results
+     * Creates an client subscrioption
+     * @param appId client application identification
+     * @param detectionIntervalMillis detection time in milliseconds
+     * @param listener client callback
      */
-    protected ActivityRecognitionSubscription(ActivityRecognitionManagerImpl manager,
-                                           IActivityRecognitionResponseListener listener,
-                                              final String appId) {
-        Log.d(TAG, "Creating new subscriber thread");
-        this.manager = manager;
+    protected ActivityRecognitionSubscription(String appId, long detectionIntervalMillis,
+                                              IActivityRecognitionResponseListener listener) {
         this.listener = listener;
+        Log.d(TAG, "Creating new subscriber thread");
         this.appId = appId;
+        this.detectionInterval = detectionIntervalMillis;
     }
 
-    @Override
-    public void run() {
-        try {
-            if (this.listener.asBinder().isBinderAlive()) {
-                Log.d(TAG, "Updating subscriber activities");
-                this.listener.onResponse(this.manager.getResult());
-            }
-            else {
-                this.manager.removeActivityUpdates(String.valueOf(appId));
-            }
-        } catch (RemoteException e) {
-            this.manager.removeActivityUpdates(appId);
-            if (e.getMessage() != null) {
-                Log.e(TAG, e.getMessage());
-            }
-        }
+    /**
+     * Returns the last update time
+     * @return last update time
+     */
+    public long getLastUpdateTime() {
+        return lastUpdateTime;
+    }
+
+    /**
+     * Sets the last update time
+     * @param lastUpdateTime new last update time
+     */
+    public void setLastUpdateTime(long lastUpdateTime) {
+        this.lastUpdateTime = lastUpdateTime;
+    }
+
+    /**
+     * Returns the detection time
+     * @return detection time interval in milliseconds
+     */
+    public long getDetectionInterval() {
+        return detectionInterval;
+    }
+
+    /**
+     * Returns the clients callback
+     * @return client callback
+     */
+    public IActivityRecognitionResponseListener getListener() {
+        return listener;
     }
 }
