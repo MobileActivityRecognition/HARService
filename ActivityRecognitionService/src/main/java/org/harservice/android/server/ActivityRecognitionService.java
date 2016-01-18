@@ -55,7 +55,7 @@ public class ActivityRecognitionService extends Service {
     @Override
     public void onDestroy() {
         running = false;
-        worker.stopTimer();
+        worker.cancel();
         Log.i(TAG, "Activity Recognition Service destroyed");
         super.onDestroy();
     }
@@ -90,7 +90,7 @@ public class ActivityRecognitionService extends Service {
      *
      * @param result {@link ActivityRecognitionResult} to be published
      */
-    protected void publishResult(ActivityRecognitionResult result) {
+    protected synchronized void publishResult(ActivityRecognitionResult result) {
         this.result = result;
         for (String clientId: subscriptions.keySet()) {
             ActivityRecognitionSubscription client = subscriptions.get(clientId);

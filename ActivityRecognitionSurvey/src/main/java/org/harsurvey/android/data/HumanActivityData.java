@@ -105,7 +105,7 @@ public class HumanActivityData {
         if (activity != null) {
             values.put(Contract.C_ACTIVITY_TYPE, activity.toString());
         }
-        if (confidence > 0) {
+        if (confidence > -1) {
             values.put(Contract.C_ACTIVITY_CONFIDENCE, confidence);
         }
         if (status != null) {

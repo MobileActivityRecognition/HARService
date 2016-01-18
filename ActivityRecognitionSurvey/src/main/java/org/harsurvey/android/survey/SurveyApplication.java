@@ -78,8 +78,8 @@ public class SurveyApplication extends Application
 
     public long getInterval() {
         String value = preferences.getString("session_duration", null);
-        if (value == null) {
-            return Constants.INTERVAL_DEFAULT;
+        if (value == null || true) {
+            return Constants.INTERVAL_DEFAULT / 2;
         }
         else {
             return Long.valueOf(value) * Constants.MINUTE;

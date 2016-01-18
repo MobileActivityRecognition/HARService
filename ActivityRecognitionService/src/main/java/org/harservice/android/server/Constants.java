@@ -17,6 +17,8 @@
 
 package org.harservice.android.server;
 
+import org.harservice.android.common.HumanActivity;
+
 /**
  * Sampling default values
  */
@@ -33,10 +35,42 @@ public class Constants {
      */
     public static final long INTERVAL_DEFAULT = 10*SECOND;
     public static final long CALCULATION_DEFAULT = 5*SECOND;
-    public static final long SAMPLETIME_DEFAULT = (long) 2.5*SECOND;
+    public static final long SAMPLE_TIME = (long) 2.5*SECOND;
+    public static final int SAMPLE_SIZE = 512;
+    public static final int SLICE_SIZE = 128;
+    public static final int FILTER_SIZE = 5;
+    public static final int X = 0;
+    public static final int Y = 1;
+    public static final int Z = 2;
 
+    public static final int ACTIVITY_COUNT = HumanActivity.Type.values().length;
     public static final String ACCESS_ACTIVITY_RECOGNITION =
             "org.harservice.android.permission.ACTIVITY_RECOGNITION";
     public static final String SEND_ACTIVITY_RECOGNITION =
             "org.harservice.android.permission.ACTIVITY_RECOGNITION_DATA";
+
+    public enum VariableType {
+        X,
+        Y,
+        Z,
+        MAG;
+    }
+
+
+    public enum FeatureType {
+        MEAN,
+        STD,
+        MAX,
+        MIN,
+        SKEWNESS,
+        KURTOSIS,
+        ENERGY,
+        ENTROPY,
+        IRQ,
+        AR_COEF1,
+        AR_COEF2,
+        AR_COEF3,
+        AR_COEF4,
+        MEAN_FREQ
+    }
 }

@@ -17,6 +17,7 @@ allprojects {
         jcenter()
         flatDir {
             dirs "../ActivityRecognitionLib/build/outputs/aar"
+            dirs "../WekaClassifier/build/libs/"
         }
     }
 }

@@ -24,7 +24,13 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.SystemClock;
 
-import java.util.ArrayList;
+import org.harservice.android.features.SignalProcessing;
+
+import static org.harservice.android.server.Constants.FILTER_SIZE;
+import static org.harservice.android.server.Constants.SAMPLE_SIZE;
+import static org.harservice.android.server.Constants.X;
+import static org.harservice.android.server.Constants.Y;
+import static org.harservice.android.server.Constants.Z;
 
 /**
  * Implements an independent sensor collector service that broadcast sensor results every X seconds
@@ -35,15 +41,13 @@ public class MonitoredSensor {
 
     private Sensor sensor;
     private boolean listening = false;
-    private long sampleTime;
     private onSensorEventListener sensorListener;
     private Context context;
     private SensorDataFinishListener listener;
 
-    public MonitoredSensor(Context context, SensorDataFinishListener listener, long sampleTime) {
+    public MonitoredSensor(Context context, SensorDataFinishListener listener) {
         this.context = context;
         this.listener = listener;
-        this.sampleTime = sampleTime;
         sensor = getSensorManager().getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     }
 
@@ -59,7 +63,7 @@ public class MonitoredSensor {
         return listening;
     }
 
-    public SensorManager getSensorManager() {
+    private SensorManager getSensorManager() {
         return (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
     }
 
@@ -73,30 +77,39 @@ public class MonitoredSensor {
     public void stopListening() {
         getSensorManager().unregisterListener(sensorListener);
         sensorListener = null;
-        listening = false;
     }
 
     private class onSensorEventListener implements SensorEventListener {
-        private long starTime;
-        private ArrayList<float[]> sensorData = new ArrayList<>();
+        private long startTime;
+        private float[][] sensorData = new float[SAMPLE_SIZE][3];
+        private int idxArray = 0;
+        private int idxCapture = 0;
+        private float[][] sampleWindow = new float[FILTER_SIZE][3];
 
         public onSensorEventListener() {
-            starTime = SystemClock.elapsedRealtime();
+            startTime = SystemClock.elapsedRealtime();
         }
 
         @Override
         public void onSensorChanged(SensorEvent event) {
             long now = SystemClock.elapsedRealtime();
-            long deltaMs = 0;
 
             float[] values = event.values;
-            deltaMs = now - event.timestamp;
-            if (now - starTime > MonitoredSensor.this.sampleTime) {
-                listener.onSensorData(sensorData);
-                stopListening();
+            idxCapture += 1;
+            if (idxCapture < SAMPLE_SIZE + FILTER_SIZE) {
+                SignalProcessing.roll(sampleWindow, X, values[X]);
+                SignalProcessing.roll(sampleWindow, Y, values[Y]);
+                SignalProcessing.roll(sampleWindow, Z, values[Z]);
+
+                if (idxCapture >= FILTER_SIZE) {
+                    sensorData[idxArray] = SignalProcessing.average(sampleWindow);
+                    idxArray += 1;
+                }
             }
             else {
-                sensorData.add(values);
+                stopListening();
+                listener.onSensorData(startTime, now, sensorData);
+                listening = false;
             }
         }
 

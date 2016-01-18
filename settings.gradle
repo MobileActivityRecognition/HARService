@@ -1,1 +1,1 @@
-include ':ActivityRecognitionLib', ':ActivityRecognitionService', ':ActivityRecognitionSurvey'
+include ':ActivityRecognitionLib', ':ActivityRecognitionService', ':ActivityRecognitionSurvey', ':WekaClassifier'

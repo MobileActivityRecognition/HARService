@@ -22,6 +22,10 @@ import android.util.Log;
 
 import org.harservice.android.common.ActivityRecognitionResult;
 import org.harservice.android.common.HumanActivity;
+import org.harservice.android.features.FeatureProcessing;
+import org.harservice.android.model.ActivityClassifier;
+import org.harservice.android.model.DecisionTreeClassifier;
+import org.harservice.android.model.RandomClassifier;
 import org.harservice.android.sampling.MonitoredSensor;
 import org.harservice.android.sampling.SensorDataFinishListener;
 
@@ -29,19 +33,23 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.harservice.android.server.Constants.VariableType;
+import static org.harservice.android.server.Constants.SAMPLE_SIZE;
+import static org.harservice.android.server.Constants.SLICE_SIZE;
+
 /**
  * This class is the task that perform human activity recognition in fixed intervals.
  */
 public class ActivityRecognitionWorker implements SensorDataFinishListener {
     public static final String TAG = ActivityRecognitionWorker.class.getSimpleName();
-
-
     private ActivityRecognitionService context;
     private long intervalTime = Integer.MAX_VALUE;
     private long newIntervalTime = -1;
     private boolean newTime = false;
     private final MonitoredSensor monitoredSensor;
+    private final ActivityClassifier activityClassifier;
     private Timer scheduler;
+    private TimerWorker timerWorker;
 
 
     /**
@@ -53,7 +61,8 @@ public class ActivityRecognitionWorker implements SensorDataFinishListener {
         this.context = context;
 
         scheduler = new Timer();
-        monitoredSensor = new MonitoredSensor(context, this, Constants.SAMPLETIME_DEFAULT);
+        monitoredSensor = new MonitoredSensor(context, this);
+        activityClassifier = new DecisionTreeClassifier();
     }
 
     public boolean isValidTime(long timer) {
@@ -66,6 +75,7 @@ public class ActivityRecognitionWorker implements SensorDataFinishListener {
             stopTimer();
             intervalTime = timer;
             long firstTime = timer - Constants.CALCULATION_DEFAULT;
+            timerWorker = new TimerWorker();
             scheduler.schedule(timerWorker, firstTime, intervalTime);
         }
         else if (isValidTime(timer) && monitoredSensor.isListening()) {
@@ -77,26 +87,44 @@ public class ActivityRecognitionWorker implements SensorDataFinishListener {
 
     public void stopTimer() {
         intervalTime = Integer.MAX_VALUE;
-        if (timerWorker.scheduledExecutionTime() == intervalTime) {
+        if (timerWorker != null) {
             timerWorker.cancel();
         }
     }
 
+    public void cancel() {
+        this.scheduler.purge();
+        this.scheduler.cancel();
+    }
 
     @Override
-    public void onSensorData(ArrayList<float[]> sensorData) {
-        Log.d(TAG, "Calculating activity " + sensorData.size());
+    public void onSensorData(long startTime, long now, float[][] sensorData) {
+        Log.d(TAG, "Calculating activity " + sensorData.length);
+        double[] results = new double[Constants.ACTIVITY_COUNT];
+        int steps = SLICE_SIZE / 2;   // STEPS = 64, SLICE_SIZE = 128, SAMPLE_SIZE = 512
+        double slices = SAMPLE_SIZE / steps  - 1; // SLICE = 7 es 100%
+        Log.d(TAG, "Number of slices " + slices);
+        for (int i = 0; i + SLICE_SIZE <= SAMPLE_SIZE ; i += steps) {
+            double[] featureData = FeatureProcessing.calculateSample(i,
+                    i + SLICE_SIZE,
+                    SLICE_SIZE,
+                    sensorData, VariableType.MAG);
+            HumanActivity.Type result = activityClassifier.classify(featureData);
+            results[result.ordinal()] += 1.0/slices;
+            Log.d(TAG, String.format("Activity detected %s (%.2f)", result.toString(),
+                    results[result.ordinal()]*100));
+        }
         ArrayList<HumanActivity> detected = new ArrayList<>();
         for (HumanActivity.Type act : HumanActivity.Type.values()) {
-            HumanActivity de = new HumanActivity(act,
-                    (int) (Math.random() * 100 + 1));
+            int confidence = (int) Math.round(results[act.ordinal()]*100);
+            HumanActivity de = new HumanActivity(act, confidence);
             detected.add(de);
         }
         this.context.publishResult(new ActivityRecognitionResult(detected,
-                System.currentTimeMillis(), SystemClock.elapsedRealtime()));
+                startTime, now - startTime));
     }
 
-    private TimerTask timerWorker = new TimerTask() {
+    private class TimerWorker extends TimerTask {
         @Override
         public void run() {
             synchronized (ActivityRecognitionWorker.this.monitoredSensor) {

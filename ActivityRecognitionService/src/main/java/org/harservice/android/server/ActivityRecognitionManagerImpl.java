@@ -34,7 +34,7 @@ import java.util.Timer;
 public class ActivityRecognitionManagerImpl extends IActivityRecognitionManager.Stub {
     public static final String TAG = ActivityRecognitionManagerImpl.class.getSimpleName();
     private ActivityRecognitionService service;
-    private Timer timer;
+
 
     /**
      * Private constructor
