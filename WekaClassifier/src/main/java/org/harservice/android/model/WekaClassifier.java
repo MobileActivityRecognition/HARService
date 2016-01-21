@@ -18,6 +18,7 @@
 package org.harservice.android.model;
 
 class WekaClassifier {
+    public static final int VERSION = 001;
 
     public static double classify(Object[] i)
             throws Exception {
