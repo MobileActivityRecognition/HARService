@@ -24,9 +24,9 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import org.harservice.android.api.ConnectionApi;
-import org.harservice.android.client.ActivityRecognitionClient;
-import org.harservice.android.client.OnClientConnectionListener;
+import org.hardroid.api.ConnectionApi;
+import org.hardroid.client.ActivityRecognitionClient;
+import org.hardroid.client.OnClientConnectionListener;
 import org.harsurvey.android.survey.Constants.SyncType;
 
 /**

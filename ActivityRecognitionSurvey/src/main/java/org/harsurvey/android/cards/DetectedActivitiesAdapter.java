@@ -19,7 +19,6 @@ package org.harsurvey.android.cards;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.provider.BaseColumns;
 import android.text.format.DateUtils;
@@ -28,10 +27,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CursorAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.harservice.android.common.HumanActivity;
 import org.harsurvey.android.data.HumanActivityData;
 import org.harsurvey.android.survey.Constants;
 import org.harsurvey.android.survey.R;

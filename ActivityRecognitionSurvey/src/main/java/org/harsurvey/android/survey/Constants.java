@@ -25,7 +25,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 
-import org.harservice.android.common.HumanActivity;
+import org.hardroid.common.HumanActivity;
 
 /**
  * Configuration Parameters

@@ -18,16 +18,12 @@
 package org.harsurvey.android.data;
 
 import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import org.harservice.android.common.HumanActivity;
+import org.hardroid.common.HumanActivity;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Collected Human Activity Data

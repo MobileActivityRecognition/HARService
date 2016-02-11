@@ -19,7 +19,7 @@
     package="org.harsurvey.android.survey" >
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="org.harservice.android.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="org.hardroid.permission.ACTIVITY_RECOGNITION" />
 
     <application android:name=".SurveyApplication"
         android:allowBackup="true"

@@ -22,8 +22,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
-import org.harservice.android.common.ActivityRecognitionResult;
-import org.harservice.android.common.HumanActivity;
+import org.hardroid.common.ActivityRecognitionResult;
+import org.hardroid.common.HumanActivity;
 import org.harsurvey.android.data.HumanActivityData;
 
 import java.util.Date;

@@ -10,7 +10,7 @@ import android.media.RingtoneManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import org.harservice.android.common.HumanActivity;
+import org.hardroid.common.HumanActivity;
 
 public class NotificationReceiver extends BroadcastReceiver {
 
