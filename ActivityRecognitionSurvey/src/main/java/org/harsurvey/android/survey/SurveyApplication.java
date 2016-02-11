@@ -47,7 +47,8 @@ public class SurveyApplication extends Application
         super.onCreate();
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         preferences.registerOnSharedPreferenceChangeListener(this);
-        apiClient = new ActivityRecognitionClient(this, this);
+        apiClient = new ActivityRecognitionClient(this);
+        apiClient.addOnConnectionListener(this);
         Log.i(TAG, "Application started");
     }
 

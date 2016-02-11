@@ -23,7 +23,7 @@ android {
 
     defaultConfig {
         applicationId "org.harsurvey.android.survey"
-        minSdkVersion 15
+        minSdkVersion 11
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
