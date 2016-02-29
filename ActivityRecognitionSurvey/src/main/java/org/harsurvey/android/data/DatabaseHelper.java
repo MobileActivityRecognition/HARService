@@ -22,7 +22,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import org.harsurvey.android.survey.Constants;
+import org.harsurvey.android.util.Constants;
 
 /**
  * Generic Database Helper

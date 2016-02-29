@@ -20,6 +20,7 @@ package org.harsurvey.android.survey;
 import android.app.LoaderManager;
 import android.content.ContentUris;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import org.harsurvey.android.cards.CardStreamLinearLayout;
 import org.harsurvey.android.cards.DetectedActivitiesAdapter;
 import org.harsurvey.android.cards.OnCardClickListener;
 import org.harsurvey.android.data.HumanActivityData;
+import org.harsurvey.android.util.Constants;
 
 /**
  * Show CardView Feed activity
@@ -54,9 +56,9 @@ public class FeedActivity extends BaseActivity implements OnCardClickListener,
     protected void onResume() {
         super.onResume();
         getLoaderManager().initLoader(0, null, this);
-        app.connect();
+        app.getConnection().connect();
         app.setOnTop(true);
-        if (!app.isClientConnected()) {
+        if (!app.getConnection().isClientConnected()) {
             Toast.makeText(this, getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
         }
     }
@@ -73,13 +75,18 @@ public class FeedActivity extends BaseActivity implements OnCardClickListener,
         Long id = Long.valueOf(tag.split("_")[1]);
         HumanActivityData activityData = new HumanActivityData(id);
         activityData.status = HumanActivityData.Status.PENDING;
-        activityData.feedback = (action == R.id.card_button_positive);
+        boolean checkButton = action == R.id.card_button_positive;
+        activityData.feedback = checkButton;
         int updated = getContentResolver().update(
                 ContentUris.withAppendedId(HumanActivityData.CONTENT_URI, id),
                 activityData.getValues(), null, null);
         if (updated > 0) {
             Log.d(TAG,  String.format("Saved activity %s as %s", activityData.getId(),
                     activityData.feedback));
+            if (app.isOnline() && checkButton) {
+                Intent localIntent = new Intent(Constants.REQUEST_SYNCRONIZATION);
+                sendBroadcast(localIntent);
+            }
         }
     }
 

@@ -35,19 +35,6 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         app = (SurveyApplication) getApplication();
-        if (savedInstanceState != null) {
-            app.setPhoneImei(savedInstanceState.getString(Constants.IMEI_KEY));
-        } else {
-            TelephonyManager telephonyManager = (TelephonyManager)
-                    getSystemService(Context.TELEPHONY_SERVICE);
-            app.setPhoneImei(telephonyManager.getDeviceId());
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        outState.putString(Constants.IMEI_KEY, app.getPhoneImei());
-        super.onSaveInstanceState(outState, outPersistentState);
     }
 
     @Override

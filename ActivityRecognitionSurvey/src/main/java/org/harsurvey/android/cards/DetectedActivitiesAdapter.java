@@ -30,7 +30,7 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import org.harsurvey.android.data.HumanActivityData;
-import org.harsurvey.android.survey.Constants;
+import org.harsurvey.android.util.Constants;
 import org.harsurvey.android.survey.R;
 
 /**

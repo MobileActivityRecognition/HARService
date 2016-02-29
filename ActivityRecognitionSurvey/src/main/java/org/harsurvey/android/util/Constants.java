@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.harsurvey.android.survey;
+package org.harsurvey.android.util;
 
 
 import android.content.Context;
@@ -23,9 +23,12 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 
 import org.hardroid.common.HumanActivity;
+import org.harsurvey.android.survey.R;
 
 /**
  * Configuration Parameters
@@ -43,24 +46,19 @@ public class Constants {
      */
     public static final int INTERVAL_DEFAULT = 1*MINUTE;
 
-
-
-    public enum SyncType {
-        GPRS,
-        WIFI
-    }
     /**
      * Declaring KEYS for saving data
      */
     public static final String PREFERENCE_KEY = "SURVEY_PREFERENCES";
 
-    public static final String IMEI_KEY = "IMEI";
     public static final String DATABASE_NAME = "activities.db";
+    public static final int DATABASE_VERSION = 3;
 
-    public static final int DATABASE_VERSION = 2;
-    public static final String DETECTED_ACTIVITY_BROADCAST = "org.harsurvey.android.survey.DETECTED_ACTIVITY_BROADCAST";
+    public static final String DETECTED_ACTIVITY_BROADCAST = "org.harsurvey.android.DETECTED_ACTIVITY_BROADCAST";
+    public static final String DETECTED_ACTIVITY_EXTRA = "org.harsurvey.android.DETECTED_ACTIVITY_EXTRA";
+    public static final String REQUEST_SYNCRONIZATION = "org.harsurvey.android.REQUEST_SYNCRONIZATION";
+    public static final String REST_URL = "%sARrecolector/webresources/com.fpuna.entities.collaborativesession";
 
-    public static final String DETECTED_ACTIVITY_EXTRA = "org.harsurvey.android.survey.DETECTED_ACTIVITY_EXTRA";
     public static String getActivityString(Context context, HumanActivity.Type detectedActivityType) {
         Resources resources = context.getResources();
         switch(detectedActivityType) {
@@ -120,6 +118,37 @@ public class Constants {
                 return R.drawable.ic_activity_walk;
             default:
                 return R.drawable.ic_activity_unkown;
+        }
+    }
+
+    public static String getDeviceName() {
+        String manufacturer = Build.MANUFACTURER;
+        String model = Build.MODEL;
+        if (model.startsWith(manufacturer)) {
+            return capitalize(model);
+        } else {
+            return capitalize(manufacturer) + " " + model;
+        }
+    }
+
+    public static String getDeviceOwner() {
+        String name = android.os.Build.USER;
+
+        if (!TextUtils.isEmpty(name)) {
+            return name;
+        }
+        return null;
+    }
+
+    private static String capitalize(String s) {
+        if (s == null || s.length() == 0) {
+            return "";
+        }
+        char first = s.charAt(0);
+        if (Character.isUpperCase(first)) {
+            return s;
+        } else {
+            return Character.toUpperCase(first) + s.substring(1);
         }
     }
 }

@@ -19,7 +19,10 @@
     package="org.harsurvey.android.survey" >
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="org.hardroid.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <application android:name=".SurveyApplication"
         android:allowBackup="true"
@@ -31,6 +34,7 @@
             android:name=".SettingsActivity"
             android:label="@string/action_settings" >
             <intent-filter>
+                <action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -50,8 +54,14 @@
             android:name="org.harsurvey.android.data.HumanActivityFeed" android:exported="false" />
         <receiver android:name=".NotificationReceiver">
             <intent-filter>
-                <action android:name="org.harsurvey.android.survey.DETECTED_ACTIVITY_BROADCAST" />
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="org.harsurvey.android.DETECTED_ACTIVITY_BROADCAST" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".UpdateActionReceiver">
+            <intent-filter>
+                <action android:name="android.net.con.CONNECTIVITY_CHANGE" />
+                <action android:name="org.harsurvey.android.REQUEST_SYNCRONIZATION" />
             </intent-filter>
         </receiver>
 

@@ -45,13 +45,11 @@ public class FeatureData {
     public double energy;
     public double entropy;
     public double irq;
-    public double sma;
-
-    public static enum Variables {
-        MEAN, STD, MAX, MIN, SKEWNESS,
-        KURTOSIS, ENERGY, ENTROPY, IQR, SMA;
-
-    }
+    public double ar1;
+    public double ar2;
+    public double ar3;
+    public double ar4;
+    public double meanf;
 
     public FeatureData(long id) {
         this.id = id;
@@ -59,7 +57,7 @@ public class FeatureData {
 
     public FeatureData(long activityId, double mean, double std, double max, double min,
                        double skew, double kurt, double energy, double entropy, double irq,
-                       double sma) {
+                       double ar1, double ar2, double ar3, double ar4, double meanf) {
         this.activityId = activityId;
         this.mean = mean;
         this.std = std;
@@ -70,7 +68,11 @@ public class FeatureData {
         this.energy = energy;
         this.entropy = entropy;
         this.irq = irq;
-        this.sma = sma;
+        this.ar1 = ar1;
+        this.ar2 = ar2;
+        this.ar3 = ar3;
+        this.ar4 = ar4;
+        this.meanf = meanf;
     }
 
     public FeatureData(ContentValues values) {
@@ -81,7 +83,7 @@ public class FeatureData {
         for (String label: values.keySet()) {
             switch (label) {
                 case Contract._ID: this.id = values.getAsLong(label); break;
-                case Contract.C_ACTIVITY_ID: this.id = values.getAsLong(label); break;
+                case Contract.C_ACTIVITY_ID: this.activityId = values.getAsLong(label); break;
                 case Contract.C_MEAN: this.mean = values.getAsDouble(label); break;
                 case Contract.C_STD: this.std = values.getAsDouble(label); break;
                 case Contract.C_MAX: this.max = values.getAsDouble(label); break;
@@ -90,7 +92,11 @@ public class FeatureData {
                 case Contract.C_ENERGY: this.energy = values.getAsDouble(label); break;
                 case Contract.C_ENTROPY: this.entropy = values.getAsDouble(label); break;
                 case Contract.C_IQR: this.irq = values.getAsDouble(label); break;
-                case Contract.C_SMA: this.sma = values.getAsDouble(label); break;
+                case Contract.C_AR1: this.ar1 = values.getAsDouble(label); break;
+                case Contract.C_AR2: this.ar2 = values.getAsDouble(label); break;
+                case Contract.C_AR3: this.ar3 = values.getAsDouble(label); break;
+                case Contract.C_AR4: this.ar4 = values.getAsDouble(label); break;
+                case Contract.C_MEANF: this.meanf = values.getAsDouble(label); break;
             }
         }
     }
@@ -100,7 +106,7 @@ public class FeatureData {
         if (this.id > 1) {
             values.put(Contract._ID, this.id);
         }
-        values.put(Contract.C_ACTIVITY_ID, this.id);
+        values.put(Contract.C_ACTIVITY_ID, this.activityId);
         values.put(Contract.C_MEAN, this.mean);
         values.put(Contract.C_STD, this.std);
         values.put(Contract.C_MAX, this.max);
@@ -108,8 +114,11 @@ public class FeatureData {
         values.put(Contract.C_SKEWNESS, this.skew);
         values.put(Contract.C_ENERGY, this.energy);
         values.put(Contract.C_ENTROPY, this.entropy);
-        values.put(Contract.C_IQR, this.irq);
-        values.put(Contract.C_SMA, this.sma);
+        values.put(Contract.C_AR1, this.ar1);
+        values.put(Contract.C_AR2, this.ar2);
+        values.put(Contract.C_AR3, this.ar3);
+        values.put(Contract.C_AR4, this.ar4);
+        values.put(Contract.C_MEANF, this.meanf);
         return values;
     }
 
@@ -129,11 +138,15 @@ public class FeatureData {
         public static final String C_ENERGY = "energy";
         public static final String C_ENTROPY = "entropy";
         public static final String C_IQR = "irq";
-        public static final String C_SMA = "sma";
+        public static final String C_AR1 = "ar1";
+        public static final String C_AR2 = "ar2";
+        public static final String C_AR3 = "ar3";
+        public static final String C_AR4 = "ar4";
+        public static final String C_MEANF = "mean_freq";
 
         public static final String[] ALL_COLUMNS = {
             _ID, C_ACTIVITY_ID, C_MEAN, C_STD, C_MAX, C_MIN, C_SKEWNESS,
-            C_KURTOSIS, C_ENERGY, C_ENTROPY, C_IQR, C_SMA
+            C_KURTOSIS, C_ENERGY, C_ENTROPY, C_IQR, C_AR1, C_AR2, C_AR3, C_AR4, C_MEANF
         };
 
         public static final String DEFAULT_SORT = _ID + " DESC";
@@ -151,8 +164,13 @@ public class FeatureData {
             "%s REAL," +
             "%s REAL," +
             "%s REAL," +
+            "%s REAL," +
+            "%s REAL," +
+            "%s REAL," +
+            "%s REAL," +
             "%s REAL)", TABLE, _ID, C_ACTIVITY_ID, C_MEAN, C_STD, C_MAX, C_MIN,
-                C_SKEWNESS, C_KURTOSIS, C_ENERGY, C_ENTROPY, C_IQR, C_SMA);
+                C_SKEWNESS, C_KURTOSIS, C_ENERGY, C_ENTROPY, C_IQR, C_AR1, C_AR2, C_AR3,
+                C_AR4, C_MEANF);
 
         public static final String SQL_DROP = "DROP TABLE IF EXISTS " + TABLE;
     }

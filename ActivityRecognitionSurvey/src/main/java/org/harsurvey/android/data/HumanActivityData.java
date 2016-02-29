@@ -141,7 +141,7 @@ public class HumanActivityData {
           "%s INTEGER)", TABLE, _ID, C_CREATED, C_ACTIVITY_TYPE, C_ACTIVITY_CONFIDENCE,
                 C_STATUS, C_FEEDBACK);
 
-        public static final String SQL_DROP = "DROP TABLE IF EXITS " + TABLE;
+        public static final String SQL_DROP = "DROP TABLE IF EXISTS " + TABLE;
     }
 
     public static final DataCreator<HumanActivityData> CREATOR = new DataCreator<>(HumanActivityData.class);

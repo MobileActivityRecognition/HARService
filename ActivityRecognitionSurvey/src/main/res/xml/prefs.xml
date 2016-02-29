@@ -19,18 +19,43 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/pref_header_general" android:key="pref_general">
         <EditTextPreference
-            android:key="display_name"
-            android:title="@string/pref_title_display_name"
-            android:defaultValue="@string/pref_default_display_name"
-            android:contentDescription="@string/pref_sum_display_name"
-            android:selectAllOnFocus="true"
+            android:key="@string/pref_key_model"
+            android:title="@string/pref_title_model"
+            android:editable="false"
+            android:enabled="false"
+            android:inputType="textCapWords"
+            android:capitalize="words"
+            android:singleLine="true"
+            android:maxLines="1" />
+
+        <EditTextPreference
+            android:key="@string/pref_key_imei"
+            android:title="@string/pref_title_imei"
+            android:editable="false"
+            android:enabled="false"
+            android:inputType="textCapWords"
+            android:capitalize="words"
+            android:singleLine="true"
+            android:maxLines="1" />
+
+        <EditTextPreference
+            android:key="@string/pref_key_sensor"
+            android:title="@string/pref_title_sensor"
+            android:editable="false"
+            android:enabled="false"
             android:inputType="textCapWords"
             android:capitalize="words"
             android:singleLine="true"
             android:maxLines="1" />
 
         <ListPreference
-            android:key="session_duration"
+            android:key="@string/pref_key_name"
+            android:title="@string/pref_title_display_name"
+            android:defaultValue="@string/pref_default_display_name"
+            android:contentDescription="@string/pref_sum_display_name" />
+
+        <ListPreference
+            android:key="@string/pref_key_duration"
             android:title="@string/pref_title_session_duration"
             android:entries="@array/pref_session_duration_titles"
             android:entryValues="@array/pref_session_duration_values"
@@ -40,14 +65,14 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/pref_header_data_sync" android:key="pref_data_sync">
         <CheckBoxPreference
-            android:key="sync_data_con"
+            android:key="@string/pref_key_conn"
             android:title="@string/pref_title_sync_data"
             android:summary="@string/pref_sum_sync_data"
             android:defaultValue="true"/>
 
         <ListPreference
             android:dependency="sync_data_con"
-            android:key="sync_data_method"
+            android:key="@string/pref_key_sync"
             android:title="@string/pref_title_sync_method"
             android:dialogTitle="@string/pref_title_sync_method"
             android:entries="@array/pref_sync_method_titles"

@@ -25,6 +25,7 @@ import android.util.Log;
 import org.hardroid.common.ActivityRecognitionResult;
 import org.hardroid.common.HumanActivity;
 import org.harsurvey.android.data.HumanActivityData;
+import org.harsurvey.android.util.Constants;
 
 import java.util.Date;
 
@@ -45,7 +46,8 @@ public class DetectedActivitiesService extends IntentService {
 
         HumanActivity activity = result.getMostProbableActivity();
 
-        HumanActivityData activityData = new HumanActivityData(new Date(),
+        Date time = new Date();
+        HumanActivityData activityData = new HumanActivityData(time,
                 activity.getType(), activity.getConfidence(),
                 HumanActivityData.Status.DRAFT, false);
         Uri uri = getContentResolver().insert(HumanActivityData.CONTENT_URI,

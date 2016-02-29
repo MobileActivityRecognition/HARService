@@ -19,45 +19,46 @@ package org.harsurvey.android.survey;
 
 import android.app.Application;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import org.hardroid.api.ConnectionApi;
 import org.hardroid.client.ActivityRecognitionClient;
-import org.hardroid.client.OnClientConnectionListener;
-import org.harsurvey.android.survey.Constants.SyncType;
+import org.harsurvey.android.util.ConnectionHelper;
+import org.harsurvey.android.util.PhoneInfoHelper;
+import org.harsurvey.android.util.PreferenceHelper;
+import org.harsurvey.android.util.RestServiceHelper;
 
 /**
  * SurveyApplication
  */
-public class SurveyApplication extends Application
-        implements SharedPreferences.OnSharedPreferenceChangeListener, OnClientConnectionListener {
+public class SurveyApplication extends Application {
 
     public static final String TAG = SurveyApplication.class.getSimpleName();
-    private SharedPreferences preferences;
-    private String phoneImei;
-    private ActivityRecognitionClient apiClient;
     private PendingIntent detectedActivityService;
     private boolean onTop = false;
+    private PhoneInfoHelper phoneInfo;
+    private ConnectionHelper connection;
+    private PreferenceHelper preference;
+    private RestServiceHelper restService;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        preferences.registerOnSharedPreferenceChangeListener(this);
-        apiClient = new ActivityRecognitionClient(this);
-        apiClient.addOnConnectionListener(this);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        preference = new PreferenceHelper(this, preferences);
+        phoneInfo = new PhoneInfoHelper(this, preferences);
+        connection = new ConnectionHelper(this, new ActivityRecognitionClient(this));
+        restService = new RestServiceHelper(this);
         Log.i(TAG, "Application started");
     }
 
     public void cleanUp() {
-        if (apiClient.isConnected()) {
-            Log.i(TAG, "Removing activities updates");
-            apiClient.getService().removeActivityUpdates(getDetectedActivityService());
-            apiClient.disconnect();
-        }
+        connection.release();
         Log.i(TAG, "Aplication terminated");
     }
 
@@ -72,64 +73,42 @@ public class SurveyApplication extends Application
         return detectedActivityService;
     }
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-
-    }
-
-    public long getInterval() {
-        String value = preferences.getString("session_duration", null);
-        if (value == null || true) {
-            return Constants.INTERVAL_DEFAULT / 2;
-        }
-        else {
-            return Long.valueOf(value) * Constants.MINUTE;
-        }
-    }
-
-    public SyncType getSyncMethod() {
-        return SyncType.valueOf(
-                preferences.getString("sync_data_method",
-                        getString(R.string.pref_default_sync_method))
-        );
-    }
-
-    public String getPhoneImei() {
-        return phoneImei;
-    }
-
-
-    public void setPhoneImei(String phoneImei) {
-        this.phoneImei = phoneImei;
-    }
-
-    public void connect() {
-        if (!apiClient.isConnected()) {
-            apiClient.connect();
-        }
-    }
-
-    @Override
-    public void onConnect(ConnectionApi connectionApi) {
-        Log.i(TAG, "Requesting activities updates");
-        apiClient.getService().requestActivityUpdates(
-                getInterval(),
-                getDetectedActivityService());
-    }
-
-    @Override
-    public void onDisconnect(ConnectionApi connectionApi) {
-    }
-
-    public boolean isClientConnected() {
-        return apiClient.isConnected();
-    }
-
     public boolean isOnTop() {
         return onTop;
     }
 
     public void setOnTop(boolean onTop) {
         this.onTop = onTop;
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        String method = preference.getSyncMethod();
+        if (networkInfo != null) {
+            boolean myNetwork = method.equals("ALL") ||
+                    networkInfo.getTypeName().equals(method);
+            return networkInfo.isConnected() && myNetwork;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public PhoneInfoHelper getPhoneInfo() {
+        return phoneInfo;
+    }
+
+    public PreferenceHelper getPreference() {
+        return preference;
+    }
+
+    public ConnectionHelper getConnection() {
+        return connection;
+    }
+
+    public RestServiceHelper getRestService() {
+        return restService;
     }
 }

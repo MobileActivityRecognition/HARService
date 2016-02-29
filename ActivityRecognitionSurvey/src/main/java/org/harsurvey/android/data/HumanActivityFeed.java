@@ -161,8 +161,9 @@ public class HumanActivityFeed extends ContentProvider {
         }
 
         SQLiteDatabase db = database.getWritableDatabase();
+        int ret;
         try {
-            int ret = db.delete(table, where, selectionArgs);
+            ret = db.delete(table, where, selectionArgs);
 
             if (ret > 0) {
                 getContext().getContentResolver().notifyChange(uri, null);
@@ -172,7 +173,7 @@ public class HumanActivityFeed extends ContentProvider {
             db.close();
         }
 
-        return 0;
+        return ret;
     }
 
     @Override
@@ -198,8 +199,9 @@ public class HumanActivityFeed extends ContentProvider {
         }
 
         SQLiteDatabase db = database.getWritableDatabase();
+        int ret = 0;
         try {
-            int ret = db.update(table, values, where, selectionArgs);
+            ret = db.update(table, values, where, selectionArgs);
 
             if (ret > 0) {
                 getContext().getContentResolver().notifyChange(uri, null);
@@ -209,7 +211,7 @@ public class HumanActivityFeed extends ContentProvider {
             db.close();
         }
 
-        return 0;
+        return ret;
     }
 
 }

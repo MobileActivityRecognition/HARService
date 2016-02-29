@@ -17,7 +17,10 @@
 
 package org.harsurvey.android.survey;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -27,6 +30,8 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+
+import org.harsurvey.android.util.Constants;
 
 
 /**
@@ -129,6 +134,19 @@ public class SettingsActivity extends PreferenceActivity {
                         .getString(preference.getKey(), ""));
     }
 
+    private static void bindPreferenceAccountNames(Preference preference, Activity activity) {
+        ListPreference prefs = ((ListPreference) preference);
+        AccountManager manager = (AccountManager) activity.getSystemService(ACCOUNT_SERVICE);
+        Account[] list = manager.getAccounts();
+        String[] values = new String[list.length];
+        int i = 0;
+        for (Account account: list) {
+            values[i++] = account.name;
+        }
+        prefs.setEntryValues(values);
+        prefs.setEntries(values);
+    }
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class SettingsFragment extends PreferenceFragment {
 
@@ -137,9 +155,23 @@ public class SettingsActivity extends PreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.prefs);
 
-            bindPreferenceSummaryToValue(findPreference("display_name"));
-            bindPreferenceSummaryToValue(findPreference("session_duration"));
-            bindPreferenceSummaryToValue(findPreference("sync_data_method"));
+
+            Activity context = getActivity();
+            bindPreferenceAccountNames(findPreference(
+                    Constants.getStringResource(context,
+                    R.string.pref_key_name)), context);
+            bindPreferenceSummaryToValue(findPreference(Constants.getStringResource(context,
+                    R.string.pref_key_model)));
+            bindPreferenceSummaryToValue(findPreference(Constants.getStringResource(context,
+                    R.string.pref_key_imei)));
+            bindPreferenceSummaryToValue(findPreference(Constants.getStringResource(context,
+                    R.string.pref_key_name)));
+            bindPreferenceSummaryToValue(findPreference(Constants.getStringResource(context,
+                    R.string.pref_key_sensor)));
+            bindPreferenceSummaryToValue(findPreference(Constants.getStringResource(context,
+                    R.string.pref_key_duration)));
+            bindPreferenceSummaryToValue(findPreference(Constants.getStringResource(context,
+                    R.string.pref_key_sync)));
         }
     }
 

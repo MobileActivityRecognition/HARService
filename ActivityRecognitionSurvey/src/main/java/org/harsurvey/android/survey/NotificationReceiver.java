@@ -11,6 +11,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import org.hardroid.common.HumanActivity;
+import org.harsurvey.android.util.Constants;
 
 public class NotificationReceiver extends BroadcastReceiver {
 
@@ -41,7 +42,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true)
                     .setLargeIcon(Constants.getBitmapIcon(context.getApplicationContext(),
-                            R.drawable.ic_notification_unkown))
+                            activity.getType()))
                     .setContentTitle(resources.getString(R.string.notification_title))
                     .setContentText(resources.getString(R.string.notification_text))
                     .setSubText(resources.getString(R.string.notification_description))
