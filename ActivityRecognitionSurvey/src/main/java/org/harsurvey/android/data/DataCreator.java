@@ -20,6 +20,7 @@ package org.harsurvey.android.data;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ import java.util.List;
  * Data Creator
  */
 public class DataCreator<T> {
+    private static final String TAG = DataCreator.class.getSimpleName();
     Class<T> clazz;
 
     public DataCreator(Class<T> clazz) {
@@ -35,17 +37,17 @@ public class DataCreator<T> {
     }
 
     public List<T> createFromCursor(Cursor cursor) {
+        ArrayList<T> result = new ArrayList<>();
         try {
-            ArrayList<T> result = new ArrayList<>();
             ContentValues values = new ContentValues();
             while (cursor.moveToNext()) {
                 DatabaseUtils.cursorRowToContentValues(cursor, values);
                 result.add(clazz.getConstructor(ContentValues.class).newInstance(values));
             }
-            return result;
         } catch (Exception e) {
-            return null;
+            Log.e(TAG, "Error obtaining data " + e.getMessage());
         }
+        return result;
     }
 
     public T createSingleFromCursor(Cursor cursor) {

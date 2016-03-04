@@ -58,6 +58,7 @@ public class Constants {
     public static final String DETECTED_ACTIVITY_EXTRA = "org.harsurvey.android.DETECTED_ACTIVITY_EXTRA";
     public static final String REQUEST_SYNCRONIZATION = "org.harsurvey.android.REQUEST_SYNCRONIZATION";
     public static final String REST_URL = "%sARrecolector/webresources/com.fpuna.entities.collaborativesession";
+    public static final String DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
 
     public static String getActivityString(Context context, HumanActivity.Type detectedActivityType) {
         Resources resources = context.getResources();
@@ -151,4 +152,5 @@ public class Constants {
             return Character.toUpperCase(first) + s.substring(1);
         }
     }
+
 }

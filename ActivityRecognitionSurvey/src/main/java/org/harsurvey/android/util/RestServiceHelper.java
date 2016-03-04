@@ -83,7 +83,7 @@ public class RestServiceHelper {
         }
 
         data.put("collaborativefeatureList", content);
-        Log.d(TAG, new Gson().toJson(data));
+        Log.d(TAG, MappingHelper.toJson(data));
         HttpRequestTask task = new HttpRequestTask();
         task.execute(context.getPreference().getIMEI(), data, activity);
     }

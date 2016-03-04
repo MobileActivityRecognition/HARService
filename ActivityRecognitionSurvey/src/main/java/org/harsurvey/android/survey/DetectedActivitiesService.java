@@ -18,12 +18,15 @@
 package org.harsurvey.android.survey;
 
 import android.app.IntentService;
+import android.content.ContentUris;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
 import org.hardroid.common.ActivityRecognitionResult;
+import org.hardroid.common.Feature;
 import org.hardroid.common.HumanActivity;
+import org.harsurvey.android.data.FeatureData;
 import org.harsurvey.android.data.HumanActivityData;
 import org.harsurvey.android.util.Constants;
 
@@ -53,7 +56,26 @@ public class DetectedActivitiesService extends IntentService {
         Uri uri = getContentResolver().insert(HumanActivityData.CONTENT_URI,
                 activityData.getValues());
         if (uri != null) {
-            Log.d(TAG,  String.format("Saved %s: %s", activity.getType(), activity.getConfidence()));
+            Log.d(TAG,  String.format("Saved Activity Result %s: %s", activity.getType(),
+                    activity.getConfidence()));
+            long lastId = ContentUris.parseId(uri);
+
+            for (Feature feature : result.getFeatures()) {
+                if (activity.getType() != feature.getActivityLabel()) {
+                    continue;
+                }
+                double[] data = feature.getData();
+                FeatureData featureData = new FeatureData(lastId, data[0], data[1], data[2], data[3],
+                        data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11],
+                        data[12], data[13]);
+                Uri alternateUri = getContentResolver().insert(FeatureData.CONTENT_URI,
+                        featureData.getValues());
+                if (alternateUri != null) {
+                    Log.d(TAG,  String.format("Saved Feature Result %s: %s data",
+                            feature.getActivityLabel(),
+                            feature.getFeatureSize()));
+                }
+            }
         }
 
         localIntent.putExtra(Constants.DETECTED_ACTIVITY_EXTRA, activity);

@@ -37,6 +37,7 @@ public class ActivityRecognitionResult implements Parcelable {
     private long time;
     private long elapsedRealtimeMillis;
     private List<HumanActivity> probableActivities;
+    private List<Feature> features;
 
     private static Comparator<HumanActivity> descendingOrder = new Comparator<HumanActivity>() {
         @Override
@@ -70,11 +71,17 @@ public class ActivityRecognitionResult implements Parcelable {
     }
 
     /**
-     * @param mostProbableActivity
-     * @param time
+     *
+     * @param features
+     * @param probableActivities
      * @param elapsedRealtimeMillis
+     * @param time
      */
-    public ActivityRecognitionResult(HumanActivity mostProbableActivity, long time, long elapsedRealtimeMillis) {
+    public ActivityRecognitionResult(List<HumanActivity> probableActivities,
+                                     long time, long elapsedRealtimeMillis,
+                                     List<Feature> features) {
+        this(probableActivities, time, elapsedRealtimeMillis);
+        this.features = features;
     }
 
     /**
@@ -133,6 +140,10 @@ public class ActivityRecognitionResult implements Parcelable {
         return this.probableActivities;
     }
 
+    public List<Feature> getFeatures() {
+        return features;
+    }
+
     @Override
     public String toString() {
         return "";
@@ -151,5 +162,19 @@ public class ActivityRecognitionResult implements Parcelable {
         }
         parcel.writeLong(this.time);
         parcel.writeLong(this.elapsedRealtimeMillis);
+        int featSize = 0;
+        if (this.features != null) {
+            featSize = this.features.size();
+        }
+        parcel.writeLong(featSize);
+        if (this.features != null) {
+            for (Feature data : this.features) {
+                data.writeToParcel(parcel, flags);
+            }
+        }
+    }
+
+    protected void setFeatures(List<Feature> features) {
+        this.features = features;
     }
 }

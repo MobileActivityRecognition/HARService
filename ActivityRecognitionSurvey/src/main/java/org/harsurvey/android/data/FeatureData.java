@@ -85,6 +85,7 @@ public class FeatureData {
                 case Contract._ID: this.id = values.getAsLong(label); break;
                 case Contract.C_ACTIVITY_ID: this.activityId = values.getAsLong(label); break;
                 case Contract.C_MEAN: this.mean = values.getAsDouble(label); break;
+                case Contract.C_KURTOSIS: this.kurt = values.getAsDouble(label); break;
                 case Contract.C_STD: this.std = values.getAsDouble(label); break;
                 case Contract.C_MAX: this.max = values.getAsDouble(label); break;
                 case Contract.C_MIN: this.min = values.getAsDouble(label); break;
@@ -112,8 +113,10 @@ public class FeatureData {
         values.put(Contract.C_MAX, this.max);
         values.put(Contract.C_MIN, this.min);
         values.put(Contract.C_SKEWNESS, this.skew);
+        values.put(Contract.C_KURTOSIS, this.kurt);
         values.put(Contract.C_ENERGY, this.energy);
         values.put(Contract.C_ENTROPY, this.entropy);
+        values.put(Contract.C_IQR, this.irq);
         values.put(Contract.C_AR1, this.ar1);
         values.put(Contract.C_AR2, this.ar2);
         values.put(Contract.C_AR3, this.ar3);
@@ -142,6 +145,7 @@ public class FeatureData {
         public static final String C_AR2 = "ar2";
         public static final String C_AR3 = "ar3";
         public static final String C_AR4 = "ar4";
+
         public static final String C_MEANF = "mean_freq";
 
         public static final String[] ALL_COLUMNS = {
@@ -171,7 +175,6 @@ public class FeatureData {
             "%s REAL)", TABLE, _ID, C_ACTIVITY_ID, C_MEAN, C_STD, C_MAX, C_MIN,
                 C_SKEWNESS, C_KURTOSIS, C_ENERGY, C_ENTROPY, C_IQR, C_AR1, C_AR2, C_AR3,
                 C_AR4, C_MEANF);
-
         public static final String SQL_DROP = "DROP TABLE IF EXISTS " + TABLE;
     }
 

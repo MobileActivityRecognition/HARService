@@ -17,14 +17,14 @@
 
 package org.hardroid.model;
 
-class WekaClassifier {
-    public static final int VERSION = 001;
+class WekaWrapperV1000 {
+    public static final int VERSION = 1000;
 
     public static double classify(Object[] i)
             throws Exception {
 
         double p = Double.NaN;
-        p = WekaClassifier.Nffc45590(i);
+        p = WekaWrapperV1000.Nffc45590(i);
         return p;
     }
     static double Nffc45590(Object []i) {
@@ -32,9 +32,9 @@ class WekaClassifier {
         if (i[9] == null) {
             p = 0;
         } else if (((Double) i[9]).doubleValue() <= 1.8702293770815341) {
-            p = WekaClassifier.N83bd05b1(i);
+            p = WekaWrapperV1000.N83bd05b1(i);
         } else if (((Double) i[9]).doubleValue() > 1.8702293770815341) {
-            p = WekaClassifier.N141aba7217(i);
+            p = WekaWrapperV1000.N141aba7217(i);
         }
         return p;
     }
@@ -43,9 +43,9 @@ class WekaClassifier {
         if (i[8] == null) {
             p = 3;
         } else if (((Double) i[8]).doubleValue() <= 0.06299034688155558) {
-            p = WekaClassifier.N7299d2672(i);
+            p = WekaWrapperV1000.N7299d2672(i);
         } else if (((Double) i[8]).doubleValue() > 0.06299034688155558) {
-            p = WekaClassifier.N1565d58711(i);
+            p = WekaWrapperV1000.N1565d58711(i);
         }
         return p;
     }
@@ -54,9 +54,9 @@ class WekaClassifier {
         if (i[0] == null) {
             p = 3;
         } else if (((Double) i[0]).doubleValue() <= 9.872186174864428) {
-            p = WekaClassifier.N7eaff8cd3(i);
+            p = WekaWrapperV1000.N7eaff8cd3(i);
         } else if (((Double) i[0]).doubleValue() > 9.872186174864428) {
-            p = WekaClassifier.N451dbcd610(i);
+            p = WekaWrapperV1000.N451dbcd610(i);
         }
         return p;
     }
@@ -65,9 +65,9 @@ class WekaClassifier {
         if (i[10] == null) {
             p = 3;
         } else if (((Double) i[10]).doubleValue() <= -0.24662258067314508) {
-            p = WekaClassifier.N1394bccc4(i);
+            p = WekaWrapperV1000.N1394bccc4(i);
         } else if (((Double) i[10]).doubleValue() > -0.24662258067314508) {
-            p = WekaClassifier.N79cde7cf6(i);
+            p = WekaWrapperV1000.N79cde7cf6(i);
         }
         return p;
     }
@@ -76,7 +76,7 @@ class WekaClassifier {
         if (i[3] == null) {
             p = 3;
         } else if (((Double) i[3]).doubleValue() <= 9.740502866483762) {
-            p = WekaClassifier.N457b0fed5(i);
+            p = WekaWrapperV1000.N457b0fed5(i);
         } else if (((Double) i[3]).doubleValue() > 9.740502866483762) {
             p = 3;
         }
@@ -100,7 +100,7 @@ class WekaClassifier {
         } else if (((Double) i[7]).doubleValue() <= 6.90625) {
             p = 0;
         } else if (((Double) i[7]).doubleValue() > 6.90625) {
-            p = WekaClassifier.N782501ab7(i);
+            p = WekaWrapperV1000.N782501ab7(i);
         }
         return p;
     }
@@ -111,7 +111,7 @@ class WekaClassifier {
         } else if (((Double) i[10]).doubleValue() <= -0.16427433053881618) {
             p = 3;
         } else if (((Double) i[10]).doubleValue() > -0.16427433053881618) {
-            p = WekaClassifier.N4ee1a0bf8(i);
+            p = WekaWrapperV1000.N4ee1a0bf8(i);
         }
         return p;
     }
@@ -120,7 +120,7 @@ class WekaClassifier {
         if (i[1] == null) {
             p = 3;
         } else if (((Double) i[1]).doubleValue() <= 0.033832439603715465) {
-            p = WekaClassifier.N5378dae99(i);
+            p = WekaWrapperV1000.N5378dae99(i);
         } else if (((Double) i[1]).doubleValue() > 0.033832439603715465) {
             p = 0;
         }
@@ -155,7 +155,7 @@ class WekaClassifier {
         } else if (((Double) i[2]).doubleValue() <= 13.20512616227174) {
             p = 0;
         } else if (((Double) i[2]).doubleValue() > 13.20512616227174) {
-            p = WekaClassifier.N56427bcc12(i);
+            p = WekaWrapperV1000.N56427bcc12(i);
         }
         return p;
     }
@@ -164,9 +164,9 @@ class WekaClassifier {
         if (i[2] == null) {
             p = 0;
         } else if (((Double) i[2]).doubleValue() <= 18.860251156045763) {
-            p = WekaClassifier.N43784c7f13(i);
+            p = WekaWrapperV1000.N43784c7f13(i);
         } else if (((Double) i[2]).doubleValue() > 18.860251156045763) {
-            p = WekaClassifier.N1500171916(i);
+            p = WekaWrapperV1000.N1500171916(i);
         }
         return p;
     }
@@ -177,7 +177,7 @@ class WekaClassifier {
         } else if (((Double) i[9]).doubleValue() <= 1.6390522422501996) {
             p = 0;
         } else if (((Double) i[9]).doubleValue() > 1.6390522422501996) {
-            p = WekaClassifier.N6baba3ca14(i);
+            p = WekaWrapperV1000.N6baba3ca14(i);
         }
         return p;
     }
@@ -188,7 +188,7 @@ class WekaClassifier {
         } else if (((Double) i[13]).doubleValue() <= 9.675918794501648) {
             p = 0;
         } else if (((Double) i[13]).doubleValue() > 9.675918794501648) {
-            p = WekaClassifier.N50d99ad515(i);
+            p = WekaWrapperV1000.N50d99ad515(i);
         }
         return p;
     }
@@ -219,9 +219,9 @@ class WekaClassifier {
         if (i[2] == null) {
             p = 5;
         } else if (((Double) i[2]).doubleValue() <= 17.85974219492334) {
-            p = WekaClassifier.N2219fec818(i);
+            p = WekaWrapperV1000.N2219fec818(i);
         } else if (((Double) i[2]).doubleValue() > 17.85974219492334) {
-            p = WekaClassifier.Nf265167101(i);
+            p = WekaWrapperV1000.Nf265167101(i);
         }
         return p;
     }
@@ -230,9 +230,9 @@ class WekaClassifier {
         if (i[8] == null) {
             p = 4;
         } else if (((Double) i[8]).doubleValue() <= 1.5046666121487373) {
-            p = WekaClassifier.N3e8ad76c19(i);
+            p = WekaWrapperV1000.N3e8ad76c19(i);
         } else if (((Double) i[8]).doubleValue() > 1.5046666121487373) {
-            p = WekaClassifier.N54d3d7e156(i);
+            p = WekaWrapperV1000.N54d3d7e156(i);
         }
         return p;
     }
@@ -241,7 +241,7 @@ class WekaClassifier {
         if (i[3] == null) {
             p = 4;
         } else if (((Double) i[3]).doubleValue() <= 9.16304081994083) {
-            p = WekaClassifier.N2b27b77b20(i);
+            p = WekaWrapperV1000.N2b27b77b20(i);
         } else if (((Double) i[3]).doubleValue() > 9.16304081994083) {
             p = 4;
         }
@@ -252,9 +252,9 @@ class WekaClassifier {
         if (i[2] == null) {
             p = 4;
         } else if (((Double) i[2]).doubleValue() <= 14.79835595960351) {
-            p = WekaClassifier.N6a2f514721(i);
+            p = WekaWrapperV1000.N6a2f514721(i);
         } else if (((Double) i[2]).doubleValue() > 14.79835595960351) {
-            p = WekaClassifier.N24a8626555(i);
+            p = WekaWrapperV1000.N24a8626555(i);
         }
         return p;
     }
@@ -263,9 +263,9 @@ class WekaClassifier {
         if (i[0] == null) {
             p = 5;
         } else if (((Double) i[0]).doubleValue() <= 9.949157623799753) {
-            p = WekaClassifier.N7ad1d7422(i);
+            p = WekaWrapperV1000.N7ad1d7422(i);
         } else if (((Double) i[0]).doubleValue() > 9.949157623799753) {
-            p = WekaClassifier.N1123a07c45(i);
+            p = WekaWrapperV1000.N1123a07c45(i);
         }
         return p;
     }
@@ -274,9 +274,9 @@ class WekaClassifier {
         if (i[4] == null) {
             p = 4;
         } else if (((Double) i[4]).doubleValue() <= -0.940759372385977) {
-            p = WekaClassifier.N6ff48b5a23(i);
+            p = WekaWrapperV1000.N6ff48b5a23(i);
         } else if (((Double) i[4]).doubleValue() > -0.940759372385977) {
-            p = WekaClassifier.N6e2405126(i);
+            p = WekaWrapperV1000.N6e2405126(i);
         }
         return p;
     }
@@ -287,7 +287,7 @@ class WekaClassifier {
         } else if (((Double) i[8]).doubleValue() <= 0.9682102095628817) {
             p = 4;
         } else if (((Double) i[8]).doubleValue() > 0.9682102095628817) {
-            p = WekaClassifier.N797e65b024(i);
+            p = WekaWrapperV1000.N797e65b024(i);
         }
         return p;
     }
@@ -298,7 +298,7 @@ class WekaClassifier {
         } else if (((Double) i[7]).doubleValue() <= 6.953125) {
             p = 5;
         } else if (((Double) i[7]).doubleValue() > 6.953125) {
-            p = WekaClassifier.N694bb6b125(i);
+            p = WekaWrapperV1000.N694bb6b125(i);
         }
         return p;
     }
@@ -320,7 +320,7 @@ class WekaClassifier {
         } else if (((Double) i[11]).doubleValue() <= -0.3855045511585117) {
             p = 4;
         } else if (((Double) i[11]).doubleValue() > -0.3855045511585117) {
-            p = WekaClassifier.N4d07a58c27(i);
+            p = WekaWrapperV1000.N4d07a58c27(i);
         }
         return p;
     }
@@ -329,9 +329,9 @@ class WekaClassifier {
         if (i[9] == null) {
             p = 0;
         } else if (((Double) i[9]).doubleValue() <= 1.9992308258341935) {
-            p = WekaClassifier.N475e0a7928(i);
+            p = WekaWrapperV1000.N475e0a7928(i);
         } else if (((Double) i[9]).doubleValue() > 1.9992308258341935) {
-            p = WekaClassifier.N7394d21d29(i);
+            p = WekaWrapperV1000.N7394d21d29(i);
         }
         return p;
     }
@@ -351,9 +351,9 @@ class WekaClassifier {
         if (i[6] == null) {
             p = 4;
         } else if (((Double) i[6]).doubleValue() <= 96.31027773379337) {
-            p = WekaClassifier.N67e0e4f630(i);
+            p = WekaWrapperV1000.N67e0e4f630(i);
         } else if (((Double) i[6]).doubleValue() > 96.31027773379337) {
-            p = WekaClassifier.N173b064331(i);
+            p = WekaWrapperV1000.N173b064331(i);
         }
         return p;
     }
@@ -373,9 +373,9 @@ class WekaClassifier {
         if (i[3] == null) {
             p = 5;
         } else if (((Double) i[3]).doubleValue() <= 8.781424553376388) {
-            p = WekaClassifier.N2001db1f32(i);
+            p = WekaWrapperV1000.N2001db1f32(i);
         } else if (((Double) i[3]).doubleValue() > 8.781424553376388) {
-            p = WekaClassifier.N797b0f1139(i);
+            p = WekaWrapperV1000.N797b0f1139(i);
         }
         return p;
     }
@@ -384,9 +384,9 @@ class WekaClassifier {
         if (i[6] == null) {
             p = 5;
         } else if (((Double) i[6]).doubleValue() <= 99.21637420026342) {
-            p = WekaClassifier.N7550f13833(i);
+            p = WekaWrapperV1000.N7550f13833(i);
         } else if (((Double) i[6]).doubleValue() > 99.21637420026342) {
-            p = WekaClassifier.N2855942938(i);
+            p = WekaWrapperV1000.N2855942938(i);
         }
         return p;
     }
@@ -395,7 +395,7 @@ class WekaClassifier {
         if (i[11] == null) {
             p = 5;
         } else if (((Double) i[11]).doubleValue() <= 0.0936629934835641) {
-            p = WekaClassifier.N15f77c3034(i);
+            p = WekaWrapperV1000.N15f77c3034(i);
         } else if (((Double) i[11]).doubleValue() > 0.0936629934835641) {
             p = 5;
         }
@@ -406,9 +406,9 @@ class WekaClassifier {
         if (i[9] == null) {
             p = 5;
         } else if (((Double) i[9]).doubleValue() <= 2.266017473984169) {
-            p = WekaClassifier.N5ab179d335(i);
+            p = WekaWrapperV1000.N5ab179d335(i);
         } else if (((Double) i[9]).doubleValue() > 2.266017473984169) {
-            p = WekaClassifier.N66d7e2837(i);
+            p = WekaWrapperV1000.N66d7e2837(i);
         }
         return p;
     }
@@ -417,7 +417,7 @@ class WekaClassifier {
         if (i[8] == null) {
             p = 4;
         } else if (((Double) i[8]).doubleValue() <= 0.8027804499249154) {
-            p = WekaClassifier.N74c698b936(i);
+            p = WekaWrapperV1000.N74c698b936(i);
         } else if (((Double) i[8]).doubleValue() > 0.8027804499249154) {
             p = 5;
         }
@@ -463,7 +463,7 @@ class WekaClassifier {
         } else if (((Double) i[6]).doubleValue() <= 97.43284214419523) {
             p = 5;
         } else if (((Double) i[6]).doubleValue() > 97.43284214419523) {
-            p = WekaClassifier.N393853d740(i);
+            p = WekaWrapperV1000.N393853d740(i);
         }
         return p;
     }
@@ -472,9 +472,9 @@ class WekaClassifier {
         if (i[4] == null) {
             p = 4;
         } else if (((Double) i[4]).doubleValue() <= 0.20224758461250286) {
-            p = WekaClassifier.N54c9f6e641(i);
+            p = WekaWrapperV1000.N54c9f6e641(i);
         } else if (((Double) i[4]).doubleValue() > 0.20224758461250286) {
-            p = WekaClassifier.N711b4a0b43(i);
+            p = WekaWrapperV1000.N711b4a0b43(i);
         }
         return p;
     }
@@ -483,7 +483,7 @@ class WekaClassifier {
         if (i[10] == null) {
             p = 4;
         } else if (((Double) i[10]).doubleValue() <= -1.8004005292944203) {
-            p = WekaClassifier.N50b9d48a42(i);
+            p = WekaWrapperV1000.N50b9d48a42(i);
         } else if (((Double) i[10]).doubleValue() > -1.8004005292944203) {
             p = 4;
         }
@@ -505,7 +505,7 @@ class WekaClassifier {
         if (i[7] == null) {
             p = 4;
         } else if (((Double) i[7]).doubleValue() <= 6.96875) {
-            p = WekaClassifier.Na46091444(i);
+            p = WekaWrapperV1000.Na46091444(i);
         } else if (((Double) i[7]).doubleValue() > 6.96875) {
             p = 5;
         }
@@ -529,7 +529,7 @@ class WekaClassifier {
         } else if (((Double) i[8]).doubleValue() <= 0.7032204761030076) {
             p = 4;
         } else if (((Double) i[8]).doubleValue() > 0.7032204761030076) {
-            p = WekaClassifier.Nf202b5646(i);
+            p = WekaWrapperV1000.Nf202b5646(i);
         }
         return p;
     }
@@ -538,9 +538,9 @@ class WekaClassifier {
         if (i[0] == null) {
             p = 4;
         } else if (((Double) i[0]).doubleValue() <= 10.42444072840509) {
-            p = WekaClassifier.N24c063ab47(i);
+            p = WekaWrapperV1000.N24c063ab47(i);
         } else if (((Double) i[0]).doubleValue() > 10.42444072840509) {
-            p = WekaClassifier.N540a72e753(i);
+            p = WekaWrapperV1000.N540a72e753(i);
         }
         return p;
     }
@@ -551,7 +551,7 @@ class WekaClassifier {
         } else if (((Double) i[7]).doubleValue() <= 6.921875) {
             p = 4;
         } else if (((Double) i[7]).doubleValue() > 6.921875) {
-            p = WekaClassifier.N1e74c08e48(i);
+            p = WekaWrapperV1000.N1e74c08e48(i);
         }
         return p;
     }
@@ -560,9 +560,9 @@ class WekaClassifier {
         if (i[7] == null) {
             p = 4;
         } else if (((Double) i[7]).doubleValue() <= 6.9375) {
-            p = WekaClassifier.N12d8b37c49(i);
+            p = WekaWrapperV1000.N12d8b37c49(i);
         } else if (((Double) i[7]).doubleValue() > 6.9375) {
-            p = WekaClassifier.N39e72bb52(i);
+            p = WekaWrapperV1000.N39e72bb52(i);
         }
         return p;
     }
@@ -573,7 +573,7 @@ class WekaClassifier {
         } else if (((Double) i[4]).doubleValue() <= -0.6028866895345456) {
             p = 5;
         } else if (((Double) i[4]).doubleValue() > -0.6028866895345456) {
-            p = WekaClassifier.N1c2c50ea50(i);
+            p = WekaWrapperV1000.N1c2c50ea50(i);
         }
         return p;
     }
@@ -584,7 +584,7 @@ class WekaClassifier {
         } else if (((Double) i[4]).doubleValue() <= 0.20122675520673927) {
             p = 4;
         } else if (((Double) i[4]).doubleValue() > 0.20122675520673927) {
-            p = WekaClassifier.N3bd6a5ff51(i);
+            p = WekaWrapperV1000.N3bd6a5ff51(i);
         }
         return p;
     }
@@ -615,7 +615,7 @@ class WekaClassifier {
         if (i[3] == null) {
             p = 4;
         } else if (((Double) i[3]).doubleValue() <= 8.106312989055509) {
-            p = WekaClassifier.N2a5fd38c54(i);
+            p = WekaWrapperV1000.N2a5fd38c54(i);
         } else if (((Double) i[3]).doubleValue() > 8.106312989055509) {
             p = 5;
         }
@@ -648,9 +648,9 @@ class WekaClassifier {
         if (i[10] == null) {
             p = 5;
         } else if (((Double) i[10]).doubleValue() <= -1.38979460404539) {
-            p = WekaClassifier.N53491ad657(i);
+            p = WekaWrapperV1000.N53491ad657(i);
         } else if (((Double) i[10]).doubleValue() > -1.38979460404539) {
-            p = WekaClassifier.N6767eff91(i);
+            p = WekaWrapperV1000.N6767eff91(i);
         }
         return p;
     }
@@ -659,9 +659,9 @@ class WekaClassifier {
         if (i[0] == null) {
             p = 5;
         } else if (((Double) i[0]).doubleValue() <= 10.07799553900821) {
-            p = WekaClassifier.N7de708058(i);
+            p = WekaWrapperV1000.N7de708058(i);
         } else if (((Double) i[0]).doubleValue() > 10.07799553900821) {
-            p = WekaClassifier.N313ab74b69(i);
+            p = WekaWrapperV1000.N313ab74b69(i);
         }
         return p;
     }
@@ -670,9 +670,9 @@ class WekaClassifier {
         if (i[2] == null) {
             p = 5;
         } else if (((Double) i[2]).doubleValue() <= 11.77970925648061) {
-            p = WekaClassifier.N6082915459(i);
+            p = WekaWrapperV1000.N6082915459(i);
         } else if (((Double) i[2]).doubleValue() > 11.77970925648061) {
-            p = WekaClassifier.N2aa42e7a60(i);
+            p = WekaWrapperV1000.N2aa42e7a60(i);
         }
         return p;
     }
@@ -694,7 +694,7 @@ class WekaClassifier {
         } else if (((Double) i[0]).doubleValue() <= 9.942556380531517) {
             p = 5;
         } else if (((Double) i[0]).doubleValue() > 9.942556380531517) {
-            p = WekaClassifier.N31a01e5261(i);
+            p = WekaWrapperV1000.N31a01e5261(i);
         }
         return p;
     }
@@ -705,7 +705,7 @@ class WekaClassifier {
         } else if (((Double) i[4]).doubleValue() <= 0.28721077351926344) {
             p = 5;
         } else if (((Double) i[4]).doubleValue() > 0.28721077351926344) {
-            p = WekaClassifier.N458e229662(i);
+            p = WekaWrapperV1000.N458e229662(i);
         }
         return p;
     }
@@ -714,9 +714,9 @@ class WekaClassifier {
         if (i[9] == null) {
             p = 5;
         } else if (((Double) i[9]).doubleValue() <= 2.41467118558188) {
-            p = WekaClassifier.N31f2034263(i);
+            p = WekaWrapperV1000.N31f2034263(i);
         } else if (((Double) i[9]).doubleValue() > 2.41467118558188) {
-            p = WekaClassifier.N3a2e3cf864(i);
+            p = WekaWrapperV1000.N3a2e3cf864(i);
         }
         return p;
     }
@@ -736,7 +736,7 @@ class WekaClassifier {
         if (i[2] == null) {
             p = 4;
         } else if (((Double) i[2]).doubleValue() <= 15.782859299133422) {
-            p = WekaClassifier.Nbcdf76165(i);
+            p = WekaWrapperV1000.Nbcdf76165(i);
         } else if (((Double) i[2]).doubleValue() > 15.782859299133422) {
             p = 5;
         }
@@ -747,7 +747,7 @@ class WekaClassifier {
         if (i[3] == null) {
             p = 4;
         } else if (((Double) i[3]).doubleValue() <= 8.109725593590927) {
-            p = WekaClassifier.N3fe3fe1c66(i);
+            p = WekaWrapperV1000.N3fe3fe1c66(i);
         } else if (((Double) i[3]).doubleValue() > 8.109725593590927) {
             p = 5;
         }
@@ -758,7 +758,7 @@ class WekaClassifier {
         if (i[0] == null) {
             p = 4;
         } else if (((Double) i[0]).doubleValue() <= 10.043293258073449) {
-            p = WekaClassifier.N1e2a12b167(i);
+            p = WekaWrapperV1000.N1e2a12b167(i);
         } else if (((Double) i[0]).doubleValue() > 10.043293258073449) {
             p = 1;
         }
@@ -769,7 +769,7 @@ class WekaClassifier {
         if (i[0] == null) {
             p = 1;
         } else if (((Double) i[0]).doubleValue() <= 9.98298274910079) {
-            p = WekaClassifier.N5528347068(i);
+            p = WekaWrapperV1000.N5528347068(i);
         } else if (((Double) i[0]).doubleValue() > 9.98298274910079) {
             p = 4;
         }
@@ -791,9 +791,9 @@ class WekaClassifier {
         if (i[2] == null) {
             p = 5;
         } else if (((Double) i[2]).doubleValue() <= 14.59431828215516) {
-            p = WekaClassifier.N1189bc6e70(i);
+            p = WekaWrapperV1000.N1189bc6e70(i);
         } else if (((Double) i[2]).doubleValue() > 14.59431828215516) {
-            p = WekaClassifier.N1e66ab7576(i);
+            p = WekaWrapperV1000.N1e66ab7576(i);
         }
         return p;
     }
@@ -804,7 +804,7 @@ class WekaClassifier {
         } else if (((Double) i[6]).doubleValue() <= 104.28557544229817) {
             p = 4;
         } else if (((Double) i[6]).doubleValue() > 104.28557544229817) {
-            p = WekaClassifier.N5ff88b7471(i);
+            p = WekaWrapperV1000.N5ff88b7471(i);
         }
         return p;
     }
@@ -813,9 +813,9 @@ class WekaClassifier {
         if (i[4] == null) {
             p = 5;
         } else if (((Double) i[4]).doubleValue() <= 0.3192111395530337) {
-            p = WekaClassifier.N4b67bf4f72(i);
+            p = WekaWrapperV1000.N4b67bf4f72(i);
         } else if (((Double) i[4]).doubleValue() > 0.3192111395530337) {
-            p = WekaClassifier.N73b56ac574(i);
+            p = WekaWrapperV1000.N73b56ac574(i);
         }
         return p;
     }
@@ -826,7 +826,7 @@ class WekaClassifier {
         } else if (((Double) i[7]).doubleValue() <= 6.90625) {
             p = 4;
         } else if (((Double) i[7]).doubleValue() > 6.90625) {
-            p = WekaClassifier.N2f03d98773(i);
+            p = WekaWrapperV1000.N2f03d98773(i);
         }
         return p;
     }
@@ -848,7 +848,7 @@ class WekaClassifier {
         } else if (((Double) i[8]).doubleValue() <= 1.9099399198698848) {
             p = 5;
         } else if (((Double) i[8]).doubleValue() > 1.9099399198698848) {
-            p = WekaClassifier.N688decec75(i);
+            p = WekaWrapperV1000.N688decec75(i);
         }
         return p;
     }
@@ -868,9 +868,9 @@ class WekaClassifier {
         if (i[8] == null) {
             p = 1;
         } else if (((Double) i[8]).doubleValue() <= 4.252792263637099) {
-            p = WekaClassifier.N2f1896df77(i);
+            p = WekaWrapperV1000.N2f1896df77(i);
         } else if (((Double) i[8]).doubleValue() > 4.252792263637099) {
-            p = WekaClassifier.N47fc9c1990(i);
+            p = WekaWrapperV1000.N47fc9c1990(i);
         }
         return p;
     }
@@ -879,9 +879,9 @@ class WekaClassifier {
         if (i[1] == null) {
             p = 5;
         } else if (((Double) i[1]).doubleValue() <= 2.1182825864241184) {
-            p = WekaClassifier.N772332bb78(i);
+            p = WekaWrapperV1000.N772332bb78(i);
         } else if (((Double) i[1]).doubleValue() > 2.1182825864241184) {
-            p = WekaClassifier.N309da18a81(i);
+            p = WekaWrapperV1000.N309da18a81(i);
         }
         return p;
     }
@@ -892,7 +892,7 @@ class WekaClassifier {
         } else if (((Double) i[4]).doubleValue() <= 0.40585717042001584) {
             p = 5;
         } else if (((Double) i[4]).doubleValue() > 0.40585717042001584) {
-            p = WekaClassifier.N704e4a3f79(i);
+            p = WekaWrapperV1000.N704e4a3f79(i);
         }
         return p;
     }
@@ -901,7 +901,7 @@ class WekaClassifier {
         if (i[6] == null) {
             p = 1;
         } else if (((Double) i[6]).doubleValue() <= 107.96699561485603) {
-            p = WekaClassifier.N5bd87a4080(i);
+            p = WekaWrapperV1000.N5bd87a4080(i);
         } else if (((Double) i[6]).doubleValue() > 107.96699561485603) {
             p = 1;
         }
@@ -923,9 +923,9 @@ class WekaClassifier {
         if (i[3] == null) {
             p = 5;
         } else if (((Double) i[3]).doubleValue() <= 4.407536544907301) {
-            p = WekaClassifier.N5ec5fbc882(i);
+            p = WekaWrapperV1000.N5ec5fbc882(i);
         } else if (((Double) i[3]).doubleValue() > 4.407536544907301) {
-            p = WekaClassifier.N44ca263c84(i);
+            p = WekaWrapperV1000.N44ca263c84(i);
         }
         return p;
     }
@@ -934,7 +934,7 @@ class WekaClassifier {
         if (i[3] == null) {
             p = 4;
         } else if (((Double) i[3]).doubleValue() <= 3.908820094996991) {
-            p = WekaClassifier.N5cd84d9d83(i);
+            p = WekaWrapperV1000.N5cd84d9d83(i);
         } else if (((Double) i[3]).doubleValue() > 3.908820094996991) {
             p = 5;
         }
@@ -956,9 +956,9 @@ class WekaClassifier {
         if (i[13] == null) {
             p = 5;
         } else if (((Double) i[13]).doubleValue() <= 8.839060847909556) {
-            p = WekaClassifier.N19865ede85(i);
+            p = WekaWrapperV1000.N19865ede85(i);
         } else if (((Double) i[13]).doubleValue() > 8.839060847909556) {
-            p = WekaClassifier.N686cfd9d86(i);
+            p = WekaWrapperV1000.N686cfd9d86(i);
         }
         return p;
     }
@@ -978,9 +978,9 @@ class WekaClassifier {
         if (i[0] == null) {
             p = 1;
         } else if (((Double) i[0]).doubleValue() <= 10.145863116013782) {
-            p = WekaClassifier.N76c6f1a887(i);
+            p = WekaWrapperV1000.N76c6f1a887(i);
         } else if (((Double) i[0]).doubleValue() > 10.145863116013782) {
-            p = WekaClassifier.N63a8d28a88(i);
+            p = WekaWrapperV1000.N63a8d28a88(i);
         }
         return p;
     }
@@ -1000,7 +1000,7 @@ class WekaClassifier {
         if (i[1] == null) {
             p = 4;
         } else if (((Double) i[1]).doubleValue() <= 2.3617126567247064) {
-            p = WekaClassifier.N48f3008f89(i);
+            p = WekaWrapperV1000.N48f3008f89(i);
         } else if (((Double) i[1]).doubleValue() > 2.3617126567247064) {
             p = 1;
         }
@@ -1033,9 +1033,9 @@ class WekaClassifier {
         if (i[12] == null) {
             p = 0;
         } else if (((Double) i[12]).doubleValue() <= 0.1854094218859732) {
-            p = WekaClassifier.N236fc03992(i);
+            p = WekaWrapperV1000.N236fc03992(i);
         } else if (((Double) i[12]).doubleValue() > 0.1854094218859732) {
-            p = WekaClassifier.N73484ba393(i);
+            p = WekaWrapperV1000.N73484ba393(i);
         }
         return p;
     }
@@ -1055,9 +1055,9 @@ class WekaClassifier {
         if (i[13] == null) {
             p = 1;
         } else if (((Double) i[13]).doubleValue() <= 8.733945295962078) {
-            p = WekaClassifier.N50771d8794(i);
+            p = WekaWrapperV1000.N50771d8794(i);
         } else if (((Double) i[13]).doubleValue() > 8.733945295962078) {
-            p = WekaClassifier.N654300f095(i);
+            p = WekaWrapperV1000.N654300f095(i);
         }
         return p;
     }
@@ -1077,7 +1077,7 @@ class WekaClassifier {
         if (i[1] == null) {
             p = 4;
         } else if (((Double) i[1]).doubleValue() <= 2.756549525776559) {
-            p = WekaClassifier.N38706a6996(i);
+            p = WekaWrapperV1000.N38706a6996(i);
         } else if (((Double) i[1]).doubleValue() > 2.756549525776559) {
             p = 1;
         }
@@ -1088,9 +1088,9 @@ class WekaClassifier {
         if (i[11] == null) {
             p = 4;
         } else if (((Double) i[11]).doubleValue() <= -0.26721863367441806) {
-            p = WekaClassifier.N9d42b9797(i);
+            p = WekaWrapperV1000.N9d42b9797(i);
         } else if (((Double) i[11]).doubleValue() > -0.26721863367441806) {
-            p = WekaClassifier.N6127840f98(i);
+            p = WekaWrapperV1000.N6127840f98(i);
         }
         return p;
     }
@@ -1112,7 +1112,7 @@ class WekaClassifier {
         } else if (((Double) i[6]).doubleValue() <= 100.13580084419856) {
             p = 5;
         } else if (((Double) i[6]).doubleValue() > 100.13580084419856) {
-            p = WekaClassifier.N1c1e5c5b99(i);
+            p = WekaWrapperV1000.N1c1e5c5b99(i);
         }
         return p;
     }
@@ -1123,7 +1123,7 @@ class WekaClassifier {
         } else if (((Double) i[7]).doubleValue() <= 6.9375) {
             p = 1;
         } else if (((Double) i[7]).doubleValue() > 6.9375) {
-            p = WekaClassifier.N27864e93100(i);
+            p = WekaWrapperV1000.N27864e93100(i);
         }
         return p;
     }
@@ -1143,9 +1143,9 @@ class WekaClassifier {
         if (i[8] == null) {
             p = 1;
         } else if (((Double) i[8]).doubleValue() <= 5.003881112651289) {
-            p = WekaClassifier.N52fcab70102(i);
+            p = WekaWrapperV1000.N52fcab70102(i);
         } else if (((Double) i[8]).doubleValue() > 5.003881112651289) {
-            p = WekaClassifier.N1afd6509123(i);
+            p = WekaWrapperV1000.N1afd6509123(i);
         }
         return p;
     }
@@ -1154,9 +1154,9 @@ class WekaClassifier {
         if (i[0] == null) {
             p = 1;
         } else if (((Double) i[0]).doubleValue() <= 11.509297929714823) {
-            p = WekaClassifier.N3c6ec9f0103(i);
+            p = WekaWrapperV1000.N3c6ec9f0103(i);
         } else if (((Double) i[0]).doubleValue() > 11.509297929714823) {
-            p = WekaClassifier.N3479d4e9119(i);
+            p = WekaWrapperV1000.N3479d4e9119(i);
         }
         return p;
     }
@@ -1165,9 +1165,9 @@ class WekaClassifier {
         if (i[3] == null) {
             p = 5;
         } else if (((Double) i[3]).doubleValue() <= 2.682580294257568) {
-            p = WekaClassifier.N2989fa38104(i);
+            p = WekaWrapperV1000.N2989fa38104(i);
         } else if (((Double) i[3]).doubleValue() > 2.682580294257568) {
-            p = WekaClassifier.N14192b07105(i);
+            p = WekaWrapperV1000.N14192b07105(i);
         }
         return p;
     }
@@ -1187,9 +1187,9 @@ class WekaClassifier {
         if (i[8] == null) {
             p = 1;
         } else if (((Double) i[8]).doubleValue() <= 2.3808584086328892) {
-            p = WekaClassifier.N2389b5df106(i);
+            p = WekaWrapperV1000.N2389b5df106(i);
         } else if (((Double) i[8]).doubleValue() > 2.3808584086328892) {
-            p = WekaClassifier.N435cc9fb111(i);
+            p = WekaWrapperV1000.N435cc9fb111(i);
         }
         return p;
     }
@@ -1198,9 +1198,9 @@ class WekaClassifier {
         if (i[2] == null) {
             p = 4;
         } else if (((Double) i[2]).doubleValue() <= 19.912529751044868) {
-            p = WekaClassifier.N6962c917107(i);
+            p = WekaWrapperV1000.N6962c917107(i);
         } else if (((Double) i[2]).doubleValue() > 19.912529751044868) {
-            p = WekaClassifier.N52c0e5d6109(i);
+            p = WekaWrapperV1000.N52c0e5d6109(i);
         }
         return p;
     }
@@ -1211,7 +1211,7 @@ class WekaClassifier {
         } else if (((Double) i[7]).doubleValue() <= 6.9375) {
             p = 4;
         } else if (((Double) i[7]).doubleValue() > 6.9375) {
-            p = WekaClassifier.Nfdca639108(i);
+            p = WekaWrapperV1000.Nfdca639108(i);
         }
         return p;
     }
@@ -1233,7 +1233,7 @@ class WekaClassifier {
         } else if (((Double) i[8]).doubleValue() <= 1.4982229769117286) {
             p = 4;
         } else if (((Double) i[8]).doubleValue() > 1.4982229769117286) {
-            p = WekaClassifier.N3c09951c110(i);
+            p = WekaWrapperV1000.N3c09951c110(i);
         }
         return p;
     }
@@ -1253,7 +1253,7 @@ class WekaClassifier {
         if (i[2] == null) {
             p = 1;
         } else if (((Double) i[2]).doubleValue() <= 21.65767513786922) {
-            p = WekaClassifier.N29db42c7112(i);
+            p = WekaWrapperV1000.N29db42c7112(i);
         } else if (((Double) i[2]).doubleValue() > 21.65767513786922) {
             p = 1;
         }
@@ -1266,7 +1266,7 @@ class WekaClassifier {
         } else if (((Double) i[13]).doubleValue() <= 7.469757488067028) {
             p = 5;
         } else if (((Double) i[13]).doubleValue() > 7.469757488067028) {
-            p = WekaClassifier.N7ce0fc7f113(i);
+            p = WekaWrapperV1000.N7ce0fc7f113(i);
         }
         return p;
     }
@@ -1275,9 +1275,9 @@ class WekaClassifier {
         if (i[10] == null) {
             p = 1;
         } else if (((Double) i[10]).doubleValue() <= -1.906308367802768) {
-            p = WekaClassifier.Nc31378a114(i);
+            p = WekaWrapperV1000.Nc31378a114(i);
         } else if (((Double) i[10]).doubleValue() > -1.906308367802768) {
-            p = WekaClassifier.N298724e6115(i);
+            p = WekaWrapperV1000.N298724e6115(i);
         }
         return p;
     }
@@ -1297,7 +1297,7 @@ class WekaClassifier {
         if (i[2] == null) {
             p = 1;
         } else if (((Double) i[2]).doubleValue() <= 19.912529751044868) {
-            p = WekaClassifier.N5ab9966b116(i);
+            p = WekaWrapperV1000.N5ab9966b116(i);
         } else if (((Double) i[2]).doubleValue() > 19.912529751044868) {
             p = 1;
         }
@@ -1310,7 +1310,7 @@ class WekaClassifier {
         } else if (((Double) i[1]).doubleValue() <= 2.914146326608752) {
             p = 1;
         } else if (((Double) i[1]).doubleValue() > 2.914146326608752) {
-            p = WekaClassifier.N21418a47117(i);
+            p = WekaWrapperV1000.N21418a47117(i);
         }
         return p;
     }
@@ -1319,7 +1319,7 @@ class WekaClassifier {
         if (i[0] == null) {
             p = 1;
         } else if (((Double) i[0]).doubleValue() <= 10.840835765413175) {
-            p = WekaClassifier.N24c96482118(i);
+            p = WekaWrapperV1000.N24c96482118(i);
         } else if (((Double) i[0]).doubleValue() > 10.840835765413175) {
             p = 2;
         }
@@ -1341,9 +1341,9 @@ class WekaClassifier {
         if (i[5] == null) {
             p = 2;
         } else if (((Double) i[5]).doubleValue() <= 1.525004851653251) {
-            p = WekaClassifier.N226516c3120(i);
+            p = WekaWrapperV1000.N226516c3120(i);
         } else if (((Double) i[5]).doubleValue() > 1.525004851653251) {
-            p = WekaClassifier.N60d92b67122(i);
+            p = WekaWrapperV1000.N60d92b67122(i);
         }
         return p;
     }
@@ -1354,7 +1354,7 @@ class WekaClassifier {
         } else if (((Double) i[1]).doubleValue() <= 3.1258580679208525) {
             p = 1;
         } else if (((Double) i[1]).doubleValue() > 3.1258580679208525) {
-            p = WekaClassifier.Nf5bb37a121(i);
+            p = WekaWrapperV1000.Nf5bb37a121(i);
         }
         return p;
     }
@@ -1385,9 +1385,9 @@ class WekaClassifier {
         if (i[4] == null) {
             p = 5;
         } else if (((Double) i[4]).doubleValue() <= 0.19566339382829082) {
-            p = WekaClassifier.N1024ab9b124(i);
+            p = WekaWrapperV1000.N1024ab9b124(i);
         } else if (((Double) i[4]).doubleValue() > 0.19566339382829082) {
-            p = WekaClassifier.N2f747e4c128(i);
+            p = WekaWrapperV1000.N2f747e4c128(i);
         }
         return p;
     }
@@ -1396,9 +1396,9 @@ class WekaClassifier {
         if (i[0] == null) {
             p = 5;
         } else if (((Double) i[0]).doubleValue() <= 11.113095465520917) {
-            p = WekaClassifier.N42361a86125(i);
+            p = WekaWrapperV1000.N42361a86125(i);
         } else if (((Double) i[0]).doubleValue() > 11.113095465520917) {
-            p = WekaClassifier.N6b1d83b4126(i);
+            p = WekaWrapperV1000.N6b1d83b4126(i);
         }
         return p;
     }
@@ -1420,7 +1420,7 @@ class WekaClassifier {
         } else if (((Double) i[9]).doubleValue() <= 2.3772114640439574) {
             p = 2;
         } else if (((Double) i[9]).doubleValue() > 2.3772114640439574) {
-            p = WekaClassifier.N1ab966f3127(i);
+            p = WekaWrapperV1000.N1ab966f3127(i);
         }
         return p;
     }
@@ -1440,9 +1440,9 @@ class WekaClassifier {
         if (i[1] == null) {
             p = 2;
         } else if (((Double) i[1]).doubleValue() <= 4.783737003779161) {
-            p = WekaClassifier.N5d64b30e129(i);
+            p = WekaWrapperV1000.N5d64b30e129(i);
         } else if (((Double) i[1]).doubleValue() > 4.783737003779161) {
-            p = WekaClassifier.N7fb2566a133(i);
+            p = WekaWrapperV1000.N7fb2566a133(i);
         }
         return p;
     }
@@ -1451,9 +1451,9 @@ class WekaClassifier {
         if (i[5] == null) {
             p = 2;
         } else if (((Double) i[5]).doubleValue() <= 0.10407768080703717) {
-            p = WekaClassifier.N5a638b35130(i);
+            p = WekaWrapperV1000.N5a638b35130(i);
         } else if (((Double) i[5]).doubleValue() > 0.10407768080703717) {
-            p = WekaClassifier.Nbbce074131(i);
+            p = WekaWrapperV1000.Nbbce074131(i);
         }
         return p;
     }
@@ -1473,7 +1473,7 @@ class WekaClassifier {
         if (i[0] == null) {
             p = 1;
         } else if (((Double) i[0]).doubleValue() <= 11.745677785045784) {
-            p = WekaClassifier.N7b66951132(i);
+            p = WekaWrapperV1000.N7b66951132(i);
         } else if (((Double) i[0]).doubleValue() > 11.745677785045784) {
             p = 2;
         }
@@ -1497,7 +1497,7 @@ class WekaClassifier {
         } else if (((Double) i[5]).doubleValue() <= 2.1933163755639287) {
             p = 2;
         } else if (((Double) i[5]).doubleValue() > 2.1933163755639287) {
-            p = WekaClassifier.N394e508a134(i);
+            p = WekaWrapperV1000.N394e508a134(i);
         }
         return p;
     }
@@ -1506,7 +1506,7 @@ class WekaClassifier {
         if (i[7] == null) {
             p = 2;
         } else if (((Double) i[7]).doubleValue() <= 6.96875) {
-            p = WekaClassifier.N559da897135(i);
+            p = WekaWrapperV1000.N559da897135(i);
         } else if (((Double) i[7]).doubleValue() > 6.96875) {
             p = 1;
         }

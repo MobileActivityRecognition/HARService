@@ -67,7 +67,7 @@ public class PreferenceHelper
 
     public boolean isSyncEnabled() {
         return preferences.getBoolean(Constants.getStringResource(context,
-                R.string.pref_key_conn), false);
+                R.string.pref_key_conn), true);
     }
 
 

@@ -36,7 +36,16 @@ public class ActivityRecognitionResultCreator
         }
         long time = parcel.readLong();
         long elapsedRealtime = parcel.readLong();
-        return new ActivityRecognitionResult(list, time, elapsedRealtime);
+        ActivityRecognitionResult result = new ActivityRecognitionResult(list, time, elapsedRealtime);
+        long featSize = parcel.readLong();
+        if (featSize > 0) {
+            ArrayList<Feature> features = new ArrayList<>();
+            for (int i = 0; i < size; i++) {
+                features.add(Feature.CREATOR.createFromParcel(parcel));
+            }
+            result.setFeatures(features);
+        }
+        return result;
     }
 
     @Override

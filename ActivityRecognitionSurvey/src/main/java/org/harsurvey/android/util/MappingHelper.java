@@ -17,6 +17,9 @@
 
 package org.harsurvey.android.util;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import org.harsurvey.android.data.FeatureData;
 import org.harsurvey.android.data.HumanActivityData;
 
@@ -27,23 +30,31 @@ import java.util.TreeMap;
  * Maps Activity and Features to JSON
  */
 public class MappingHelper {
+    private static final Gson MAPPER = new GsonBuilder().setDateFormat(Constants.DATETIME_FORMAT).create();
+    ;
+    public static final String toJson(Object obj) {
+        return MAPPER.toJson(obj);
+    }
+
     public static Map<String, Object> fromActivityToJson(HumanActivityData activity,
                                                                FeatureData featureData) {
         TreeMap<String, Object> map = new TreeMap<>();
-        map.put("arX1", 0d);
-        map.put("arX2", 0d);
-        map.put("arX3", 0d);
-        map.put("arX4", 0d);
+        String jsonDate = toJson(activity.created).replace("\"", "");
+        int lastTwo = jsonDate.length() - 2;
+        map.put("arX1", featureData.ar1);
+        map.put("arX2", featureData.ar2);
+        map.put("arX3", featureData.ar3);
+        map.put("arX4", featureData.ar4);
         map.put("energyX", featureData.energy);
         map.put("entropyX", featureData.entropy);
         map.put("etiqueta", activity.activity.toString());
-        map.put("fecha", activity.created);
+        map.put("fecha", jsonDate.substring(0, lastTwo) + ":" + jsonDate.substring(lastTwo));
         map.put("idCf", 0d);
         map.put("iqrX", featureData.irq);
         map.put("kurtosisX", featureData.kurt);
         map.put("maxX", featureData.max);
         map.put("meanX", featureData.mean);
-        map.put("meanfreqX", 0d);
+        map.put("meanfreqX", featureData.meanf);
         map.put("minX", featureData.min);
         map.put("skewnessX", featureData.skew);
         map.put("stdX", featureData.std);

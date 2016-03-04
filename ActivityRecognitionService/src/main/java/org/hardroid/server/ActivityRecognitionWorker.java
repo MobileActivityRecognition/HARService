@@ -19,11 +19,12 @@ package org.hardroid.server;
 
 import android.util.Log;
 
+import org.hardroid.common.ActivityClassifier;
 import org.hardroid.common.ActivityRecognitionResult;
+import org.hardroid.common.Feature;
 import org.hardroid.common.HumanActivity;
 import org.hardroid.features.FeatureProcessing;
-import org.hardroid.model.ActivityClassifier;
-import org.hardroid.model.DecisionTreeClassifier;
+import org.hardroid.model.DumbClassifier;
 import org.hardroid.sampling.MonitoredSensor;
 import org.hardroid.sampling.SensorDataFinishListener;
 
@@ -45,11 +46,11 @@ public class ActivityRecognitionWorker implements SensorDataFinishListener {
     private long newIntervalTime = -1;
     private boolean newTime = false;
     private final MonitoredSensor monitoredSensor;
-    private final ActivityClassifier activityClassifier;
+    private ActivityClassifier activityClassifier = null;
     private Timer scheduler;
     private TimerWorker timerWorker;
 
-
+    
     /**
      * Constructs a new Activity Recognition Worker to resolve Human Activities
      *
@@ -60,7 +61,14 @@ public class ActivityRecognitionWorker implements SensorDataFinishListener {
 
         scheduler = new Timer();
         monitoredSensor = new MonitoredSensor(context, this);
-        activityClassifier = new DecisionTreeClassifier();
+        try {
+            activityClassifier = (ActivityClassifier)
+                    Class.forName("org.hardroid.model.DecisionTreeClassifier").newInstance();
+        } catch (Exception e) {
+            Log.w(TAG, "Error al instanciar clasificador dinamico");
+            activityClassifier = new DumbClassifier();
+        }
+        Log.i(TAG, "Inicializando modelo " + activityClassifier.toString());
     }
 
     public boolean isValidTime(long timer) {
@@ -102,6 +110,7 @@ public class ActivityRecognitionWorker implements SensorDataFinishListener {
         int steps = SLICE_SIZE / 2;   // STEPS = 64, SLICE_SIZE = 128, SAMPLE_SIZE = 512
         double slices = SAMPLE_SIZE / steps  - 1; // SLICE = 7 es 100%
         Log.d(TAG, "Number of slices " + slices);
+        ArrayList<Feature> features = new ArrayList<>();
         for (int i = 0; i + SLICE_SIZE <= SAMPLE_SIZE ; i += steps) {
             double[] featureData = FeatureProcessing.calculateSample(i,
                     i + SLICE_SIZE,
@@ -111,6 +120,7 @@ public class ActivityRecognitionWorker implements SensorDataFinishListener {
             results[result.ordinal()] += 1.0/slices;
             Log.d(TAG, String.format("Activity detected %s (%.2f)", result.toString(),
                     results[result.ordinal()]*100));
+            features.add(new Feature(result, featureData.length, featureData));
         }
         ArrayList<HumanActivity> detected = new ArrayList<>();
         for (HumanActivity.Type act : HumanActivity.Type.values()) {
@@ -119,7 +129,7 @@ public class ActivityRecognitionWorker implements SensorDataFinishListener {
             detected.add(de);
         }
         this.context.publishResult(new ActivityRecognitionResult(detected,
-                startTime, now - startTime));
+                startTime, now - startTime, features));
     }
 
     private class TimerWorker extends TimerTask {
