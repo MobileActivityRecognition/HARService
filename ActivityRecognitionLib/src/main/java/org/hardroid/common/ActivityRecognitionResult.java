@@ -38,6 +38,7 @@ public class ActivityRecognitionResult implements Parcelable {
     private long elapsedRealtimeMillis;
     private List<HumanActivity> probableActivities;
     private List<Feature> features;
+    private int modelVersion = -1;
 
     private static Comparator<HumanActivity> descendingOrder = new Comparator<HumanActivity>() {
         @Override
@@ -62,8 +63,9 @@ public class ActivityRecognitionResult implements Parcelable {
      * @param time
      * @param elapsedRealtimeMillis
      */
-    public ActivityRecognitionResult(List<HumanActivity> probableActivities, long time,
-                                     long elapsedRealtimeMillis) {
+    public ActivityRecognitionResult(int modelVersion, List<HumanActivity> probableActivities,
+                                     long time, long elapsedRealtimeMillis) {
+        this.modelVersion = modelVersion;
         this.probableActivities = probableActivities;
         this.time = time;
         this.elapsedRealtimeMillis = elapsedRealtimeMillis;
@@ -77,10 +79,11 @@ public class ActivityRecognitionResult implements Parcelable {
      * @param elapsedRealtimeMillis
      * @param time
      */
-    public ActivityRecognitionResult(List<HumanActivity> probableActivities,
+    public ActivityRecognitionResult(int modelVersion,
+                                     List<HumanActivity> probableActivities,
                                      long time, long elapsedRealtimeMillis,
                                      List<Feature> features) {
-        this(probableActivities, time, elapsedRealtimeMillis);
+        this(modelVersion, probableActivities, time, elapsedRealtimeMillis);
         this.features = features;
     }
 
@@ -144,6 +147,10 @@ public class ActivityRecognitionResult implements Parcelable {
         return features;
     }
 
+    public int getModelVersion() {
+        return modelVersion;
+    }
+
     @Override
     public String toString() {
         return "";
@@ -156,6 +163,7 @@ public class ActivityRecognitionResult implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeInt(this.modelVersion);
         parcel.writeInt(this.probableActivities.size());
         for (HumanActivity detectedActivity: this.probableActivities) {
             detectedActivity.writeToParcel(parcel, flags);

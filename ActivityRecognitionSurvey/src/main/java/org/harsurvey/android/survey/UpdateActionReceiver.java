@@ -47,7 +47,7 @@ public class UpdateActionReceiver extends BroadcastReceiver {
                 Log.d(TAG, "Connection available sync information");
                 Cursor cursor = app.getContentResolver().query(HumanActivityData.CONTENT_URI,
                         HumanActivityData.Contract.ALL_COLUMNS,
-                        "status = 'PENDING' AND feedback = 1",
+                        "status = 'PENDING'",
                         null, null);
                 List<HumanActivityData> dataList = HumanActivityData.CREATOR.createFromCursor(cursor);
                 for (HumanActivityData activity : dataList ) {

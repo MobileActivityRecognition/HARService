@@ -23,6 +23,7 @@ android {
 
     defaultConfig {
         applicationId "org.hardroid.server"
+        archivesBaseName = "HARDroid";
         minSdkVersion 10
         targetSdkVersion 22
         versionCode 1

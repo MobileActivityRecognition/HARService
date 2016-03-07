@@ -17,6 +17,16 @@
 
 apply plugin: 'java'
 
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+            /* Escluir incrementalmente la compilacion de clases no necesarias */
+            exclude '**/WekaWrapperV1000.java'
+        }
+    }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

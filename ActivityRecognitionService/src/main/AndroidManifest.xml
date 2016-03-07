@@ -27,7 +27,8 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name">
+        android:label="@string/app_name"
+        android:description="@string/description">
         <service android:name=".ActivityRecognitionService"  android:exported="true">
             <intent-filter>
                 <action android:name="org.hardroid.common.IActivityRecognitionManager" />

@@ -29,6 +29,7 @@ public class ActivityRecognitionResultCreator
         implements Parcelable.Creator<ActivityRecognitionResult> {
     @Override
     public ActivityRecognitionResult createFromParcel(Parcel parcel) {
+        int modelVersion = parcel.readInt();
         int size = parcel.readInt();
         ArrayList<HumanActivity> list = new ArrayList<>();
         for (int i = 0; i < size; i++) {
@@ -36,7 +37,8 @@ public class ActivityRecognitionResultCreator
         }
         long time = parcel.readLong();
         long elapsedRealtime = parcel.readLong();
-        ActivityRecognitionResult result = new ActivityRecognitionResult(list, time, elapsedRealtime);
+        ActivityRecognitionResult result = new ActivityRecognitionResult(modelVersion,
+                list, time, elapsedRealtime);
         long featSize = parcel.readLong();
         if (featSize > 0) {
             ArrayList<Feature> features = new ArrayList<>();

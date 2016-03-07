@@ -52,7 +52,8 @@ public class DetectedActivitiesService extends IntentService {
         Date time = new Date();
         HumanActivityData activityData = new HumanActivityData(time,
                 activity.getType(), activity.getConfidence(),
-                HumanActivityData.Status.DRAFT, false);
+                HumanActivityData.Status.DRAFT, false,
+                "", result.getModelVersion());
         Uri uri = getContentResolver().insert(HumanActivityData.CONTENT_URI,
                 activityData.getValues());
         if (uri != null) {

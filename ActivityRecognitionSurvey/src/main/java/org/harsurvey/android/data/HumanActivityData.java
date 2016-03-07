@@ -51,18 +51,23 @@ public class HumanActivityData {
     public int confidence = -1;
     public Status status;
     public Boolean feedback;
+    public String feedbackActivity;
+    public int modelVersion;
 
     public HumanActivityData(long id) {
         this.id = id;
     }
 
     public HumanActivityData(Date created, HumanActivity.Type activity,
-                             int confidence, Status status, boolean feedback) {
+                             int confidence, Status status, boolean feedback,
+                             String feedbackActivity, int modelVersion) {
         this.created = created;
         this.activity = activity;
         this.confidence = confidence;
         this.status = status;
         this.feedback = feedback;
+        this.feedbackActivity = feedbackActivity;
+        this.modelVersion = modelVersion;
     }
 
     public HumanActivityData(ContentValues values) {
@@ -86,7 +91,13 @@ public class HumanActivityData {
             status = Status.valueOf(values.getAsString(Contract.C_STATUS));
         }
         if (values.containsKey(Contract.C_FEEDBACK)) {
-            feedback = values.getAsBoolean(Contract.C_FEEDBACK);
+            feedback = values.getAsInteger(Contract.C_FEEDBACK) == 1;
+        }
+        if (values.containsKey(Contract.C_FEEDBACK_ACTIVITY)) {
+            feedbackActivity = values.getAsString(Contract.C_FEEDBACK_ACTIVITY);
+        }
+        if (values.containsKey(Contract.C_MODEL_VERSION)) {
+            modelVersion = values.getAsInteger(Contract.C_MODEL_VERSION);
         }
     }
 
@@ -108,7 +119,13 @@ public class HumanActivityData {
             values.put(Contract.C_STATUS, status.toString());
         }
         if (feedback != null) {
-            values.put(Contract.C_FEEDBACK, feedback);
+            values.put(Contract.C_FEEDBACK, feedback ? 1 : 0);
+        }
+        if (feedbackActivity != null) {
+            values.put(Contract.C_FEEDBACK_ACTIVITY, feedbackActivity);
+        }
+        if (modelVersion > 0) {
+            values.put(Contract.C_MODEL_VERSION, modelVersion);
         }
         return values;
     }
@@ -124,9 +141,12 @@ public class HumanActivityData {
         public static final String C_ACTIVITY_CONFIDENCE = "activity_confidence";
         public static final String C_STATUS = "status";
         public static final String C_FEEDBACK = "feedback";
+        public static final String C_FEEDBACK_ACTIVITY = "feedback_activity";
+        public static final String C_MODEL_VERSION = "model_version";
 
         public static final String[] ALL_COLUMNS = {
-                _ID, C_CREATED, C_ACTIVITY_TYPE, C_ACTIVITY_CONFIDENCE, C_STATUS, C_FEEDBACK
+                _ID, C_CREATED, C_ACTIVITY_TYPE, C_ACTIVITY_CONFIDENCE,
+                C_STATUS, C_FEEDBACK, C_FEEDBACK_ACTIVITY, C_MODEL_VERSION
         };
 
         public static final String DEFAULT_SORT = C_CREATED + " ASC";
@@ -138,8 +158,10 @@ public class HumanActivityData {
           "%s TEXT," +
           "%s INTEGER," +
           "%s TEXT," +
+          "%s INTEGER," +
+          "%s TEXT," +
           "%s INTEGER)", TABLE, _ID, C_CREATED, C_ACTIVITY_TYPE, C_ACTIVITY_CONFIDENCE,
-                C_STATUS, C_FEEDBACK);
+                C_STATUS, C_FEEDBACK, C_FEEDBACK_ACTIVITY, C_MODEL_VERSION);
 
         public static final String SQL_DROP = "DROP TABLE IF EXISTS " + TABLE;
     }

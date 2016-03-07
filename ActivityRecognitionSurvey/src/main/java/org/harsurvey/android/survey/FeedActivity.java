@@ -83,7 +83,7 @@ public class FeedActivity extends BaseActivity implements OnCardClickListener,
         if (updated > 0) {
             Log.d(TAG,  String.format("Saved activity %s as %s", activityData.getId(),
                     activityData.feedback));
-            if (app.isOnline() && checkButton) {
+            if (app.isOnline()) {
                 Intent localIntent = new Intent(Constants.REQUEST_SYNCRONIZATION);
                 sendBroadcast(localIntent);
             }

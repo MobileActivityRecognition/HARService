@@ -37,7 +37,7 @@ public class MappingHelper {
     }
 
     public static Map<String, Object> fromActivityToJson(HumanActivityData activity,
-                                                               FeatureData featureData) {
+                                                         FeatureData featureData) {
         TreeMap<String, Object> map = new TreeMap<>();
         String jsonDate = toJson(activity.created).replace("\"", "");
         int lastTwo = jsonDate.length() - 2;
@@ -58,6 +58,9 @@ public class MappingHelper {
         map.put("minX", featureData.min);
         map.put("skewnessX", featureData.skew);
         map.put("stdX", featureData.std);
+        map.put("version", String.format("%.3f", activity.modelVersion/1000d));
+        map.put("prediccion", activity.feedback ? "S": "N");
+        map.put("etiquetaUsuario", activity.feedbackActivity);
         return map;
     }
 }

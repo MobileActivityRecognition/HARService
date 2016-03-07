@@ -52,7 +52,7 @@ public class Constants {
     public static final String PREFERENCE_KEY = "SURVEY_PREFERENCES";
 
     public static final String DATABASE_NAME = "activities.db";
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 4;
 
     public static final String DETECTED_ACTIVITY_BROADCAST = "org.harsurvey.android.DETECTED_ACTIVITY_BROADCAST";
     public static final String DETECTED_ACTIVITY_EXTRA = "org.harsurvey.android.DETECTED_ACTIVITY_EXTRA";

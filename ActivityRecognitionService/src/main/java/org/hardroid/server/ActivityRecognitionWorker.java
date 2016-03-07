@@ -128,8 +128,9 @@ public class ActivityRecognitionWorker implements SensorDataFinishListener {
             HumanActivity de = new HumanActivity(act, confidence);
             detected.add(de);
         }
-        this.context.publishResult(new ActivityRecognitionResult(detected,
-                startTime, now - startTime, features));
+        this.context.publishResult(new ActivityRecognitionResult(this.activityClassifier.version(),
+                detected, startTime,
+                now - startTime, features));
     }
 
     private class TimerWorker extends TimerTask {

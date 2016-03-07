@@ -66,10 +66,11 @@ public class RestServiceHelper {
         headers = new HttpHeaders();
         headers.setContentType(new MediaType("application", "json"));
         headers.setAcceptEncoding(ContentCodingType.GZIP);
-        headers.setAccept(Collections.singletonList(new MediaType("application", "json")));
+        //headers.setAccept(Collections.singletonList(new MediaType("application", "json")));
     }
 
-    public void saveFeatureData(HumanActivityData activity, List<FeatureData> featureSet) {
+    public void saveFeatureData(HumanActivityData activity,
+                                List<FeatureData> featureSet) {
         Map<String, Object> data = new TreeMap<>();
 
         data.put("imei", context.getPreference().getIMEI());

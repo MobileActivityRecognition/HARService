@@ -16,5 +16,6 @@
   -->
 
 <resources>
-  <string name="app_name">ActivityRecognitionService</string>
+  <string name="app_name">HARDroid</string>
+  <string name="description">Servicio de Reconocimiento de Actividades Humanas</string>
 </resources>
