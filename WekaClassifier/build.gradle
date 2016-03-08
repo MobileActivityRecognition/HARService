@@ -17,15 +17,35 @@
 
 apply plugin: 'java'
 
-sourceSets {
-    main {
-        java {
-            srcDir 'src'
-            /* Escluir incrementalmente la compilacion de clases no necesarias */
-            exclude '**/WekaWrapperV1000.java'
-        }
+task assembleDexJar(type: Jar, dependsOn: build) {
+    from "$buildDir/classes/main/"
+    baseName = "classes"
+    exclude '**/WekaWrapperV1000.class'
+}
+
+
+import org.apache.tools.ant.taskdefs.condition.Os
+
+task dexJar << {
+    ext.androidSdkDir = System.env.ANDROID_HOME
+    if(androidSdkDir == null) {
+        Properties localProps = new Properties()
+        localProps.load(new FileInputStream(file("../local.properties")))
+        ext.androidSdkDir = localProps['sdk.dir']
+    }
+    // Make sure no existing jar file exists as this will cause dx to fail
+    new File("${buildDir}/libs/WekaJ48DT.jar").delete();
+    // Use command line dx utility to convert *.class files into classes.dex inside jar archive
+    String cmdExt = Os.isFamily(Os.FAMILY_WINDOWS) ? '.bat' : ''
+    exec {
+        commandLine "${androidSdkDir}/build-tools/23.0.1/dx${cmdExt}", '--verbose', '--dex',
+                "--output=${buildDir}/libs/WekaJ48DT.jar",
+                "${buildDir}/libs/classes.jar"
     }
 }
+
+dexJar.dependsOn(assembleDexJar)
+jar.finalizedBy(dexJar)
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])

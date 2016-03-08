@@ -24,6 +24,7 @@ import org.hardroid.common.ActivityRecognitionResult;
 import org.hardroid.common.Feature;
 import org.hardroid.common.HumanActivity;
 import org.hardroid.features.FeatureProcessing;
+import org.hardroid.model.DecisionTreeClassifier;
 import org.hardroid.model.DumbClassifier;
 import org.hardroid.sampling.MonitoredSensor;
 import org.hardroid.sampling.SensorDataFinishListener;
@@ -61,13 +62,7 @@ public class ActivityRecognitionWorker implements SensorDataFinishListener {
 
         scheduler = new Timer();
         monitoredSensor = new MonitoredSensor(context, this);
-        try {
-            activityClassifier = (ActivityClassifier)
-                    Class.forName("org.hardroid.model.DecisionTreeClassifier").newInstance();
-        } catch (Exception e) {
-            Log.w(TAG, "Error al instanciar clasificador dinamico");
-            activityClassifier = new DumbClassifier();
-        }
+        activityClassifier = new DecisionTreeClassifier();
         Log.i(TAG, "Inicializando modelo " + activityClassifier.toString());
     }
 

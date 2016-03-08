@@ -17,6 +17,9 @@
 
 package org.hardroid.model;
 
+import android.text.TextUtils;
+import android.util.Log;
+
 import org.hardroid.common.ActivityClassifier;
 import org.hardroid.common.HumanActivity.Type;
 
@@ -32,10 +35,23 @@ public class DecisionTreeClassifier extends ActivityClassifier {
             Type.TILTING,
             Type.ON_BICYCLE,
     };
+    private static final String TAG = DecisionTreeClassifier.class.getSimpleName();
+
+    private WekaClassifier classifier;
+    private WekaClassifier defaultClassifier = new FallbackClassifier();
+
+    public void setClassifier(WekaClassifier classifier) {
+        this.classifier = classifier;
+    }
 
     @Override
     public int version() {
-        return WekaWrapperV1001.VERSION;
+        if (classifier != null) {
+            return classifier.version();
+        }
+        else {
+            return defaultClassifier.version();
+        }
     }
 
     @Override
@@ -47,13 +63,34 @@ public class DecisionTreeClassifier extends ActivityClassifier {
             for (double feature : featureData) {
                 sendData[i++] = feature;
             }
-            result = (int) WekaWrapperV1001.classify(sendData);
+            if (classifier != null) {
+                result = (int) classifier.classify(sendData);
+            }
+            else {
+                result = (int) defaultClassifier.classify(sendData);
+            }
             if (result > 0 && result < detectedActivity.length) {
                 return detectedActivity[result];
             }
+            else {
+                Log.e(TAG, "Error al detectar actividad, resultado invalido: " + result);
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error al detectar actividad: " + e.getMessage());
         }
         return Type.UNKNOWN;
+    }
+
+    private class FallbackClassifier implements WekaClassifier {
+
+        @Override
+        public int version() {
+            return WekaWrapperV1000.VERSION;
+        }
+
+        @Override
+        public double classify(Object[] i) throws Exception {
+            return WekaWrapperV1001.classify(i);
+        }
     }
 }
