@@ -27,7 +27,7 @@ import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
-import org.hardroid.common.HumanActivity;
+import org.hardroid.common.HumanActivity.Type;
 import org.harsurvey.android.survey.R;
 
 /**
@@ -59,8 +59,15 @@ public class Constants {
     public static final String REQUEST_SYNCRONIZATION = "org.harsurvey.android.REQUEST_SYNCRONIZATION";
     public static final String REST_URL = "%sARrecolector/webresources/com.fpuna.entities.collaborativesession";
     public static final String DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
+    public static final String[] ACTIVITY_LIST = {
+            Type.STILL.toString(),
+            Type.WALKING.toString(),
+            Type.RUNNING.toString(),
+            Type.IN_VEHICLE.toString(),
+            Type.ON_BICYCLE.toString()
+    };
 
-    public static String getActivityString(Context context, HumanActivity.Type detectedActivityType) {
+    public static String getActivityString(Context context, Type detectedActivityType) {
         Resources resources = context.getResources();
         switch(detectedActivityType) {
             case IN_VEHICLE:
@@ -83,11 +90,11 @@ public class Constants {
         }
     }
 
-    public static Drawable getActivityIcon(Context context, HumanActivity.Type detectedActivity) {
+    public static Drawable getActivityIcon(Context context, Type detectedActivity) {
         return ContextCompat.getDrawable(context, getDrawableForType(detectedActivity));
     }
 
-    public static Bitmap getBitmapIcon(Context context, HumanActivity.Type detectedActivity) {
+    public static Bitmap getBitmapIcon(Context context, Type detectedActivity) {
         return BitmapFactory.decodeResource(context.getResources(),
                 getDrawableForType(detectedActivity));
     }
@@ -101,7 +108,7 @@ public class Constants {
         return context.getResources().getString(resource);
     }
 
-    private static int getDrawableForType(HumanActivity.Type detectedActivity) {
+    private static int getDrawableForType(Type detectedActivity) {
         switch (detectedActivity) {
             case IN_VEHICLE:
                 return R.drawable.ic_activity_car;

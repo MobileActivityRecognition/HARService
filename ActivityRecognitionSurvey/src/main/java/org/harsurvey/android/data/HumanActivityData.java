@@ -41,7 +41,8 @@ public class HumanActivityData {
     public enum Status {
         DRAFT,
         PENDING,
-        SAVED
+        SAVED,
+        CANCEL
     }
 
     // FIELDS

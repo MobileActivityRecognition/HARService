@@ -67,7 +67,6 @@ public class DetectedActivitiesAdapter extends CursorAdapter {
 
         ViewGroup actionArea = (ViewGroup) cardView.findViewById(R.id.card_actionarea);
 
-        actionArea.setVisibility(View.VISIBLE);
         Button actionButtonPositive = (Button) actionArea.findViewById(R.id.card_button_positive);
         actionButtonPositive.setOnClickListener(listener);
 

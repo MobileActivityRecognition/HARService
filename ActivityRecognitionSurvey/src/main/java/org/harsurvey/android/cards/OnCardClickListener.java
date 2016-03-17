@@ -21,5 +21,5 @@ package org.harsurvey.android.cards;
  * Click Listener
  */
 public interface OnCardClickListener {
-    public void onCardClick(int id, String tag);
+    void onCardClick(int id, String tag);
 }

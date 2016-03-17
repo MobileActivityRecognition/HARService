@@ -99,6 +99,12 @@ public class CardStreamLinearLayout extends LinearLayout implements View.OnClick
         }
     }
 
+    public void removeCard(View cardView) {
+        String tag = (String) cardView.getTag();
+        this.removeView(cardView);
+        this.cards.remove(tag);
+    }
+
     private void scrollToCard(String tag) {
         final int count = getChildCount();
         for (int index = 0; index < count; ++index) {
@@ -137,18 +143,17 @@ public class CardStreamLinearLayout extends LinearLayout implements View.OnClick
         return adapter;
     }
 
-    public void setCardClickListener(OnCardClickListener cardClickListener) {
+    public void setOnCardClickListener(OnCardClickListener cardClickListener) {
         this.cardClickListener = cardClickListener;
     }
 
     @Override
     public void onClick(View view) {
-        View cardView = (View) view.getParent().getParent();
+        View cardView = (View) view.getParent().getParent().getParent();
         String tag = (String) cardView.getTag();
         if (tag != null) {
             this.cardClickListener.onCardClick(view.getId(), tag);
-            this.removeView(cardView);
-            this.cards.remove(tag);
+            removeCard(cardView);
         }
     }
 }

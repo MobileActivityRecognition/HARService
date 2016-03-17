@@ -18,37 +18,34 @@
 package org.harsurvey.android.survey;
 
 import android.app.LoaderManager;
-import android.content.ContentUris;
 import android.content.CursorLoader;
-import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import org.harsurvey.android.cards.CardStreamLinearLayout;
 import org.harsurvey.android.cards.DetectedActivitiesAdapter;
-import org.harsurvey.android.cards.OnCardClickListener;
 import org.harsurvey.android.data.HumanActivityData;
-import org.harsurvey.android.util.Constants;
+import org.harsurvey.android.util.CardActionHelper;
 
 /**
  * Show CardView Feed activity
  */
-public class FeedActivity extends BaseActivity implements OnCardClickListener,
-        LoaderManager.LoaderCallbacks<Cursor> {
+public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String TAG = FeedActivity.class.getSimpleName();
     CardStreamLinearLayout listView;
     CursorLoader cursorLoader;
+    private CardActionHelper cardActionHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.cardstream);
+        cardActionHelper = new CardActionHelper(this);
         listView = (CardStreamLinearLayout) findViewById(R.id.card_stream);
-        listView.setCardClickListener(this);
+        listView.setOnCardClickListener(cardActionHelper);
         listView.setAdapter(new DetectedActivitiesAdapter(this, null, listView));
     }
 
@@ -68,26 +65,6 @@ public class FeedActivity extends BaseActivity implements OnCardClickListener,
         app.setOnTop(false);
         getLoaderManager().destroyLoader(0);
         super.onPause();
-    }
-
-    @Override
-    public void onCardClick(int action, String tag) {
-        Long id = Long.valueOf(tag.split("_")[1]);
-        HumanActivityData activityData = new HumanActivityData(id);
-        activityData.status = HumanActivityData.Status.PENDING;
-        boolean checkButton = action == R.id.card_button_positive;
-        activityData.feedback = checkButton;
-        int updated = getContentResolver().update(
-                ContentUris.withAppendedId(HumanActivityData.CONTENT_URI, id),
-                activityData.getValues(), null, null);
-        if (updated > 0) {
-            Log.d(TAG,  String.format("Saved activity %s as %s", activityData.getId(),
-                    activityData.feedback));
-            if (app.isOnline()) {
-                Intent localIntent = new Intent(Constants.REQUEST_SYNCRONIZATION);
-                sendBroadcast(localIntent);
-            }
-        }
     }
 
     @Override

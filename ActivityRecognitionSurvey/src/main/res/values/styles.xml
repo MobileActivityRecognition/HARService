@@ -31,7 +31,6 @@
 
     <!-- Main card -->
     <style name="Card">
-        <item name="android:background">@drawable/card_bg</item>
         <item name="android:layout_margin">@dimen/card_margin</item>
     </style>
 
@@ -76,6 +75,12 @@
         <item name="android:layout_marginRight">@dimen/card_action_margin</item>
         <item name="android:paddingLeft">@dimen/card_action_padding</item>
         <item name="android:drawablePadding">@dimen/card_action_padding</item>
+    </style>
+
+    <style name="CardActionNeutral" parent="@style/CardAction">
+        <item name="android:background">@drawable/card_action_bg</item>
+        <item name="android:drawableStart">@drawable/card_action_icon_neutral</item>
+        <item name="android:textColor">@drawable/card_action_text</item>
     </style>
 
     <style name="CardActionNegative" parent="@style/CardAction">

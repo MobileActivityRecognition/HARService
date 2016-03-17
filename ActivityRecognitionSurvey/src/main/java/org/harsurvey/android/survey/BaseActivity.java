@@ -29,7 +29,7 @@ import android.view.MenuItem;
 public class BaseActivity extends AppCompatActivity {
     public static final String TAG = BaseActivity.class.getSimpleName();
 
-    SurveyApplication app;
+    public SurveyApplication app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

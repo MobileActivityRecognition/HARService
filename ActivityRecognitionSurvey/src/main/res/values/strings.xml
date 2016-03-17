@@ -84,8 +84,8 @@
     <string name="walking">Caminado</string>
     <string name="unidentifiable_activity">Unidentifiable activity: %1$s</string>
     <string name="not_connected">ActivityClient is not yet connected. Try again.</string>
-    <string name="action_ok">OK</string>
-    <string name="action_nook">NOOK</string>
+    <string name="action_ok">Correcto</string>
+    <string name="action_nook">Incorrecto</string>
     <string name="notification_title">Encuesta de Actividad</string>
     <string name="notification_text">Se ha detectado una nueva actividad!</string>
     <string name="notification_description">Toca para responder a la encuesta</string>
@@ -99,5 +99,8 @@
     <string name="pref_key_conn">sync_data_con</string>
     <string name="pref_key_sync">sync_data_method</string>
     <string name="pref_title_sensor">Sensor</string>
-    <string name="rest_host">http://ec2-52-27-63-54.us-west-2.compute.amazonaws.com:8080/</string>
+    <string name="rest_host"><![CDATA[
+    http://ec2-52-27-63-54.us-west-2.compute.amazonaws.com:8080/
+    ]]></string>
+    <string name="pick_activity_title">Elija una actividad</string>
 </resources>
