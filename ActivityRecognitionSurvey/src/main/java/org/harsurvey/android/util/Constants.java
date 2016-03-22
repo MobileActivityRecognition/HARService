@@ -66,6 +66,8 @@ public class Constants {
             Type.IN_VEHICLE.toString(),
             Type.ON_BICYCLE.toString()
     };
+    public static final int ACTION_POSITIVE = 0;
+    public static final int ACTION_NEGATIVE = 1;
 
     public static String getActivityString(Context context, Type detectedActivityType) {
         Resources resources = context.getResources();

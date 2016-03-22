@@ -38,8 +38,6 @@ import java.util.HashSet;
  */
 public class CardStreamLinearLayout extends LinearLayout implements View.OnClickListener {
     public static final String TAG = CardStreamLinearLayout.class.getSimpleName();
-    private DetectedActivitiesAdapter adapter;
-    private HashSet<String> cards = new HashSet<>();
     private OnCardClickListener cardClickListener;
 
     public CardStreamLinearLayout(Context context) {
@@ -64,30 +62,6 @@ public class CardStreamLinearLayout extends LinearLayout implements View.OnClick
         }
     }
 
-    public void setAdapter(CursorAdapter adapter) {
-        this.adapter = (DetectedActivitiesAdapter) adapter;
-        adapter.registerDataSetObserver(new DataSetObserver() {
-            @Override
-            public void onChanged() {
-                CardStreamLinearLayout.this.populate();
-            }
-        });
-    }
-
-    private void populate() {
-        Cursor cursor = adapter.getCursor();
-        View view = null;
-        while(cursor.moveToNext()) {
-            String tag = "ACT_" + cursor.getLong(cursor.getColumnIndexOrThrow(BaseColumns._ID));
-            boolean isNew = !cards.contains(tag);
-            if (isNew) {
-                view = adapter.newView(getContext(), cursor, this);
-                adapter.bindView(view, getContext(), cursor);
-                addCard(view);
-            }
-        }
-    }
-
     public void addCard(View cardView) {
         if (cardView.getParent() == null) {
             ViewGroup.LayoutParams param = cardView.getLayoutParams();
@@ -95,14 +69,12 @@ public class CardStreamLinearLayout extends LinearLayout implements View.OnClick
                 param = generateDefaultLayoutParams();
             }
             super.addView(cardView, 0, param);
-            cards.add((String) cardView.getTag());
         }
     }
 
     public void removeCard(View cardView) {
         String tag = (String) cardView.getTag();
         this.removeView(cardView);
-        this.cards.remove(tag);
     }
 
     private void scrollToCard(String tag) {
@@ -138,10 +110,6 @@ public class CardStreamLinearLayout extends LinearLayout implements View.OnClick
             Log.d(TAG, "Card View removed: " + view);
         }
     };
-
-    public CursorAdapter getAdapter() {
-        return adapter;
-    }
 
     public void setOnCardClickListener(OnCardClickListener cardClickListener) {
         this.cardClickListener = cardClickListener;

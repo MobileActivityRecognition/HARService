@@ -30,6 +30,7 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import org.harsurvey.android.data.HumanActivityData;
+import org.harsurvey.android.survey.FeedActivity;
 import org.harsurvey.android.util.Constants;
 import org.harsurvey.android.survey.R;
 
@@ -37,45 +38,16 @@ import org.harsurvey.android.survey.R;
  * Adapter for cards
  */
 public class DetectedActivitiesAdapter extends CursorAdapter {
-    private View.OnClickListener listener;
 
-    public DetectedActivitiesAdapter(Context context, Cursor c, View.OnClickListener listener) {
+    private OnCardClickListener listener;
+
+    public DetectedActivitiesAdapter(Context context, Cursor c) {
         super(context, c, 0);
-        this.listener = listener;
     }
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
-        String tag = "ACT_" + cursor.getLong(cursor.getColumnIndexOrThrow(BaseColumns._ID));
-        LayoutInflater inflater = LayoutInflater.from(context);
-        Activity activity = (Activity) context;
-        // Inflating the card.
-        ViewGroup cardView = (ViewGroup) inflater.inflate(R.layout.card,
-                (ViewGroup) activity.findViewById(R.id.card_stream), false);
-
-        // Check that the layout contains a TextView with the card_title id
-        View viewTitle = cardView.findViewById(R.id.card_title);
-        if (viewTitle != null) {
-            viewTitle.setVisibility(View.GONE);
-        }
-
-        // Check that the layout contains a TextView with the card_content id
-        View viewDesc = cardView.findViewById(R.id.card_content);
-        if (viewDesc != null) {
-            viewDesc.setVisibility(View.GONE);
-        }
-
-        ViewGroup actionArea = (ViewGroup) cardView.findViewById(R.id.card_actionarea);
-
-        Button actionButtonPositive = (Button) actionArea.findViewById(R.id.card_button_positive);
-        actionButtonPositive.setOnClickListener(listener);
-
-        Button actionButtonNegative = (Button) actionArea.findViewById(R.id.card_button_negative);
-        actionButtonNegative.setOnClickListener(listener);
-
-        cardView.setTag(tag);
-
-        return cardView;
+        return null;
     }
 
     @Override

@@ -26,7 +26,7 @@ import android.util.Log;
 import org.harsurvey.android.cards.CardListItemAdapter;
 import org.harsurvey.android.cards.OnCardClickListener;
 import org.harsurvey.android.data.HumanActivityData;
-import org.harsurvey.android.survey.BaseActivity;
+import org.harsurvey.android.survey.FeedActivity;
 import org.harsurvey.android.survey.R;
 
 /**
@@ -35,18 +35,19 @@ import org.harsurvey.android.survey.R;
 public class CardActionHelper implements OnCardClickListener {
     private static final String TAG = CardActionHelper.class.getSimpleName();
 
-    private BaseActivity context;
-    private CardListItemAdapter adapter;
+    private FeedActivity activity;
+    private CardListItemAdapter cardListItemAdapter;
 
-    public CardActionHelper(BaseActivity context) {
-        this.context = context;
-        this.adapter = new CardListItemAdapter(context, Constants.ACTIVITY_LIST);
+    public CardActionHelper(FeedActivity context) {
+        this.activity = context;
+        this.cardListItemAdapter = new CardListItemAdapter(context, Constants.ACTIVITY_LIST);
     }
 
     @Override
     public void onCardClick(int action, String tag) {
         if (tag.startsWith("ACT_")) {
             handleSurveyCard(action, tag.split("_")[1]);
+            activity.removeCard(tag);
         }
         else {
             Log.i(TAG, "Nothing to be done for tag: " + tag);
@@ -55,7 +56,7 @@ public class CardActionHelper implements OnCardClickListener {
 
     public void handleSurveyCard(int action, String tag) {
         Long id = Long.valueOf(tag);
-        boolean checkButtom = (action == R.id.card_button_positive);
+        boolean checkButtom = (action == Constants.ACTION_POSITIVE);
         final HumanActivityData activityData = new HumanActivityData(id);
         if (checkButtom) {
             activityData.status = HumanActivityData.Status.PENDING;
@@ -64,9 +65,9 @@ public class CardActionHelper implements OnCardClickListener {
         }
         else {
             activityData.feedback = false;
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             builder.setTitle(R.string.pick_activity_title)
-                   .setAdapter(adapter, new DialogInterface.OnClickListener() {
+                   .setAdapter(cardListItemAdapter, new DialogInterface.OnClickListener() {
                        @Override
                        public void onClick(DialogInterface dialogInterface, int i) {
                            activityData.feedbackActivity = Constants.ACTIVITY_LIST[i];
@@ -91,15 +92,15 @@ public class CardActionHelper implements OnCardClickListener {
     }
 
     public void saveAndSync(HumanActivityData activityData, boolean sync) {
-        int updated = context.getContentResolver().update(
+        int updated = activity.getContentResolver().update(
                 ContentUris.withAppendedId(HumanActivityData.CONTENT_URI, activityData.getId()),
                 activityData.getValues(), null, null);
         if (updated > 0) {
             Log.d(TAG, String.format("Saved activity %s as %s", activityData.getId(),
                     activityData.feedback));
-            if (context.app.isOnline() && sync) {
+            if (activity.app.isOnline() && sync) {
                 Intent localIntent = new Intent(Constants.REQUEST_SYNCRONIZATION);
-                context.sendBroadcast(localIntent);
+                activity.sendBroadcast(localIntent);
             }
         }
     }

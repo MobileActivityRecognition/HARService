@@ -65,21 +65,6 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/card_separator" />
 
-            <Button xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/card_button_positive"
-                    style="@style/CardActionPositive"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:text="@string/action_ok"/>
-
-            <Button xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/card_button_negative"
-                    style="@style/CardActionNegative"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:text="@string/action_nook"/>
         </LinearLayout>
     </RelativeLayout>
 
