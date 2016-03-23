@@ -81,6 +81,11 @@ public class PreferenceHelper
                 R.string.pref_key_name), "N/A");
     }
 
+    public String getAge() {
+        return preferences.getString(Constants.getStringResource(context, R.string.pref_key_age),
+                "N/A");
+    }
+
     public String getPhoneName() {
         return preferences.getString(Constants.getStringResource(context,
                 R.string.pref_key_model), "N/A");

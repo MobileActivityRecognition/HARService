@@ -31,7 +31,6 @@
     <string name="pref_sum_display_name">Provee tu nombre para poder reconocerte</string>
     <string name="pref_title_sync_settings">Sincronización</string>
     <string name="pref_title_session_duration">Intervalo de duración</string>
-
     <string name="pref_default_display_name">Tu nombre completo</string>
     <string name="pref_default_session_duration">1</string>
     <string name="pref_default_sync_method">WIFI</string>
@@ -91,16 +90,19 @@
     <string name="notification_description">Toca para responder a la encuesta</string>
     <string name="pref_title_model">Modelo</string>
     <string name="pref_title_imei">IMEI</string>
+    <string name="pref_title_sensor">Sensor</string>
+    <string name="pref_title_age">Edad</string>
     <string name="pref_key_sensor">sensor</string>
     <string name="pref_key_model">model</string>
     <string name="pref_key_imei">imei</string>
     <string name="pref_key_name">display_name</string>
+    <string name="pref_key_age">year_age</string>
     <string name="pref_key_duration">session_duration</string>
     <string name="pref_key_conn">sync_data_con</string>
     <string name="pref_key_sync">sync_data_method</string>
-    <string name="pref_title_sensor">Sensor</string>
     <string name="rest_host"><![CDATA[
     http://ec2-52-27-63-54.us-west-2.compute.amazonaws.com:8080/
     ]]></string>
     <string name="pick_activity_title">Elija una actividad</string>
+    <string name="pref_default_age">25</string>
 </resources>

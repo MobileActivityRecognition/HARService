@@ -33,6 +33,10 @@ import android.preference.PreferenceManager;
 
 import org.harsurvey.android.util.Constants;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -128,23 +132,34 @@ public class SettingsActivity extends PreferenceActivity {
 
         // Trigger the listener immediately with the preference's
         // current value.
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
+        Object value = null;
+        if (preference.getKey().equalsIgnoreCase("year_age")) {
+            value = PreferenceManager
+                    .getDefaultSharedPreferences(preference.getContext())
+                    .getInt(preference.getKey(), 25) + "";
+        }
+        else {
+            value = PreferenceManager
+                    .getDefaultSharedPreferences(preference.getContext())
+                    .getString(preference.getKey(), "");
+        }
+        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference, value);
     }
 
     private static void bindPreferenceAccountNames(Preference preference, Activity activity) {
         ListPreference prefs = ((ListPreference) preference);
         AccountManager manager = (AccountManager) activity.getSystemService(ACCOUNT_SERVICE);
         Account[] list = manager.getAccounts();
-        String[] values = new String[list.length];
+        List<String> values = new ArrayList<>();
         int i = 0;
         for (Account account: list) {
-            values[i++] = account.name;
+            if (account.name.contains("@")) {
+                values.add(account.name);
+            }
         }
-        prefs.setEntryValues(values);
-        prefs.setEntries(values);
+        String[] realValues = values.toArray(new String[values.size()]);
+        prefs.setEntryValues(realValues);
+        prefs.setEntries(realValues);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -159,7 +174,7 @@ public class SettingsActivity extends PreferenceActivity {
             Activity context = getActivity();
             bindPreferenceAccountNames(findPreference(
                     Constants.getStringResource(context,
-                    R.string.pref_key_name)), context);
+                            R.string.pref_key_name)), context);
             bindPreferenceSummaryToValue(findPreference(Constants.getStringResource(context,
                     R.string.pref_key_model)));
             bindPreferenceSummaryToValue(findPreference(Constants.getStringResource(context,
@@ -167,11 +182,33 @@ public class SettingsActivity extends PreferenceActivity {
             bindPreferenceSummaryToValue(findPreference(Constants.getStringResource(context,
                     R.string.pref_key_name)));
             bindPreferenceSummaryToValue(findPreference(Constants.getStringResource(context,
+                    R.string.pref_key_age)));
+            bindPreferenceSummaryToValue(findPreference(Constants.getStringResource(context,
                     R.string.pref_key_sensor)));
             bindPreferenceSummaryToValue(findPreference(Constants.getStringResource(context,
                     R.string.pref_key_duration)));
             bindPreferenceSummaryToValue(findPreference(Constants.getStringResource(context,
                     R.string.pref_key_sync)));
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class AccountFragment extends PreferenceFragment {
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.register);
+
+
+            Activity context = getActivity();
+            bindPreferenceAccountNames(findPreference(
+                    Constants.getStringResource(context,
+                            R.string.pref_key_name)), context);
+            bindPreferenceSummaryToValue(findPreference(Constants.getStringResource(context,
+                    R.string.pref_key_name)));
+            bindPreferenceSummaryToValue(findPreference(Constants.getStringResource(context,
+                    R.string.pref_key_age)));
         }
     }
 

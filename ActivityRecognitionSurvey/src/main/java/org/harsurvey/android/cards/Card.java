@@ -146,7 +146,6 @@ public class Card {
                 cardView.findViewById(R.id.card_content).setVisibility(View.GONE);
             }
 
-
             ViewGroup actionArea = (ViewGroup) cardView.findViewById(R.id.card_actionarea);
 
             // Inflate all action views.
