@@ -20,7 +20,7 @@
     <string name="activity_title">Mi Actividad Actual</string>
     <string name="action_settings">Configuración</string>
 
-    <string name="intro_title">Introducción</string>
+    <string name="intro_title">Introducción al Reconocedor</string>
 
     <!-- Strings related to Settings -->
     <string name="pref_header_general">General</string>
@@ -68,7 +68,20 @@
     </string-array>
 
     <string name="intro_message">
-        <![CDATA[
+         <![CDATA[
+
+            <p>El detector de Actividades Humanas predice de acuerdo a el movimiento que
+            tiene tu teléfono movil la actividad física probable que estas realizando.
+            <p>Para completar tus datos basicos presiona el botón "ENTENDIDO"
+            para poder empezar contentar la encuesta
+            a medida que la aplicación detecte tu actividad.</p>
+            <p>
+            El sensor de aceleración no consume mucha bateria, y esta APP se ejecuta de fondo para no
+            interferir con tu actividad diaria, de modo que cuando tengas que contestar una encuesta
+            recibiras una notificación para completar la información y eventualmente enviar los datos
+            a nuestro servidor, por lo que requerimos que para empezar a usar la APP completes tus datos:</p>
+            <p>1. Cuenta de Correo</p>
+            <p>2. Edad</p>
 
         ]]>
     </string>
@@ -82,7 +95,7 @@
     <string name="unknown">Desconocido</string>
     <string name="walking">Caminado</string>
     <string name="unidentifiable_activity">Unidentifiable activity: %1$s</string>
-    <string name="not_connected">ActivityClient is not yet connected. Try again.</string>
+    <string name="connected">Servicio de actividad conectado</string>
     <string name="action_ok">Correcto</string>
     <string name="action_nook">Incorrecto</string>
     <string name="notification_title">Encuesta de Actividad</string>
@@ -105,4 +118,6 @@
     ]]></string>
     <string name="pick_activity_title">Elija una actividad</string>
     <string name="pref_default_age">25</string>
+    <string name="action_ready">ENTENDIDO</string>
+    <string name="action_account_settings">Configurar Cuenta</string>
 </resources>

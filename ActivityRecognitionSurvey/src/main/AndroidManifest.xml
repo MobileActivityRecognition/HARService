@@ -39,6 +39,13 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".AccountSettings"
+            android:label="@string/action_account_settings" >
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".FeedActivity"
             android:label="@string/application_name">
             <intent-filter>

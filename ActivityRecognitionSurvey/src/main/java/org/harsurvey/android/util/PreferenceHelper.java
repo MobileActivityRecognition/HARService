@@ -28,8 +28,7 @@ import org.harsurvey.android.survey.SurveyApplication;
 /**
  * Preference and settings
  */
-public class PreferenceHelper
-        implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class PreferenceHelper implements SharedPreferences.OnSharedPreferenceChangeListener {
     private final String TAG = PreferenceHelper.class.getSimpleName();
     private final SharedPreferences preferences;
     private final SurveyApplication context;
@@ -73,27 +72,34 @@ public class PreferenceHelper
 
     public String getIMEI() {
         return preferences.getString(Constants.getStringResource(context,
-                R.string.pref_key_imei), "N/A");
+                R.string.pref_key_imei), Constants.NONE);
     }
 
     public String getName() {
         return preferences.getString(Constants.getStringResource(context,
-                R.string.pref_key_name), "N/A");
+                R.string.pref_key_name), Constants.NONE);
     }
 
     public String getAge() {
-        return preferences.getString(Constants.getStringResource(context, R.string.pref_key_age),
-                "N/A");
+        int result = preferences.getInt(Constants.getStringResource(context, R.string.pref_key_age),
+                -1);
+        if (result > NumberPickerPreference.MIN_VALUE &&
+                result < NumberPickerPreference.MAX_VALUE) {
+            return String.valueOf(result);
+        }
+        else {
+            return Constants.NONE;
+        }
     }
 
     public String getPhoneName() {
         return preferences.getString(Constants.getStringResource(context,
-                R.string.pref_key_model), "N/A");
+                R.string.pref_key_model), Constants.NONE);
     }
 
     public String getSensorName() {
         return preferences.getString(Constants.getStringResource(context,
-                R.string.pref_key_sensor), "N/A");
+                R.string.pref_key_sensor), Constants.NONE);
     }
 }
 

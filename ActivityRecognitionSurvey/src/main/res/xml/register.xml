@@ -20,12 +20,10 @@
     <ListPreference
         android:key="@string/pref_key_name"
         android:title="@string/pref_title_display_name"
-        android:defaultValue="@string/pref_default_display_name"
         android:contentDescription="@string/pref_sum_display_name" />
 
     <org.harsurvey.android.util.NumberPickerPreference
         android:key="@string/pref_key_age"
-        android:title="@string/pref_title_age"
-        android:defaultValue="@string/pref_default_age" />
+        android:title="@string/pref_title_age"/>
 
 </PreferenceScreen>

@@ -46,10 +46,7 @@ public class Constants {
      */
     public static final int INTERVAL_DEFAULT = 1*MINUTE;
 
-    /**
-     * Declaring KEYS for saving data
-     */
-    public static final String PREFERENCE_KEY = "SURVEY_PREFERENCES";
+    public static final String NONE = "N/A";
 
     public static final String DATABASE_NAME = "activities.db";
     public static final int DATABASE_VERSION = 4;
@@ -68,6 +65,9 @@ public class Constants {
     };
     public static final int ACTION_POSITIVE = 0;
     public static final int ACTION_NEGATIVE = 1;
+    public static final int ACTION_NEUTRAL = 2;
+
+    public static final String INTRO_CARD = "INTRO";
 
     public static String getActivityString(Context context, Type detectedActivityType) {
         Resources resources = context.getResources();

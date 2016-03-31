@@ -26,6 +26,7 @@ import android.util.Log;
 import org.harsurvey.android.cards.CardListItemAdapter;
 import org.harsurvey.android.cards.OnCardClickListener;
 import org.harsurvey.android.data.HumanActivityData;
+import org.harsurvey.android.survey.AccountSettings;
 import org.harsurvey.android.survey.FeedActivity;
 import org.harsurvey.android.survey.R;
 
@@ -48,6 +49,10 @@ public class CardActionHelper implements OnCardClickListener {
         if (tag.startsWith("ACT_")) {
             handleSurveyCard(action, tag.split("_")[1]);
             activity.removeCard(tag);
+        }
+        else if (tag.equalsIgnoreCase(Constants.INTRO_CARD)) {
+            activity.startActivity(new Intent(activity, AccountSettings.class));
+            activity.removeCard(Constants.INTRO_CARD);
         }
         else {
             Log.i(TAG, "Nothing to be done for tag: " + tag);

@@ -25,7 +25,6 @@ import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.view.View;
-import android.widget.Toast;
 
 import org.harsurvey.android.cards.Card;
 import org.harsurvey.android.cards.CardStreamLinearLayout;
@@ -42,6 +41,7 @@ import java.util.TreeMap;
  */
 public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String TAG = FeedActivity.class.getSimpleName();
+
     CardStreamLinearLayout listView;
     CursorLoader cursorLoader;
     CardActionHelper cardActionHelper;
@@ -59,12 +59,12 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
         adapter.registerDataSetObserver(new DataSetObserver() {
             @Override
             public void onChanged() {
-                addCards();
+                addSurveyCards();
             }
         });
     }
 
-    private void addCards() {
+    private void addSurveyCards() {
         Cursor cursor = adapter.getCursor();
         View view = null;
         while(cursor.moveToNext()) {
@@ -89,6 +89,19 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
         }
     }
 
+    private void showIntroCard() {
+        boolean isNew = !cards.containsKey(Constants.INTRO_CARD);
+        if (isNew) {
+            Card card = new Card.Builder(cardActionHelper, Constants.INTRO_CARD)
+                    .setTitle(getString(R.string.intro_title))
+                    .setDescription(getString(R.string.intro_message))
+                    .addAction(Constants.getStringResource(this, R.string.action_ready),
+                            Constants.ACTION_NEUTRAL, Card.ACTION_NEUTRAL)
+                    .build(this);
+            addCard(card);
+        }
+    }
+
     public void addCard(Card card) {
         cards.put(card.getTag(), card);
         listView.addCard(card.getView());
@@ -105,12 +118,18 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
     @Override
     protected void onResume() {
         super.onResume();
-        getLoaderManager().initLoader(0, null, this);
-        app.getConnection().connect();
-        app.setOnTop(true);
-        if (!app.getConnection().isClientConnected()) {
-            Toast.makeText(this, getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
+        if (app.hasValidAccount()) {
+            this.resumeSurvey();
         }
+        else {
+            this.showIntroCard();
+        }
+        app.setOnTop(true);
+    }
+
+    private void resumeSurvey() {
+        app.getConnection().connect();
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override

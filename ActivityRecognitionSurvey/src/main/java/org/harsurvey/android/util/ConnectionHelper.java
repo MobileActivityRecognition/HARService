@@ -18,10 +18,12 @@
 package org.harsurvey.android.util;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import org.hardroid.api.ConnectionApi;
 import org.hardroid.client.ActivityRecognitionClient;
 import org.hardroid.client.OnClientConnectionListener;
+import org.harsurvey.android.survey.R;
 import org.harsurvey.android.survey.SurveyApplication;
 
 /**
@@ -41,6 +43,8 @@ public class ConnectionHelper implements OnClientConnectionListener {
     @Override
     public void onConnect(ConnectionApi connectionApi) {
         Log.i(TAG, "Requesting activities updates");
+        Toast.makeText(context, Constants.getStringResource(context, R.string.connected),
+                Toast.LENGTH_SHORT).show();
         apiClient.getService().requestActivityUpdates(
                 context.getPreference().getInterval(),
                 context.getDetectedActivityService());

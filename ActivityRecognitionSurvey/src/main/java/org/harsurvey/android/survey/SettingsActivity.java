@@ -34,7 +34,6 @@ import android.preference.PreferenceManager;
 import org.harsurvey.android.util.Constants;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 

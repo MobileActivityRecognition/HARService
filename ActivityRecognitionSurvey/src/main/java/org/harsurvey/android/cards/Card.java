@@ -18,6 +18,7 @@
 package org.harsurvey.android.cards;
 
 import android.app.Activity;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -141,7 +142,7 @@ public class Card {
             View viewDesc = cardView.findViewById(R.id.card_content);
             if (card.description != null && viewDesc != null) {
                 card.descView = (TextView) viewDesc;
-                card.descView.setText(card.description);
+                card.descView.setText(Html.fromHtml(card.description));
             } else if (viewDesc != null) {
                 cardView.findViewById(R.id.card_content).setVisibility(View.GONE);
             }

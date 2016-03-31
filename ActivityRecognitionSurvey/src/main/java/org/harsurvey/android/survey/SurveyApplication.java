@@ -29,6 +29,7 @@ import android.util.Log;
 
 import org.hardroid.client.ActivityRecognitionClient;
 import org.harsurvey.android.util.ConnectionHelper;
+import org.harsurvey.android.util.Constants;
 import org.harsurvey.android.util.PhoneInfoHelper;
 import org.harsurvey.android.util.PreferenceHelper;
 import org.harsurvey.android.util.RestServiceHelper;
@@ -110,5 +111,11 @@ public class SurveyApplication extends Application {
 
     public RestServiceHelper getRestService() {
         return restService;
+    }
+
+    public boolean hasValidAccount() {
+        PreferenceHelper prefs = getPreference();
+        return !prefs.getName().equalsIgnoreCase(Constants.NONE) &&
+                !prefs.getAge().equalsIgnoreCase(Constants.NONE);
     }
 }
