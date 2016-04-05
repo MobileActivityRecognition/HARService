@@ -33,8 +33,8 @@ import android.preference.PreferenceManager;
 
 import org.harsurvey.android.util.Constants;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -149,7 +149,7 @@ public class SettingsActivity extends PreferenceActivity {
         ListPreference prefs = ((ListPreference) preference);
         AccountManager manager = (AccountManager) activity.getSystemService(ACCOUNT_SERVICE);
         Account[] list = manager.getAccounts();
-        List<String> values = new ArrayList<>();
+        Set<String> values = new HashSet<>();
         int i = 0;
         for (Account account: list) {
             if (account.name.contains("@")) {

@@ -33,6 +33,8 @@ import org.harsurvey.android.data.HumanActivityData;
 import org.harsurvey.android.util.CardActionHelper;
 import org.harsurvey.android.util.Constants;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -67,7 +69,7 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
     private void addSurveyCards() {
         Cursor cursor = adapter.getCursor();
         View view = null;
-        while(cursor.moveToNext()) {
+        while(cursor.moveToNext() && cards.size() < Constants.MAX_CARDS) {
             String tag = "ACT_" + cursor.getLong(cursor.getColumnIndexOrThrow(BaseColumns._ID));
             boolean isNew = !cards.containsKey(tag);
             if (isNew) {
@@ -79,7 +81,7 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
                         .addAction(Constants.getStringResource(this, R.string.action_nook),
                                 Constants.ACTION_NEGATIVE, Card.ACTION_NEGATIVE)
                         .build(this);
-                addCard(card);
+                addCard(card, false);
                 view = card.getView();
             }
             else {
@@ -98,13 +100,13 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
                     .addAction(Constants.getStringResource(this, R.string.action_ready),
                             Constants.ACTION_NEUTRAL, Card.ACTION_NEUTRAL)
                     .build(this);
-            addCard(card);
+            addCard(card, false);
         }
     }
 
-    public void addCard(Card card) {
+    public void addCard(Card card, boolean dismiss) {
         cards.put(card.getTag(), card);
-        listView.addCard(card.getView());
+        listView.addCard(card.getView(), dismiss);
     }
 
     public void removeCard(String tag) {
@@ -144,8 +146,10 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
         cursorLoader = new CursorLoader(this, HumanActivityData.CONTENT_URI,
                 HumanActivityData.Contract.ALL_COLUMNS,
                 HumanActivityData.Contract.C_STATUS + " = ?",
-                new String[]{ HumanActivityData.Status.DRAFT.toString() },
-                HumanActivityData.Contract.DEFAULT_SORT);
+                new String[]{
+                        HumanActivityData.Status.DRAFT.toString()
+                },
+                HumanActivityData.Contract.C_CREATED + " DESC");
         return cursorLoader;
     }
 

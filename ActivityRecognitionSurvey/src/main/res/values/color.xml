@@ -38,4 +38,7 @@
     <color name="card_action_positive_focused">#FFE4F0AF</color>
     <color name="card_action_positive">#FFA0CC00</color>
     <color name="card_action_positive_ripple">#CCA0CC00</color>
+
+    <color name="mint_green">#48CFAD</color>
+    <color name="mint_green_dark">#37BC9B</color>
 </resources>

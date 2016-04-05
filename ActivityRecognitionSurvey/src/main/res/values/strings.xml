@@ -70,18 +70,16 @@
     <string name="intro_message">
          <![CDATA[
 
-            <p>El detector de Actividades Humanas predice de acuerdo a el movimiento que
-            tiene tu teléfono movil la actividad física probable que estas realizando.
-            <p>Para completar tus datos basicos presiona el botón "ENTENDIDO"
-            para poder empezar contentar la encuesta
-            a medida que la aplicación detecte tu actividad.</p>
-            <p>
-            El sensor de aceleración no consume mucha bateria, y esta APP se ejecuta de fondo para no
-            interferir con tu actividad diaria, de modo que cuando tengas que contestar una encuesta
-            recibiras una notificación para completar la información y eventualmente enviar los datos
-            a nuestro servidor, por lo que requerimos que para empezar a usar la APP completes tus datos:</p>
+            <p>El detector de Actividades predice por el movimiento del teléfono
+            la actividad física probable que estas realizando.
+            <p>Para completar tus <b>datos basicos</b> presiona el botón "ENTENDIDO"
+            y empezar la encuesta a medida que detecte tu actividad.</p>
             <p>1. Cuenta de Correo</p>
             <p>2. Edad</p>
+            <i>
+            El sensor de aceleración no consume mucha bateria, y la applicación se ejecuta de fondo
+            para no interferir con tu actividad diaria. Cuando tengas que contestar la encuesta
+            recibiras una notificación y enviar los datos al servidor dependiendo de tus preferencias</i>
 
         ]]>
     </string>
@@ -116,8 +114,12 @@
     <string name="rest_host"><![CDATA[
     http://ec2-52-27-63-54.us-west-2.compute.amazonaws.com:8080/
     ]]></string>
+    <string name="help_url"><![CDATA[
+    https://hardroidpy.github.io/
+    ]]></string>
     <string name="pick_activity_title">Elija una actividad</string>
     <string name="pref_default_age">25</string>
     <string name="action_ready">ENTENDIDO</string>
     <string name="action_account_settings">Configurar Cuenta</string>
+    <string name="help">Ayuda</string>
 </resources>

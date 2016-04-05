@@ -68,6 +68,7 @@ public class Constants {
     public static final int ACTION_NEUTRAL = 2;
 
     public static final String INTRO_CARD = "INTRO";
+    public static final int MAX_CARDS = 5;
 
     public static String getActivityString(Context context, Type detectedActivityType) {
         Resources resources = context.getResources();

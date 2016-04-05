@@ -85,7 +85,7 @@ public class DecisionTreeClassifier extends ActivityClassifier {
 
         @Override
         public int version() {
-            return WekaWrapperV1000.VERSION;
+            return WekaWrapperV1001.VERSION;
         }
 
         @Override

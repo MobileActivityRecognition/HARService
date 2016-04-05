@@ -17,21 +17,19 @@
 
 package org.harsurvey.android.cards;
 
+import android.animation.LayoutTransition;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.DataSetObserver;
-import android.provider.BaseColumns;
+import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.widget.CursorAdapter;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
-import java.util.HashSet;
+import org.harsurvey.android.util.AnimationHelper;
 
 /**
  * Layout
@@ -39,36 +37,92 @@ import java.util.HashSet;
 public class CardStreamLinearLayout extends LinearLayout implements View.OnClickListener {
     public static final String TAG = CardStreamLinearLayout.class.getSimpleName();
     private OnCardClickListener cardClickListener;
+    private AnimationHelper animationHelper;
+    public boolean showInitialAnimation = true;
+    private Rect childRect = new Rect();
+    private String firstVisibleCardTag = null;
+    private boolean layouted;
 
     public CardStreamLinearLayout(Context context) {
         super(context);
-        setOnHierarchyChangeListener(hierarchyChangeListener);
+        animationHelper = new AnimationHelper(this, null, 0);
     }
 
     public CardStreamLinearLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+        animationHelper = new AnimationHelper(this, attrs, 0);
     }
 
     @SuppressLint("NewApi")
     public CardStreamLinearLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        animationHelper = new AnimationHelper(this, attrs, defStyle);
     }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
-        for (int i = 0; i < this.getChildCount(); i++) {
-            this.getChildAt(i).setVisibility(VISIBLE);
+
+        if( changed ){
+            layouted = true;
+
+            ObjectAnimator animator;
+            LayoutTransition layoutTransition = new LayoutTransition();
+
+            animator = animationHelper.animators.getDisappearingAnimator(getContext());
+            layoutTransition.setAnimator(LayoutTransition.DISAPPEARING, animator);
+
+            animator = animationHelper.animators.getAppearingAnimator(getContext());
+            layoutTransition.setAnimator(LayoutTransition.APPEARING, animator);
+
+            layoutTransition.addTransitionListener(animationHelper.transitionListener);
+
+            if( animator != null )
+                layoutTransition.setDuration(animator.getDuration());
+
+            setLayoutTransition(layoutTransition);
+
+            if(showInitialAnimation)
+                animationHelper.runInitialAnimations();
+
+            if (firstVisibleCardTag != null) {
+                scrollToCard(firstVisibleCardTag);
+                firstVisibleCardTag = null;
+            }
         }
+
     }
 
-    public void addCard(View cardView) {
+    /**
+     * get the tag of the first visible child in this layout
+     *
+     * @return tag of the first visible child or null
+     */
+    public String getFirstVisibleCardTag() {
+
+        final int count = getChildCount();
+
+        if (count == 0)
+            return null;
+
+        for (int index = 0; index < count; ++index) {
+            //check the position of each view.
+            View child = getChildAt(index);
+            if (child.getGlobalVisibleRect(childRect) == true)
+                return (String) child.getTag();
+        }
+
+        return null;
+    }
+
+    public void addCard(View cardView, boolean dismiss) {
         if (cardView.getParent() == null) {
+            animationHelper.initCard(cardView, dismiss);
             ViewGroup.LayoutParams param = cardView.getLayoutParams();
             if (param == null) {
                 param = generateDefaultLayoutParams();
             }
-            super.addView(cardView, 0, param);
+            super.addView(cardView, -1, param);
         }
     }
 
@@ -93,23 +147,6 @@ public class CardStreamLinearLayout extends LinearLayout implements View.OnClick
             }
         }
     }
-
-    private OnHierarchyChangeListener hierarchyChangeListener = new OnHierarchyChangeListener() {
-
-        @Override
-        public void onChildViewAdded(View view, View parent) {
-            Log.d(TAG, "Card View added: " + view);
-            ViewParent scrollView = parent.getParent();
-            if (scrollView != null && scrollView instanceof ScrollView) {
-                ((ScrollView) scrollView).fullScroll(FOCUS_UP);
-            }
-        }
-
-        @Override
-        public void onChildViewRemoved(View view, View view1) {
-            Log.d(TAG, "Card View removed: " + view);
-        }
-    };
 
     public void setOnCardClickListener(OnCardClickListener cardClickListener) {
         this.cardClickListener = cardClickListener;

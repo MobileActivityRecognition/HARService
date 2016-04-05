@@ -19,12 +19,15 @@ package org.harsurvey.android.survey;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import org.harsurvey.android.util.Constants;
 
 public class BaseActivity extends AppCompatActivity {
     public static final String TAG = BaseActivity.class.getSimpleName();
@@ -56,6 +59,10 @@ public class BaseActivity extends AppCompatActivity {
             startActivity(new Intent(this, SettingsActivity.class)
                     .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
             return true;
+        }
+        else if (id == R.id.help) {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse(Constants.getStringResource(this, R.string.help_url))));
         }
 
         return super.onOptionsItemSelected(item);

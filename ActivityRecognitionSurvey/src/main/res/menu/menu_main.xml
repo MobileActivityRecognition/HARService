@@ -21,4 +21,6 @@
     tools:context="org.harsurvey.android.survey.BaseActivity">
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/help" android:title="@string/help"
+          android:orderInCategory="101" app:showAsAction="never" />
 </menu>

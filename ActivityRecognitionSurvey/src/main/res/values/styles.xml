@@ -19,7 +19,8 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/mint_green</item>
+        <item name="colorPrimaryDark">@color/mint_green_dark</item>
     </style>
 
     <!-- Card Stream -->
@@ -94,5 +95,14 @@
         <item name="android:drawableStart">@drawable/card_action_icon_positive</item>
         <item name="android:textColor">@drawable/card_action_text_positive</item>
     </style>
+
+    <declare-styleable name="CardStream">
+        <attr name="animationDuration" format="enum">
+            <enum name="slow" value="1001"/>
+            <enum name="normal" value="1002"/>
+            <enum name="fast" value="1003"/>
+        </attr>
+        <attr name="animators" format="string"/>
+    </declare-styleable>
 
 </resources>

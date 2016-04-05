@@ -39,7 +39,7 @@ public class NumberPickerPreference extends DialogPreference {
     public static final boolean WRAP_SELECTOR_WHEEL = true;
 
     private NumberPicker picker;
-    private int value;
+    private int value = 25;
 
     public NumberPickerPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
