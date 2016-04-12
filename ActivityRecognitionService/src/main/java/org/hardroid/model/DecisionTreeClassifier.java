@@ -17,7 +17,6 @@
 
 package org.hardroid.model;
 
-import android.text.TextUtils;
 import android.util.Log;
 
 import org.hardroid.common.ActivityClassifier;
@@ -28,7 +27,7 @@ import org.hardroid.common.HumanActivity.Type;
  */
 public class DecisionTreeClassifier extends ActivityClassifier {
     private Type[] detectedActivity = new Type[]{
-            Type.ON_BICYCLE,
+            Type.UNKNOWN,
             Type.WALKING,
             Type.RUNNING,
             Type.STILL,
@@ -38,20 +37,15 @@ public class DecisionTreeClassifier extends ActivityClassifier {
     private static final String TAG = DecisionTreeClassifier.class.getSimpleName();
 
     private WekaClassifier classifier;
-    private WekaClassifier defaultClassifier = new FallbackClassifier();
 
-    public void setClassifier(WekaClassifier classifier) {
+    public DecisionTreeClassifier(WekaClassifier classifier) {
         this.classifier = classifier;
+        Log.i(TAG, "Inicializando modelo " + this.toString());
     }
 
     @Override
     public int version() {
-        if (classifier != null) {
-            return classifier.version();
-        }
-        else {
-            return defaultClassifier.version();
-        }
+        return classifier.version();
     }
 
     @Override
@@ -63,12 +57,7 @@ public class DecisionTreeClassifier extends ActivityClassifier {
             for (double feature : featureData) {
                 sendData[i++] = feature;
             }
-            if (classifier != null) {
-                result = (int) classifier.classify(sendData);
-            }
-            else {
-                result = (int) defaultClassifier.classify(sendData);
-            }
+            result = (int) classifier.classify(sendData);
             if (result > 0 && result < detectedActivity.length) {
                 return detectedActivity[result];
             }
@@ -79,18 +68,5 @@ public class DecisionTreeClassifier extends ActivityClassifier {
             Log.e(TAG, "Error al detectar actividad: " + e.getMessage());
         }
         return Type.UNKNOWN;
-    }
-
-    private class FallbackClassifier implements WekaClassifier {
-
-        @Override
-        public int version() {
-            return WekaWrapperV1001.VERSION;
-        }
-
-        @Override
-        public double classify(Object[] i) throws Exception {
-            return WekaWrapperV1001.classify(i);
-        }
     }
 }

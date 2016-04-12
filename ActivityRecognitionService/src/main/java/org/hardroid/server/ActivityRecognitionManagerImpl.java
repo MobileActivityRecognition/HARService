@@ -25,6 +25,7 @@ import android.util.Log;
 import org.hardroid.common.ActivityRecognitionResult;
 import org.hardroid.common.IActivityRecognitionManager;
 import org.hardroid.common.IActivityRecognitionResponseListener;
+import org.hardroid.utils.Constants;
 
 /**
  * IBinder activity recognition manager implementation

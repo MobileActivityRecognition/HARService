@@ -29,6 +29,7 @@ import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
+import org.hardroid.common.HumanActivity;
 import org.harsurvey.android.data.HumanActivityData;
 import org.harsurvey.android.survey.FeedActivity;
 import org.harsurvey.android.util.Constants;

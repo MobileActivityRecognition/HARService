@@ -63,9 +63,6 @@ public class Constants {
             Type.IN_VEHICLE.toString(),
             Type.ON_BICYCLE.toString()
     };
-    public static final int ACTION_POSITIVE = 0;
-    public static final int ACTION_NEGATIVE = 1;
-    public static final int ACTION_NEUTRAL = 2;
 
     public static final String INTRO_CARD = "INTRO";
     public static final int MAX_CARDS = 5;

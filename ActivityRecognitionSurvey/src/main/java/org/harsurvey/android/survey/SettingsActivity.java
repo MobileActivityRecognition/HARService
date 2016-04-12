@@ -208,6 +208,8 @@ public class SettingsActivity extends PreferenceActivity {
                     R.string.pref_key_name)));
             bindPreferenceSummaryToValue(findPreference(Constants.getStringResource(context,
                     R.string.pref_key_age)));
+            bindPreferenceSummaryToValue(findPreference(Constants.getStringResource(context,
+                    R.string.pref_key_duration)));
         }
     }
 

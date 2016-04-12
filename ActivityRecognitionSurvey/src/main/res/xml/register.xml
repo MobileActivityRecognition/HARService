@@ -26,4 +26,11 @@
         android:key="@string/pref_key_age"
         android:title="@string/pref_title_age"/>
 
+    <ListPreference
+        android:key="@string/pref_key_duration"
+        android:title="@string/pref_title_session_duration"
+        android:entries="@array/pref_session_duration_titles"
+        android:entryValues="@array/pref_session_duration_values"
+        android:defaultValue="@string/pref_default_session_duration" />
+
 </PreferenceScreen>

@@ -24,18 +24,18 @@ import org.hardroid.common.ActivityRecognitionResult;
 import org.hardroid.common.Feature;
 import org.hardroid.common.HumanActivity;
 import org.hardroid.features.FeatureProcessing;
-import org.hardroid.model.DecisionTreeClassifier;
 import org.hardroid.model.DumbClassifier;
 import org.hardroid.sampling.MonitoredSensor;
 import org.hardroid.sampling.SensorDataFinishListener;
+import org.hardroid.utils.Constants;
+import org.hardroid.utils.Constants.VariableType;
 
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.hardroid.server.Constants.VariableType;
-import static org.hardroid.server.Constants.SAMPLE_SIZE;
-import static org.hardroid.server.Constants.SLICE_SIZE;
+import static org.hardroid.utils.Constants.SAMPLE_SIZE;
+import static org.hardroid.utils.Constants.SLICE_SIZE;
 
 /**
  * This class is the task that perform human activity recognition in fixed intervals.
@@ -48,10 +48,10 @@ public class ActivityRecognitionWorker implements SensorDataFinishListener {
     private boolean newTime = false;
     private final MonitoredSensor monitoredSensor;
     private ActivityClassifier activityClassifier = null;
+
     private Timer scheduler;
     private TimerWorker timerWorker;
 
-    
     /**
      * Constructs a new Activity Recognition Worker to resolve Human Activities
      *
@@ -62,9 +62,9 @@ public class ActivityRecognitionWorker implements SensorDataFinishListener {
 
         scheduler = new Timer();
         monitoredSensor = new MonitoredSensor(context, this);
-        activityClassifier = new DecisionTreeClassifier();
-        Log.i(TAG, "Inicializando modelo " + activityClassifier.toString());
+        activityClassifier = new DumbClassifier();
     }
+
 
     public boolean isValidTime(long timer) {
         return timer < this.intervalTime && timer >= Constants.INTERVAL_DEFAULT;
@@ -126,6 +126,10 @@ public class ActivityRecognitionWorker implements SensorDataFinishListener {
         this.context.publishResult(new ActivityRecognitionResult(this.activityClassifier.version(),
                 detected, startTime,
                 now - startTime, features));
+    }
+
+    public void setActivityClassifier(ActivityClassifier activityClassifier) {
+        this.activityClassifier = activityClassifier;
     }
 
     private class TimerWorker extends TimerTask {

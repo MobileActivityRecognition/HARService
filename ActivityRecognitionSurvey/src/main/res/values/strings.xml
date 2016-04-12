@@ -45,16 +45,12 @@
         <item>15 minutos</item>
         <item>30 minutos</item>
         <item>1 hora</item>
-        <item>3 horas</item>
-        <item>6 horas</item>
     </string-array>
     <string-array name="pref_session_duration_values">
         <item>1</item>
         <item>15</item>
         <item>30</item>
         <item>60</item>
-        <item>180</item>
-        <item>360</item>
     </string-array>
     <string-array name="pref_sync_method_titles">
         <item>Cualquiera</item>
@@ -72,7 +68,7 @@
 
             <p>El detector de Actividades predice por el movimiento del teléfono
             la actividad física probable que estas realizando.
-            <p>Para completar tus <b>datos basicos</b> presiona el botón "ENTENDIDO"
+            <p>Presiona el botón "ENTENDIDO" para completar tus <b>datos basicos</b>
             y empezar la encuesta a medida que detecte tu actividad.</p>
             <p>1. Cuenta de Correo</p>
             <p>2. Edad</p>

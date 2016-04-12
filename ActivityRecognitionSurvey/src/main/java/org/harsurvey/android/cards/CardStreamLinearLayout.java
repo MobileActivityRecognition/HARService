@@ -34,14 +34,13 @@ import org.harsurvey.android.util.AnimationHelper;
 /**
  * Layout
  */
-public class CardStreamLinearLayout extends LinearLayout implements View.OnClickListener {
+public class CardStreamLinearLayout extends LinearLayout {
     public static final String TAG = CardStreamLinearLayout.class.getSimpleName();
-    private OnCardClickListener cardClickListener;
     private AnimationHelper animationHelper;
-    public boolean showInitialAnimation = true;
+    public boolean showInitialAnimation = false;
     private Rect childRect = new Rect();
     private String firstVisibleCardTag = null;
-    private boolean layouted;
+    private boolean layouted = false;
 
     public CardStreamLinearLayout(Context context) {
         super(context);
@@ -63,7 +62,7 @@ public class CardStreamLinearLayout extends LinearLayout implements View.OnClick
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
 
-        if( changed ){
+        if( changed && !layouted){
             layouted = true;
 
             ObjectAnimator animator;
@@ -82,8 +81,9 @@ public class CardStreamLinearLayout extends LinearLayout implements View.OnClick
 
             setLayoutTransition(layoutTransition);
 
-            if(showInitialAnimation)
+            if(showInitialAnimation) {
                 animationHelper.runInitialAnimations();
+            }
 
             if (firstVisibleCardTag != null) {
                 scrollToCard(firstVisibleCardTag);
@@ -122,7 +122,7 @@ public class CardStreamLinearLayout extends LinearLayout implements View.OnClick
             if (param == null) {
                 param = generateDefaultLayoutParams();
             }
-            super.addView(cardView, -1, param);
+            super.addView(cardView, 0, param);
         }
     }
 
@@ -145,20 +145,6 @@ public class CardStreamLinearLayout extends LinearLayout implements View.OnClick
                 }
                 return;
             }
-        }
-    }
-
-    public void setOnCardClickListener(OnCardClickListener cardClickListener) {
-        this.cardClickListener = cardClickListener;
-    }
-
-    @Override
-    public void onClick(View view) {
-        View cardView = (View) view.getParent().getParent().getParent();
-        String tag = (String) cardView.getTag();
-        if (tag != null) {
-            this.cardClickListener.onCardClick(view.getId(), tag);
-            removeCard(cardView);
         }
     }
 }

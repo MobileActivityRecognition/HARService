@@ -17,7 +17,7 @@
 
 <resources>
   <string name="app_name">HARDroid</string>
-  <string name="installed_message">Open Activity Recognition Service is not installed. Install it with Google Play Store</string>
+  <string name="installed_message">HARDroid Service is not installed. Install it with Google Play Store</string>
   <integer name="harlib_version">10000</integer>
   <string name="activity_recognition_perm_label">Requires access to wearable sensor/activity data</string>
   <string name="activity_recognition_perm_desc">Allows the app to access data from wearable sensors,

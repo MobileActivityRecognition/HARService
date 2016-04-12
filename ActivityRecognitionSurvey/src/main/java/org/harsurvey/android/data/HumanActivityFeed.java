@@ -124,16 +124,12 @@ public class HumanActivityFeed extends ContentProvider {
 
         SQLiteDatabase db = database.getWritableDatabase();
 
-        try {
-            long rowId = db.insertWithOnConflict(table, null, values,
-                    SQLiteDatabase.CONFLICT_IGNORE);
-            if (rowId != -1) {
-                long id = rowId;
-                result = ContentUris.withAppendedId(uri, id);
-                getContext().getContentResolver().notifyChange(uri, null);
-            }
-        } finally {
-            db.close();
+        long rowId = db.insertWithOnConflict(table, null, values,
+                SQLiteDatabase.CONFLICT_IGNORE);
+        if (rowId != -1) {
+            long id = rowId;
+            result = ContentUris.withAppendedId(uri, id);
+            getContext().getContentResolver().notifyChange(uri, null);
         }
         return result;
     }
@@ -162,17 +158,12 @@ public class HumanActivityFeed extends ContentProvider {
 
         SQLiteDatabase db = database.getWritableDatabase();
         int ret;
-        try {
-            ret = db.delete(table, where, selectionArgs);
+        ret = db.delete(table, where, selectionArgs);
 
-            if (ret > 0) {
-                getContext().getContentResolver().notifyChange(uri, null);
-            }
-            Log.d(TAG, "deleted records: " + ret);
-        } finally {
-            db.close();
+        if (ret > 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
         }
-
+        Log.d(TAG, "deleted records: " + ret);
         return ret;
     }
 
@@ -200,16 +191,12 @@ public class HumanActivityFeed extends ContentProvider {
 
         SQLiteDatabase db = database.getWritableDatabase();
         int ret = 0;
-        try {
-            ret = db.update(table, values, where, selectionArgs);
+        ret = db.update(table, values, where, selectionArgs);
 
-            if (ret > 0) {
-                getContext().getContentResolver().notifyChange(uri, null);
-            }
-            Log.d(TAG, "updated records: " + ret);
-        } finally {
-            db.close();
+        if (ret > 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
         }
+        Log.d(TAG, "updated records: " + ret);
 
         return ret;
     }

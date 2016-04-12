@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.view.View;
 
+import org.hardroid.common.HumanActivity;
 import org.harsurvey.android.cards.Card;
 import org.harsurvey.android.cards.CardStreamLinearLayout;
 import org.harsurvey.android.cards.DetectedActivitiesAdapter;
@@ -48,7 +49,7 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
     CursorLoader cursorLoader;
     CardActionHelper cardActionHelper;
     DetectedActivitiesAdapter adapter;
-    Map<String, Card> cards = new TreeMap<>();
+    TreeMap<String, Card> cards = new TreeMap<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,30 +65,49 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
                 addSurveyCards();
             }
         });
+        getLoaderManager().initLoader(0, null, this);
+        listView.showInitialAnimation = true;
     }
 
     private void addSurveyCards() {
         Cursor cursor = adapter.getCursor();
         View view = null;
-        while(cursor.moveToNext() && cards.size() < Constants.MAX_CARDS) {
+        int first = 0;
+        int last = cursor.getCount();
+        if (last > Constants.MAX_CARDS) {
+            first = last - Constants.MAX_CARDS;
+        }
+        cursor.moveToPosition(first);
+        while(cursor.moveToNext()) {
             String tag = "ACT_" + cursor.getLong(cursor.getColumnIndexOrThrow(BaseColumns._ID));
             boolean isNew = !cards.containsKey(tag);
+            int colIndex = cursor.getColumnIndex(HumanActivityData.Contract.C_ACTIVITY_TYPE);
+            HumanActivity.Type activity = HumanActivity.Type.valueOf(cursor.getString(colIndex));
+            Card card;
             if (isNew) {
-                Card card = new Card.Builder(cardActionHelper, tag)
+                card = new Card.Builder(cardActionHelper, tag)
                         .setTitle("")
                         .setDescription("")
                         .addAction(Constants.getStringResource(this, R.string.action_ok),
-                                Constants.ACTION_POSITIVE, Card.ACTION_POSITIVE)
+                                Card.ACTION_POSITIVE, Card.ACTION_POSITIVE)
                         .addAction(Constants.getStringResource(this, R.string.action_nook),
-                                Constants.ACTION_NEGATIVE, Card.ACTION_NEGATIVE)
+                                Card.ACTION_NEGATIVE, Card.ACTION_NEGATIVE)
                         .build(this);
-                addCard(card, false);
+                addCard(card, true);
                 view = card.getView();
+                if (cards.size() > Constants.MAX_CARDS) {
+                    Map.Entry<String, Card> lastCard = cards.firstEntry();
+                    removeCard(lastCard.getKey());
+                }
             }
             else {
-                view = cards.get(tag).getView();
+                card = cards.get(tag);
+                view = card.getView();
             }
             adapter.bindView(view, this, cursor);
+            if (activity.equals(HumanActivity.Type.UNKNOWN)) {
+                card.hideAction(Card.ACTION_POSITIVE);
+            }
         }
     }
 
@@ -98,7 +118,7 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
                     .setTitle(getString(R.string.intro_title))
                     .setDescription(getString(R.string.intro_message))
                     .addAction(Constants.getStringResource(this, R.string.action_ready),
-                            Constants.ACTION_NEUTRAL, Card.ACTION_NEUTRAL)
+                            Card.ACTION_NEUTRAL, Card.ACTION_NEUTRAL)
                     .build(this);
             addCard(card, false);
         }
@@ -116,40 +136,52 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
         }
     }
 
-
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         if (app.hasValidAccount()) {
             this.resumeSurvey();
         }
         else {
             this.showIntroCard();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         app.setOnTop(true);
     }
 
     private void resumeSurvey() {
         app.getConnection().connect();
-        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
     protected void onPause() {
-        app.setOnTop(false);
-        getLoaderManager().destroyLoader(0);
         super.onPause();
+        app.setOnTop(false);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        getLoaderManager().destroyLoader(0);
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        Date now = Calendar.getInstance().getTime();
+        Long delta = now.getTime() - 6*Constants.HOUR;
         cursorLoader = new CursorLoader(this, HumanActivityData.CONTENT_URI,
                 HumanActivityData.Contract.ALL_COLUMNS,
-                HumanActivityData.Contract.C_STATUS + " = ?",
+                HumanActivityData.Contract.C_STATUS + " = ? AND " +
+                HumanActivityData.Contract.C_CREATED + " > ? ",
                 new String[]{
-                        HumanActivityData.Status.DRAFT.toString()
+                        HumanActivityData.Status.DRAFT.toString() ,
+                        String.valueOf(delta)
                 },
-                HumanActivityData.Contract.C_CREATED + " DESC");
+                HumanActivityData.Contract.C_CREATED + " ASC");
         return cursorLoader;
     }
 

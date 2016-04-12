@@ -4,12 +4,12 @@ import android.os.SystemClock;
 import android.util.Log;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
-import static org.hardroid.server.Constants.X;
-import static org.hardroid.server.Constants.Y;
-import static org.hardroid.server.Constants.Z;
+import static org.hardroid.utils.Constants.X;
+import static org.hardroid.utils.Constants.Y;
+import static org.hardroid.utils.Constants.Z;
 
-import org.hardroid.server.Constants.FeatureType;
-import org.hardroid.server.Constants.VariableType;
+import org.hardroid.utils.Constants.FeatureType;
+import org.hardroid.utils.Constants.VariableType;
 
 
 /**

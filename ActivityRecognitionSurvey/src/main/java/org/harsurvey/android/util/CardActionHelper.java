@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
+import org.harsurvey.android.cards.Card;
 import org.harsurvey.android.cards.CardListItemAdapter;
 import org.harsurvey.android.cards.OnCardClickListener;
 import org.harsurvey.android.data.HumanActivityData;
@@ -61,7 +62,7 @@ public class CardActionHelper implements OnCardClickListener {
 
     public void handleSurveyCard(int action, String tag) {
         Long id = Long.valueOf(tag);
-        boolean checkButtom = (action == Constants.ACTION_POSITIVE);
+        boolean checkButtom = (action == Card.ACTION_POSITIVE);
         final HumanActivityData activityData = new HumanActivityData(id);
         if (checkButtom) {
             activityData.status = HumanActivityData.Status.PENDING;

@@ -16,57 +16,50 @@
   ~ limitations under the License.
   -->
 
-<android.support.v7.widget.CardView
+<org.harsurvey.android.cards.CardLayout
     android:id="@+id/card_layout"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/Card"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    card_view:cardCornerRadius="4dp">
+    android:layout_height="wrap_content">
 
-    <RelativeLayout
-        android:layout_height="match_parent"
-        android:layout_width="match_parent">
+    <LinearLayout
+        android:id="@+id/card_contentarea"
+        style="@style/CardContentArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
 
-        <LinearLayout
-            android:id="@+id/card_contentarea"
-            style="@style/CardContentArea"
+        <TextView
+            android:id="@+id/card_title"
+            style="@style/CardTitle"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/card_content"
+            style="@style/CardContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/card_actionarea"
+        style="@style/CardActionArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/card_contentarea"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/card_separator"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:src="@drawable/card_separator" />
 
-            <TextView
-                android:id="@+id/card_title"
-                style="@style/CardTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:id="@+id/card_content"
-                style="@style/CardContent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/card_actionarea"
-            style="@style/CardActionArea"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/card_contentarea"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/card_separator"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/card_separator" />
-
-        </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 
 
-</android.support.v7.widget.CardView>
+</org.harsurvey.android.cards.CardLayout>

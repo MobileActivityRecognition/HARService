@@ -26,11 +26,11 @@ import android.os.SystemClock;
 
 import org.hardroid.features.SignalProcessing;
 
-import static org.hardroid.server.Constants.FILTER_SIZE;
-import static org.hardroid.server.Constants.SAMPLE_SIZE;
-import static org.hardroid.server.Constants.X;
-import static org.hardroid.server.Constants.Y;
-import static org.hardroid.server.Constants.Z;
+import static org.hardroid.utils.Constants.FILTER_SIZE;
+import static org.hardroid.utils.Constants.SAMPLE_SIZE;
+import static org.hardroid.utils.Constants.X;
+import static org.hardroid.utils.Constants.Y;
+import static org.hardroid.utils.Constants.Z;
 
 /**
  * Implements an independent sensor collector service that broadcast sensor results every X seconds

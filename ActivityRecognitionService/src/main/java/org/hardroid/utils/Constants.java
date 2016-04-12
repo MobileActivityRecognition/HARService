@@ -15,7 +15,9 @@
  * limitations under the License.
  */
 
-package org.hardroid.server;
+package org.hardroid.utils;
+
+import android.os.Environment;
 
 import org.hardroid.common.HumanActivity;
 
@@ -48,13 +50,14 @@ public class Constants {
             "org.hardroid.permission.ACTIVITY_RECOGNITION";
     public static final String SEND_ACTIVITY_RECOGNITION =
             "org.hardroid.permission.ACTIVITY_RECOGNITION_DATA";
-
     public enum VariableType {
         X,
         Y,
         Z,
         MAG;
+
     }
+
 
 
     public enum FeatureType {
@@ -71,6 +74,6 @@ public class Constants {
         AR_COEF2,
         AR_COEF3,
         AR_COEF4,
-        MEAN_FREQ
+        MEAN_FREQ;
     }
 }

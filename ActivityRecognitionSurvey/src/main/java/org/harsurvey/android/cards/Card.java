@@ -88,6 +88,15 @@ public class Card {
         cardActions.add(cardAction);
     }
 
+    public void hideAction(int type) {
+        for (CardAction action : cardActions) {
+            if (action.type == type) {
+                action.actionView.setVisibility(View.GONE);
+                break;
+            }
+        }
+    }
+
     public String getTag() {
         return tag;
     }

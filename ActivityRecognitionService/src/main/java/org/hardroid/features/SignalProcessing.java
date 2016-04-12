@@ -15,9 +15,9 @@ import org.apache.commons.math3.transform.TransformType;
 
 import java.util.Iterator;
 
-import static org.hardroid.server.Constants.X;
-import static org.hardroid.server.Constants.Y;
-import static org.hardroid.server.Constants.Z;
+import static org.hardroid.utils.Constants.X;
+import static org.hardroid.utils.Constants.Y;
+import static org.hardroid.utils.Constants.Z;
 
 /**
  * Utility class for signal processing calculations

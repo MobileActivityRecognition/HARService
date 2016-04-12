@@ -27,12 +27,16 @@ import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.hardroid.client.ActivityRecognitionClient;
 import org.harsurvey.android.util.ConnectionHelper;
 import org.harsurvey.android.util.Constants;
 import org.harsurvey.android.util.PhoneInfoHelper;
 import org.harsurvey.android.util.PreferenceHelper;
 import org.harsurvey.android.util.RestServiceHelper;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * SurveyApplication
@@ -55,6 +59,7 @@ public class SurveyApplication extends Application {
         phoneInfo = new PhoneInfoHelper(this, preferences);
         connection = new ConnectionHelper(this, new ActivityRecognitionClient(this));
         restService = new RestServiceHelper(this);
+        Fabric.with(this, new Crashlytics());
         Log.i(TAG, "Application started");
     }
 

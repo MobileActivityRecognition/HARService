@@ -25,6 +25,9 @@ import android.util.Log;
 
 import org.hardroid.common.ActivityRecognitionResult;
 import org.hardroid.common.IActivityRecognitionResponseListener;
+import org.hardroid.model.DecisionTreeClassifier;
+import org.hardroid.model.WekaClassifier;
+import org.hardroid.utils.DexModelLoader;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -39,9 +42,11 @@ public class ActivityRecognitionService extends Service {
     private boolean running = false;
     private final LinkedHashMap<String, ActivityRecognitionSubscription> subscriptions = new LinkedHashMap<>();
     private ActivityRecognitionResult result;
+    private DexModelLoader modelLoader;
 
     @Override
     public IBinder onBind(Intent intent) {
+        onServiceStarted();
         return service;
     }
 
@@ -50,6 +55,7 @@ public class ActivityRecognitionService extends Service {
         super.onCreate();
         service = new ActivityRecognitionManagerImpl(this);
         worker = new ActivityRecognitionWorker(this);
+        modelLoader = new DexModelLoader(this);
     }
 
     @Override
@@ -62,18 +68,32 @@ public class ActivityRecognitionService extends Service {
 
     @Override
     public boolean onUnbind(Intent intent) {
-        //this.service = null; // Don't do this
+        Log.i(TAG, "Client disconected");
         return super.onUnbind(intent);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
+        onServiceStarted();
+        return START_STICKY;
+    }
+
+    public void onServiceStarted() {
         if (!running) {
             Log.v(TAG, "Activity Recognition Service started");
             running = true;
         }
-        return START_STICKY;
+
+        WekaClassifier model = modelLoader.
+                retrieveModel(getString(R.string.model_name));
+        if (model != null) {
+            worker.setActivityClassifier(
+                    new DecisionTreeClassifier(
+                        model
+                    )
+            );
+        }
     }
 
     /**
@@ -90,24 +110,26 @@ public class ActivityRecognitionService extends Service {
      *
      * @param result {@link ActivityRecognitionResult} to be published
      */
-    protected synchronized void publishResult(ActivityRecognitionResult result) {
-        this.result = result;
-        for (String clientId: subscriptions.keySet()) {
-            ActivityRecognitionSubscription client = subscriptions.get(clientId);
-            long now = System.currentTimeMillis();
-            if (now - client.getLastUpdateTime() > client.getDetectionInterval()) {
-                IActivityRecognitionResponseListener listener = client.getListener();
-                try {
-                    if (listener.asBinder().isBinderAlive()) {
-                        Log.d(TAG, "Updating subscriber activities");
-                        listener.onResponse(getResult());
-                        client.setLastUpdateTime(now);
-                    } else {
+    protected void publishResult(ActivityRecognitionResult result) {
+        synchronized (result) {
+            this.result = result;
+            for (String clientId: subscriptions.keySet()) {
+                ActivityRecognitionSubscription client = subscriptions.get(clientId);
+                long now = System.currentTimeMillis();
+                if (now - client.getLastUpdateTime() > client.getDetectionInterval()) {
+                    IActivityRecognitionResponseListener listener = client.getListener();
+                    try {
+                        if (listener.asBinder().isBinderAlive()) {
+                            Log.d(TAG, "Updating subscriber activities");
+                            listener.onResponse(getResult());
+                            client.setLastUpdateTime(now);
+                        } else {
+                            removeClient(clientId, listener);
+                        }
+                    } catch (RemoteException e) {
+                        Log.d(TAG, "Client is dead, unsubscribing");
                         removeClient(clientId, listener);
                     }
-                } catch (RemoteException e) {
-                    Log.d(TAG, "Client is dead, unsubscribing");
-                    removeClient(clientId, listener);
                 }
             }
         }
