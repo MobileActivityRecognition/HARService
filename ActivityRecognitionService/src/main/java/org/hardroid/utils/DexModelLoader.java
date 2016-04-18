@@ -25,6 +25,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.hardroid.model.WekaClassifier;
+import org.hardroid.model.WekaClassifierImpl;
 import org.hardroid.server.R;
 
 import java.net.MalformedURLException;
@@ -64,7 +65,7 @@ public class DexModelLoader {
 
     public WekaClassifier retrieveModel(String className) {
 
-        if (!shouldRetreive()) {
+        if (!shouldRetreive()) {;
             return null;
         }
 
@@ -112,7 +113,7 @@ public class DexModelLoader {
     }
 
     public boolean shouldRetreive() {
-        if (!connMgr.getActiveNetworkInfo().isConnected()) {
+        if (!isConnected()) {
             return false;
         }
         long result = sharedPrefs.getLong(context.getString(R.string.pref_model_date), -1);
@@ -122,5 +123,11 @@ public class DexModelLoader {
             return (now - lastHour) > 6;
         }
         return true;
+    }
+
+    private boolean isConnected() {
+        NetworkInfo activeNetwork = connMgr.getActiveNetworkInfo();
+        return activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
     }
 }

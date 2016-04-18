@@ -16,18 +16,20 @@
  */
 
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion ANDROID_SDK_VERSION
+    buildToolsVersion ANDROID_BUILD_TOOLS
 
     defaultConfig {
         applicationId "org.hardroid.server"
         archivesBaseName = "HARDroid"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode VERSION_CODE
+        versionName PUBLISH_VERSION
     }
     lintOptions {
         abortOnError false
@@ -42,8 +44,15 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'it.necst.grabnrun:grabnrun:1.0.4'
-    compile 'org.apache.commons:commons-math3:3.0'
-    compile project(':ActivityRecognitionLib')
+    // Dependencies for grab and run
+    compile libraries.android_support
+    compile libraries.guava
+
+    //compile 'it.necst.grabnrun:grabnrun:1.0.4'
+    compile libraries.commons_math
+    compile libraries.hardroidlib
+    compile(libraries.crashlytics) {
+        transitive = true;
+    }
     compile project(':WekaClassifier')
 }

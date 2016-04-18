@@ -17,6 +17,8 @@
 
 package org.hardroid.model;
 
+import android.util.Log;
+
 import org.hardroid.common.ActivityClassifier;
 import org.hardroid.common.HumanActivity;
 
@@ -24,6 +26,12 @@ import org.hardroid.common.HumanActivity;
  * Implements a random classifier
  */
 public class DumbClassifier extends ActivityClassifier {
+
+    private static final String TAG = DumbClassifier.class.getSimpleName();
+
+    public DumbClassifier() {
+        Log.i(TAG, "Inicializando modelo " + this.toString());
+    }
 
     @Override
     public int version() {

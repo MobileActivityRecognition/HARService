@@ -23,6 +23,8 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.hardroid.common.ActivityRecognitionResult;
 import org.hardroid.common.IActivityRecognitionResponseListener;
 import org.hardroid.model.DecisionTreeClassifier;
@@ -31,6 +33,8 @@ import org.hardroid.utils.DexModelLoader;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * This class implements the Activity Recognition Service
@@ -56,6 +60,7 @@ public class ActivityRecognitionService extends Service {
         service = new ActivityRecognitionManagerImpl(this);
         worker = new ActivityRecognitionWorker(this);
         modelLoader = new DexModelLoader(this);
+        Fabric.with(this, new Crashlytics());
     }
 
     @Override
