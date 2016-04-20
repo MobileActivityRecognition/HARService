@@ -17,12 +17,14 @@
 
 apply plugin: 'java'
 
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
 task assembleDexJar(type: Jar, dependsOn: build) {
     from "$buildDir/classes/main/"
     baseName = "classes"
-    exclude '**/WekaWrapperV1001.class'
+    exclude '**/WekaWrapperV1000.class'
 }
-
 
 import org.apache.tools.ant.taskdefs.condition.Os
 
@@ -38,7 +40,7 @@ task dexJar << {
     // Use command line dx utility to convert *.class files into classes.dex inside jar archive
     String cmdExt = Os.isFamily(Os.FAMILY_WINDOWS) ? '.bat' : ''
     exec {
-        commandLine "${androidSdkDir}/build-tools/23.0.1/dx${cmdExt}", '--verbose', '--dex',
+        commandLine "${androidSdkDir}/build-tools/${ANDROID_BUILD_TOOLS}/dx${cmdExt}", '--verbose', '--dex',
                 "--output=${buildDir}/libs/WekaJ48DT.jar",
                 "${buildDir}/libs/classes.jar"
     }

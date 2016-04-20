@@ -25,7 +25,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.hardroid.model.WekaClassifier;
-import org.hardroid.model.WekaClassifierImpl;
 import org.hardroid.server.R;
 
 import java.net.MalformedURLException;
@@ -64,14 +63,46 @@ public class DexModelLoader {
     }
 
     public WekaClassifier retrieveModel(String className) {
+        Class<?> loadedClass;
+        WekaClassifier model = null;
+        boolean saveDate = false;
 
-        if (!shouldRetreive()) {;
-            return null;
+        if (shouldRetrieve()) {
+            loadedClass = loadRemoteModel(className);
+            saveDate = true;
+        }
+        else {
+            loadedClass = loadLocalModel(className);
         }
 
-        Log.d(TAG, "Setting up SecureDexClassLoader..");
+        if (loadedClass != null) {
+            try {
+                model = (WekaClassifier) loadedClass.newInstance();
+                if (saveDate) {
+                    saveDate(System.currentTimeMillis());
+                }
+            } catch (InstantiationException e) {
+                Log.e(TAG, "Problem in the instantiation of the target class!");
+            } catch (IllegalAccessException e) {
+                Log.e(TAG, "Problem in the access to the target class!");
+            }
+        }
+        return model;
+    }
 
-        WekaClassifier model = null;
+    private Class<?> loadLocalModel(String className) {
+        Class<?> loadedClass = null;
+        try {
+            loadedClass = getClass().getClassLoader().loadClass(className);
+        } catch (ClassNotFoundException e) {
+            Log.e(TAG, "Error: Class not found! " + className);
+        }
+        return loadedClass;
+    }
+
+    private Class<?> loadRemoteModel(String className) {
+
+        Log.d(TAG, "Setting up SecureDexClassLoader...");
 
         SecureLoaderFactory secureLoaderFactory = new SecureLoaderFactory(context, 1);
 
@@ -86,7 +117,6 @@ public class DexModelLoader {
                 getClass().getClassLoader(),
                 packageNamesToCertMap);
 
-        // Class returned from the loadClass() operation..
         Class<?> loadedClass = null;
 
         try {
@@ -94,25 +124,15 @@ public class DexModelLoader {
             loadedClass = secureDexClassLoader.loadClass(className);
 
         } catch (ClassNotFoundException e) {
-            Log.e(TAG, "Error: Class not found!");
+            Log.e(TAG, "Error: Class not found! " + className);
         }
 
-        if (loadedClass != null) {
-            try {
-                model = (WekaClassifier) loadedClass.newInstance();
-            } catch (InstantiationException e) {
-                Log.e(TAG, "Problem in the instantiation of the target class!");
-            } catch (IllegalAccessException e) {
-                Log.e(TAG, "Problem in the access to the target class!");
-            }
-        }
+        //secureDexClassLoader.wipeOutPrivateAppCachedData(true, true);
 
-        secureDexClassLoader.wipeOutPrivateAppCachedData(true, true);
-
-        return model;
+        return loadedClass;
     }
 
-    public boolean shouldRetreive() {
+    public boolean shouldRetrieve() {
         if (!isConnected()) {
             return false;
         }
@@ -120,9 +140,13 @@ public class DexModelLoader {
         if (result > 0) {
             long now = TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis());
             long lastHour = TimeUnit.MILLISECONDS.toHours(result);
-            return (now - lastHour) > 6;
+            return (now - lastHour) > 24;
         }
         return true;
+    }
+
+    public void saveDate(long time) {
+        sharedPrefs.edit().putLong(context.getString(R.string.model_name), time).apply();
     }
 
     private boolean isConnected() {

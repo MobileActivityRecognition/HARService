@@ -45,14 +45,16 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     // Dependencies for grab and run
-    compile libraries.android_support
-    compile libraries.guava
+    //compile libraries.android_support
+    //compile libraries.guava
 
-    //compile 'it.necst.grabnrun:grabnrun:1.0.4'
+    compile libraries.grab_n_run
     compile libraries.commons_math
     compile libraries.hardroidlib
     compile(libraries.crashlytics) {
         transitive = true;
     }
-    compile project(':WekaClassifier')
+    compile(project(':WekaClassifier')) {
+        exclude module: 'org.hardroid.model'
+    }
 }

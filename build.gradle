@@ -6,7 +6,8 @@ ext {
         hardroidlib: 'org.hardroid.library:hardroidlib:1.0.0@aar',
         spring_rest: 'org.springframework.android:spring-android-rest-template:1.0.1.RELEASE',
         gson: 'com.google.code.gson:gson:2.3',
-        crashlytics: 'com.crashlytics.sdk.android:crashlytics:2.5.5@aar'
+        crashlytics: 'com.crashlytics.sdk.android:crashlytics:2.5.5@aar',
+        grab_n_run: 'it.necst.grabnrun:grabnrun:1.0.4'
     ]
 
     PUBLISH_GROUP_ID = 'org.hardroid.library'
@@ -24,7 +25,7 @@ buildscript {
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.2.3'
+        classpath 'com.android.tools.build:gradle:2.0.0'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -38,8 +39,12 @@ allprojects {
         mavenLocal()
         jcenter()
         maven {
-            url "file://${projectDir}/ActivityRecognitionLib/build/release/"
+            url "file://${rootDir}/ActivityRecognitionLib/build/release/"
         }
         maven { url 'https://maven.fabric.io/public' }
     }
+}
+
+task wrapper( type: Wrapper ) {
+    gradleVersion = '2.10'
 }

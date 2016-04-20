@@ -91,6 +91,7 @@ task generateRelease << {
 generateRelease.dependsOn(uploadArchives)
 generateRelease.dependsOn(zipRelease)
 
+build.finalizedBy(generateRelease)
 
 artifacts {
     archives androidSourcesJar
