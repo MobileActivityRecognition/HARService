@@ -1,3 +1,5 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
 ext {
     libraries = [
         android_support: 'com.android.support:appcompat-v7:23.1.1',
@@ -25,7 +27,7 @@ buildscript {
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.0.0'
+        classpath 'com.android.tools.build:gradle:' + (Os.isFamily(Os.FAMILY_WINDOWS) ? '2.0.0' : '1.2.3')
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -46,5 +48,5 @@ allprojects {
 }
 
 task wrapper( type: Wrapper ) {
-    gradleVersion = '2.10'
+    gradleVersion = Os.isFamily(Os.FAMILY_WINDOWS) ? '2.10' : '2.4'
 }
