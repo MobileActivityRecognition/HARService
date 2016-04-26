@@ -27,7 +27,7 @@ android {
         applicationId "org.hardroid.server"
         archivesBaseName = "HARDroid"
         minSdkVersion 14
-        targetSdkVersion 23
+        targetSdkVersion ANDROID_SDK_VERSION
         versionCode VERSION_CODE
         versionName PUBLISH_VERSION
     }
@@ -53,8 +53,5 @@ dependencies {
     compile libraries.hardroidlib
     compile(libraries.crashlytics) {
         transitive = true;
-    }
-    compile(project(':WekaClassifier')) {
-        exclude module: 'org.hardroid.model'
     }
 }

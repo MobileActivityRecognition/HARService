@@ -1,8 +1,7 @@
-package org.hardroid.model;
+package org.hardroid.classifier;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.hardroid.common.HumanActivity;
-import org.hardroid.common.ActivityClassifier;
 
 import java.util.Random;
 
@@ -15,7 +14,7 @@ public class RandomClassifier extends ActivityClassifier {
 
     @Override
     public int version() {
-        return 0;
+        return 1;
     }
 
     @Override

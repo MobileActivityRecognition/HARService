@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-package org.hardroid.model;
+package org.hardroid.classifier;
 
 import android.util.Log;
 
-import org.hardroid.common.ActivityClassifier;
 import org.hardroid.common.HumanActivity.Type;
+import org.hardroid.model.WekaModel;
 
 /**
  * Implements a decision tree classifier
@@ -36,9 +36,9 @@ public class DecisionTreeClassifier extends ActivityClassifier {
     };
     private static final String TAG = DecisionTreeClassifier.class.getSimpleName();
 
-    private WekaClassifier classifier;
+    private WekaModel classifier;
 
-    public DecisionTreeClassifier(WekaClassifier classifier) {
+    public DecisionTreeClassifier(WekaModel classifier) {
         this.classifier = classifier;
         Log.i(TAG, "Inicializando modelo " + this.toString());
     }

@@ -27,8 +27,8 @@ import com.crashlytics.android.Crashlytics;
 
 import org.hardroid.common.ActivityRecognitionResult;
 import org.hardroid.common.IActivityRecognitionResponseListener;
-import org.hardroid.model.DecisionTreeClassifier;
-import org.hardroid.model.WekaClassifier;
+import org.hardroid.classifier.DecisionTreeClassifier;
+import org.hardroid.model.WekaModel;
 import org.hardroid.utils.DexModelLoader;
 
 import java.util.Collections;
@@ -90,7 +90,7 @@ public class ActivityRecognitionService extends Service {
             running = true;
         }
 
-        WekaClassifier model = modelLoader.
+        WekaModel model = modelLoader.
                 retrieveModel(getString(R.string.model_name));
         if (model != null) {
             worker.setActivityClassifier(

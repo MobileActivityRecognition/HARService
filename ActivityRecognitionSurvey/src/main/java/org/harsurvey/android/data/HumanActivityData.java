@@ -98,7 +98,12 @@ public class HumanActivityData {
             feedbackActivity = values.getAsString(Contract.C_FEEDBACK_ACTIVITY);
         }
         if (values.containsKey(Contract.C_MODEL_VERSION)) {
-            modelVersion = values.getAsInteger(Contract.C_MODEL_VERSION);
+            if (values.get(Contract.C_MODEL_VERSION) != null) {
+                modelVersion = values.getAsInteger(Contract.C_MODEL_VERSION);
+            }
+            else {
+                modelVersion = 0;
+            }
         }
     }
 

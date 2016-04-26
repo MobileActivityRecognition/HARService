@@ -1,4 +1,4 @@
-package org.hardroid.common;
+package org.hardroid.classifier;
 
 import org.hardroid.common.HumanActivity;
 

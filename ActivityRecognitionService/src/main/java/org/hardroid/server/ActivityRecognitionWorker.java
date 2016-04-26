@@ -19,12 +19,12 @@ package org.hardroid.server;
 
 import android.util.Log;
 
-import org.hardroid.common.ActivityClassifier;
+import org.hardroid.classifier.ActivityClassifier;
+import org.hardroid.classifier.DumbClassifier;
 import org.hardroid.common.ActivityRecognitionResult;
 import org.hardroid.common.Feature;
 import org.hardroid.common.HumanActivity;
 import org.hardroid.features.FeatureProcessing;
-import org.hardroid.model.DumbClassifier;
 import org.hardroid.sampling.MonitoredSensor;
 import org.hardroid.sampling.SensorDataFinishListener;
 import org.hardroid.utils.Constants;

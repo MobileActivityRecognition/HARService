@@ -24,7 +24,7 @@ import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import org.hardroid.model.WekaClassifier;
+import org.hardroid.model.WekaModel;
 import org.hardroid.server.R;
 
 import java.net.MalformedURLException;
@@ -62,25 +62,17 @@ public class DexModelLoader {
                 context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
-    public WekaClassifier retrieveModel(String className) {
+    public WekaModel retrieveModel(String className) {
         Class<?> loadedClass;
-        WekaClassifier model = null;
+        WekaModel model = null;
         boolean saveDate = false;
 
-        if (shouldRetrieve()) {
-            loadedClass = loadRemoteModel(className);
-            saveDate = true;
-        }
-        else {
-            loadedClass = loadLocalModel(className);
-        }
+        loadedClass = loadRemoteModel(className);
 
         if (loadedClass != null) {
             try {
-                model = (WekaClassifier) loadedClass.newInstance();
-                if (saveDate) {
-                    saveDate(System.currentTimeMillis());
-                }
+                model = (WekaModel) loadedClass.newInstance();
+
             } catch (InstantiationException e) {
                 Log.e(TAG, "Problem in the instantiation of the target class!");
             } catch (IllegalAccessException e) {
@@ -112,10 +104,21 @@ public class DexModelLoader {
             return null;
         }
 
-        secureDexClassLoader = secureLoaderFactory.createDexClassLoader(context.getString(R.string.jar_url),
-                null,
-                getClass().getClassLoader(),
-                packageNamesToCertMap);
+        try {
+            secureDexClassLoader = secureLoaderFactory.createDexClassLoader(context.getString(R.string.jar_url),
+                    null,
+                    getClass().getClassLoader(),
+                    packageNamesToCertMap);
+        } catch (Exception e) {
+            Log.e(TAG, "Error: Not connection available");
+            return null;
+        }
+
+        boolean saveDate = false;
+        if (isOldModel() && isConnected()) {
+            secureDexClassLoader.wipeOutPrivateAppCachedData(true, false);
+            saveDate = true;
+        }
 
         Class<?> loadedClass = null;
 
@@ -123,19 +126,22 @@ public class DexModelLoader {
 
             loadedClass = secureDexClassLoader.loadClass(className);
 
+            if (saveDate) {
+                saveDate(System.currentTimeMillis());
+            }
+
         } catch (ClassNotFoundException e) {
             Log.e(TAG, "Error: Class not found! " + className);
         }
-
-        //secureDexClassLoader.wipeOutPrivateAppCachedData(true, true);
 
         return loadedClass;
     }
 
     public boolean shouldRetrieve() {
-        if (!isConnected()) {
-            return false;
-        }
+        return !isConnected();
+    }
+
+    public boolean isOldModel() {
         long result = sharedPrefs.getLong(context.getString(R.string.pref_model_date), -1);
         if (result > 0) {
             long now = TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis());
@@ -146,7 +152,7 @@ public class DexModelLoader {
     }
 
     public void saveDate(long time) {
-        sharedPrefs.edit().putLong(context.getString(R.string.model_name), time).apply();
+        sharedPrefs.edit().putLong(context.getString(R.string.pref_model_date), time).apply();
     }
 
     private boolean isConnected() {

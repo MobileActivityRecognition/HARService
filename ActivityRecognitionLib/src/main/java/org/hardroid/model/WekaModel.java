@@ -18,16 +18,9 @@
 package org.hardroid.model;
 
 /**
- * WekaClassifier implementation
+ * Weka Classifier Contract
  */
-public class WekaClassifierImpl implements WekaClassifier {
-    @Override
-    public int version() {
-        return WekaWrapperV1000.VERSION;
-    }
-
-    @Override
-    public double classify(Object[] i) throws Exception {
-        return WekaWrapperV1000.classify(i);
-    }
+public interface WekaModel {
+    int version();
+    double classify(Object[] i) throws Exception;
 }

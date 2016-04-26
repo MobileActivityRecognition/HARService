@@ -51,4 +51,5 @@ jar.finalizedBy(dexJar)
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile libraries.hardroidjar;
 }

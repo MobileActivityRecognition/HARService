@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.hardroid.model;
+package org.hardroid.model.impl;
 
 class WekaWrapperV1000 {
     public static final int VERSION = 1000;

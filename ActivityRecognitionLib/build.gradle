@@ -67,6 +67,11 @@ task androidSourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
 }
 
+task assembleJar(type: Jar) {
+    baseName = "hardroidlib"
+    from "$buildDir/intermediates/classes/release/"
+}
+
 uploadArchives {
     repositories.mavenDeployer {
         pom.groupId = groupId
@@ -94,6 +99,7 @@ generateRelease.dependsOn(zipRelease)
 build.finalizedBy(generateRelease)
 
 artifacts {
-    archives androidSourcesJar
+    //archives androidSourcesJar
+    archives assembleJar
     //archives androidJavadocsJar
 }

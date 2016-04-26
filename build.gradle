@@ -6,6 +6,7 @@ ext {
         guava: 'com.google.guava:guava:18.0',
         commons_math: 'org.apache.commons:commons-math3:3.0',
         hardroidlib: 'org.hardroid.library:hardroidlib:1.0.0@aar',
+        hardroidjar: 'org.hardroid.library:hardroidlib:1.0.0@jar',
         spring_rest: 'org.springframework.android:spring-android-rest-template:1.0.1.RELEASE',
         gson: 'com.google.code.gson:gson:2.3',
         crashlytics: 'com.crashlytics.sdk.android:crashlytics:2.5.5@aar',

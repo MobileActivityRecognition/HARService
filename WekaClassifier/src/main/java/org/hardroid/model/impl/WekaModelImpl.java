@@ -15,31 +15,21 @@
  * limitations under the License.
  */
 
-package org.hardroid.model;
+package org.hardroid.model.impl;
 
-import android.util.Log;
-
-import org.hardroid.common.ActivityClassifier;
-import org.hardroid.common.HumanActivity;
+import org.hardroid.model.WekaModel;
 
 /**
- * Implements a random classifier
+ * WekaClassifier implementation
  */
-public class DumbClassifier extends ActivityClassifier {
-
-    private static final String TAG = DumbClassifier.class.getSimpleName();
-
-    public DumbClassifier() {
-        Log.i(TAG, "Inicializando modelo " + this.toString());
-    }
-
+public class WekaModelImpl implements WekaModel {
     @Override
     public int version() {
-        return 0;
+        return WekaWrapperV1001.VERSION;
     }
 
     @Override
-    public HumanActivity.Type classify(double[] featureData) {
-        return HumanActivity.Type.UNKNOWN;
+    public double classify(Object[] i) throws Exception {
+        return WekaWrapperV1001.classify(i);
     }
 }
