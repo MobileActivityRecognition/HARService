@@ -33,7 +33,7 @@
     <string name="pref_title_session_duration">Intervalo de duración</string>
     <string name="pref_default_display_name">Tu nombre completo</string>
     <string name="pref_default_session_duration">1</string>
-    <string name="pref_default_sync_method">WIFI</string>
+    <string name="pref_default_sync_method">ALL</string>
     <string name="pref_title_sync_data">Sincronizar Datos</string>
     <string name="pref_sum_sync_data">Active sincronización de datos</string>
     <string name="pref_title_sync_method">Sincronizar por</string>
@@ -118,4 +118,8 @@
     <string name="action_ready">ENTENDIDO</string>
     <string name="action_account_settings">Configurar Cuenta</string>
     <string name="help">Ayuda</string>
+    <string name="action_service_active">Desactivar Servicio</string>
+    <string name="action_service_inactive">Activar Servicio</string>
+    <string name="disconnected">Servicio de actividad desconectado</string>
+    <string name="pref_service_active">servicio_activo</string>
 </resources>

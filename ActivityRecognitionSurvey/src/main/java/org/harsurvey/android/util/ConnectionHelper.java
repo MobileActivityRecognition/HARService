@@ -17,6 +17,7 @@
 
 package org.harsurvey.android.util;
 
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -48,10 +49,13 @@ public class ConnectionHelper implements OnClientConnectionListener {
         apiClient.getService().requestActivityUpdates(
                 context.getPreference().getInterval(),
                 context.getDetectedActivityService());
+        context.sendBroadcast(new Intent(Constants.SERVICE_CHANGE));
     }
 
     @Override
     public void onDisconnect(ConnectionApi connectionApi) {
+        Toast.makeText(context, Constants.getStringResource(context, R.string.disconnected),
+                Toast.LENGTH_SHORT).show();
     }
 
     public void release() {
@@ -59,6 +63,7 @@ public class ConnectionHelper implements OnClientConnectionListener {
             Log.i(TAG, "Removing activities updates");
             apiClient.getService().removeActivityUpdates(context.getDetectedActivityService());
             apiClient.disconnect();
+            context.sendBroadcast(new Intent(Constants.SERVICE_CHANGE));
         }
     }
 

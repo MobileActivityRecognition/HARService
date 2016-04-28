@@ -51,9 +51,14 @@ public class Constants {
     public static final String DATABASE_NAME = "activities.db";
     public static final int DATABASE_VERSION = 4;
 
+    /**
+     * Actions
+     */
     public static final String DETECTED_ACTIVITY_BROADCAST = "org.harsurvey.android.DETECTED_ACTIVITY_BROADCAST";
     public static final String DETECTED_ACTIVITY_EXTRA = "org.harsurvey.android.DETECTED_ACTIVITY_EXTRA";
     public static final String REQUEST_SYNCRONIZATION = "org.harsurvey.android.REQUEST_SYNCRONIZATION";
+    public static final String SERVICE_CHANGE = "org.harsurvey.android.SERVICE_CHANGE";
+
     public static final String REST_URL = "%sARrecolector/webresources/com.fpuna.entities.collaborativesession";
     public static final String DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
     public static final String[] ACTIVITY_LIST = {

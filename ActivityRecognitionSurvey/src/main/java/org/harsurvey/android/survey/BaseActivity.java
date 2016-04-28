@@ -17,8 +17,10 @@
 
 package org.harsurvey.android.survey;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -33,6 +35,7 @@ public class BaseActivity extends AppCompatActivity {
     public static final String TAG = BaseActivity.class.getSimpleName();
 
     public SurveyApplication app;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +47,18 @@ public class BaseActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        this.menu = menu;
+        setMenuStatus();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Constants.SERVICE_CHANGE);
+        registerReceiver(hideMenuReceiver, filter);
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(hideMenuReceiver);
     }
 
     @Override
@@ -64,7 +78,48 @@ public class BaseActivity extends AppCompatActivity {
             startActivity(new Intent(Intent.ACTION_VIEW,
                     Uri.parse(Constants.getStringResource(this, R.string.help_url))));
         }
+        else if (id == R.id.action_service_active) {
+            setDetectorService(false);
+            app.getPreference().disableService();
+        }
+        else if (id == R.id.action_service_inactive) {
+            app.getPreference().enableService();
+            setDetectorService(true);
+        }
 
         return super.onOptionsItemSelected(item);
     }
+
+    protected void setDetectorService(boolean active) {
+        if (!app.getPreference().getServiceStatus()) {
+            return;
+        }
+        Intent intent = new Intent(this, DetectorService.class);
+        if (active) {
+            startService(intent);
+        }
+        else {
+            stopService(intent);
+        }
+    }
+
+    private void setMenuStatus() {
+        if (app.getConnection().isClientConnected()) {
+            this.menu.getItem(0).setVisible(true);
+            this.menu.getItem(1).setVisible(false);
+        }
+        else {
+           this.menu.getItem(0).setVisible(false);
+           this.menu.getItem(1).setVisible(true);
+        }
+    }
+
+    private BroadcastReceiver hideMenuReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equalsIgnoreCase(Constants.SERVICE_CHANGE)) {
+                BaseActivity.this.setMenuStatus();
+            }
+        }
+    };
 }

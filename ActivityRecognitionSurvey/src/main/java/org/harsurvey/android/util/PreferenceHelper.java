@@ -101,5 +101,17 @@ public class PreferenceHelper implements SharedPreferences.OnSharedPreferenceCha
         return preferences.getString(Constants.getStringResource(context,
                 R.string.pref_key_sensor), Constants.NONE);
     }
+
+    public void disableService() {
+        preferences.edit().putBoolean(Constants.getStringResource(context, R.string.pref_service_active), false).apply();
+    }
+
+    public void enableService() {
+        preferences.edit().putBoolean(Constants.getStringResource(context, R.string.pref_service_active), true).apply();
+    }
+
+    public boolean getServiceStatus() {
+        return preferences.getBoolean(Constants.getStringResource(context, R.string.pref_service_active), true);
+    }
 }
 

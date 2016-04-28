@@ -19,6 +19,7 @@ package org.harsurvey.android.survey;
 
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.database.DataSetObserver;
@@ -72,12 +73,6 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
     private void addSurveyCards() {
         Cursor cursor = adapter.getCursor();
         View view = null;
-        int first = 0;
-        int last = cursor.getCount();
-        if (last > Constants.MAX_CARDS) {
-            first = last - Constants.MAX_CARDS;
-        }
-        cursor.moveToPosition(first);
         while(cursor.moveToNext()) {
             String tag = "ACT_" + cursor.getLong(cursor.getColumnIndexOrThrow(BaseColumns._ID));
             boolean isNew = !cards.containsKey(tag);
@@ -96,7 +91,7 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
                 addCard(card, true);
                 view = card.getView();
                 if (cards.size() > Constants.MAX_CARDS) {
-                    Map.Entry<String, Card> lastCard = cards.firstEntry();
+                    Map.Entry<String, Card> lastCard = cards.lastEntry();
                     removeCard(lastCard.getKey());
                 }
             }
@@ -107,6 +102,9 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
             adapter.bindView(view, this, cursor);
             if (activity.equals(HumanActivity.Type.UNKNOWN)) {
                 card.hideAction(Card.ACTION_POSITIVE);
+            }
+            if (cards.size() >= Constants.MAX_CARDS) {
+                break;
             }
         }
     }
@@ -137,24 +135,16 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        if (app.hasValidAccount()) {
-            this.resumeSurvey();
-        }
-        else {
-            this.showIntroCard();
-        }
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
+        if (app.hasValidAccount()) {
+            setDetectorService(true);
+        }
+        else {
+            setDetectorService(false);
+            this.showIntroCard();
+        }
         app.setOnTop(true);
-    }
-
-    private void resumeSurvey() {
-        app.getConnection().connect();
     }
 
     @Override

@@ -19,6 +19,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.harsurvey.android.survey.BaseActivity">
+    <item
+        android:id="@+id/action_service_active"
+        android:icon="@drawable/ic_notifications_active_white"
+        android:title="@string/action_service_active"
+        app:showAsAction="ifRoom" android:visible="false"/>
+    <item
+        android:id="@+id/action_service_inactive"
+        android:icon="@drawable/ic_notifications_off_white"
+        android:title="@string/action_service_inactive"
+        app:showAsAction="ifRoom" android:visible="false"/>
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/help" android:title="@string/help"

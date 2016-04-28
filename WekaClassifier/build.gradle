@@ -30,24 +30,67 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 task dexJar << {
     ext.androidSdkDir = System.env.ANDROID_HOME
-    if(androidSdkDir == null) {
+    ext.javaHome = System.env.JAVA_HOME
+    if (androidSdkDir == null) {
         Properties localProps = new Properties()
         localProps.load(new FileInputStream(file("../local.properties")))
         ext.androidSdkDir = localProps['sdk.dir']
     }
     // Make sure no existing jar file exists as this will cause dx to fail
-    new File("${buildDir}/libs/WekaJ48DT.jar").delete();
+    new File("$buildDir/libs/WekaJ48DT.jar").delete();
     // Use command line dx utility to convert *.class files into classes.dex inside jar archive
     String cmdExt = Os.isFamily(Os.FAMILY_WINDOWS) ? '.bat' : ''
+
     exec {
-        commandLine "${androidSdkDir}/build-tools/${ANDROID_BUILD_TOOLS}/dx${cmdExt}", '--verbose', '--dex',
-                "--output=${buildDir}/libs/WekaJ48DT.jar",
-                "${buildDir}/libs/classes.jar"
+        commandLine "$androidSdkDir/build-tools/${ANDROID_BUILD_TOOLS}/dx${cmdExt}", '--verbose', '--dex',
+                "--output=$buildDir/libs/WekaJ48DT-${WEKA_MODEL_VERSION}.jar",
+                "$buildDir/libs/classes.jar"
+    }
+}
+
+import groovy.swing.SwingBuilder;
+
+task signJar << {
+    def pass = ''
+    if(System.console() == null) {
+        new SwingBuilder().edt {
+            dialog(modal: true, // Otherwise the build will continue running before you closed the dialog
+                    title: 'Enter password', // Dialog title
+                    alwaysOnTop: true, // pretty much what the name says
+                    resizable: false, // Don't allow the user to resize the dialog
+                    locationRelativeTo: null, // Place dialog in center of the screen
+                    pack: true, // We need to pack the dialog (so it will take the size of it's children)
+                    show: true // Let's show it
+            ) {
+                vbox { // Put everything below each other
+                    label(text: "Please enter key passphrase:")
+                    input = passwordField()
+                    button(defaultButton: true, text: 'OK', actionPerformed: {
+                        pass = input.password; // Set pass variable to value of input field
+                        dispose(); // Close dialog
+                    })
+                } // vbox end
+            } // dialog end
+        } // edt end
+    } else {
+        pass = System.console().readPassword("\nPlease enter key passphrase: ")
+        pass = new String(pass)
+    }
+
+    if(pass.size() <= 0) {
+        throw new InvalidUserDataException("You must enter a password to proceed.")
+    }
+    exec {
+        commandLine "jarsigner", '-verbose', '-sigalg', 'SHA1withRSA', '-digestalg',
+                'SHA1',
+                '-keystore', KEYSTORE_FILE, '-storepass', pass.toString(),
+                "${buildDir}/libs/WekaJ48DT-${WEKA_MODEL_VERSION}.jar", 'agimenezpy'
     }
 }
 
 dexJar.dependsOn(assembleDexJar)
 jar.finalizedBy(dexJar)
+dexJar.finalizedBy(signJar)
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
