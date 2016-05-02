@@ -22,6 +22,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import org.hardroid.model.WekaModel;
@@ -31,7 +32,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import it.necst.grabnrun.SecureDexClassLoader;
 import it.necst.grabnrun.SecureLoaderFactory;
@@ -65,7 +65,6 @@ public class DexModelLoader {
     public WekaModel retrieveModel(String className) {
         Class<?> loadedClass;
         WekaModel model = null;
-        boolean saveDate = false;
 
         loadedClass = loadRemoteModel(className);
 
@@ -114,25 +113,22 @@ public class DexModelLoader {
             return null;
         }
 
-        boolean saveDate = false;
-        if (isOldModel() && isConnected()) {
-            secureDexClassLoader.wipeOutPrivateAppCachedData(true, false);
-            saveDate = true;
-        }
-
         Class<?> loadedClass = null;
 
         try {
 
             loadedClass = secureDexClassLoader.loadClass(className);
 
-            if (saveDate) {
-                saveDate(System.currentTimeMillis());
-            }
 
         } catch (ClassNotFoundException e) {
             Log.e(TAG, "Error: Class not found! " + className);
         }
+
+        if (isOldModel() && isConnected()) {
+            secureDexClassLoader.wipeOutPrivateAppCachedData(true, false);
+            saveDate(System.currentTimeMillis());
+        }
+
 
         return loadedClass;
     }
@@ -144,9 +140,13 @@ public class DexModelLoader {
     public boolean isOldModel() {
         long result = sharedPrefs.getLong(context.getString(R.string.pref_model_date), -1);
         if (result > 0) {
-            long now = TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis());
-            long lastHour = TimeUnit.MILLISECONDS.toHours(result);
-            return (now - lastHour) > 24;
+            Log.i(TAG, "Last model date: " + DateUtils.formatDateTime(this.context, result, DateUtils.FORMAT_SHOW_DATE |
+            DateUtils.FORMAT_SHOW_TIME));
+            long now = System.currentTimeMillis();
+            long lastHour = (now - result)/(Constants.HOUR);
+            Log.i(TAG, "Current date: " + DateUtils.formatDateTime(this.context, now, DateUtils.FORMAT_SHOW_DATE |
+                    DateUtils.FORMAT_SHOW_TIME) + " Hours: " + lastHour);
+            return lastHour > 12;
         }
         return true;
     }

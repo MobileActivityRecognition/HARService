@@ -18,7 +18,11 @@
 package org.harsurvey.android.survey;
 
 import android.app.Activity;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 
 /**
  * Account Settings Holder
@@ -28,9 +32,30 @@ public class AccountSettings extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Display the fragment as the main content.
-        getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new SettingsActivity.AccountFragment())
-                .commit();
+        boolean showSettings = false;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            showSettings = true;
+        }
+        else {
+            if (ContextCompat.checkSelfPermission(this,
+                    android.Manifest.permission.GET_ACCOUNTS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.GET_ACCOUNTS},
+                        0);
+                this.finish();
+            }
+            else {
+                showSettings = true;
+            }
+
+        }
+        if (showSettings) {
+            // Display the fragment as the main content.
+            getFragmentManager().beginTransaction()
+                    .replace(android.R.id.content, new SettingsActivity.AccountFragment())
+                    .commit();
+        }
+
     }
 }

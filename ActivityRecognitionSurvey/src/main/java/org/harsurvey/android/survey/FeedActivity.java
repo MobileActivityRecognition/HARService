@@ -19,7 +19,6 @@ package org.harsurvey.android.survey;
 
 import android.app.LoaderManager;
 import android.content.CursorLoader;
-import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.database.DataSetObserver;
@@ -37,8 +36,8 @@ import org.harsurvey.android.util.Constants;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * Show CardView Feed activity
@@ -50,7 +49,7 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
     CursorLoader cursorLoader;
     CardActionHelper cardActionHelper;
     DetectedActivitiesAdapter adapter;
-    TreeMap<String, Card> cards = new TreeMap<>();
+    Map<String, Card> cards = new LinkedHashMap<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,10 +72,18 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
     private void addSurveyCards() {
         Cursor cursor = adapter.getCursor();
         View view = null;
+        int first = 0;
+        int last = cursor.getCount();
+        if (last > Constants.MAX_CARDS) {
+            first = last - Constants.MAX_CARDS;
+        }
+        cursor.moveToPosition(first);
+        long lastTime = -1;
         while(cursor.moveToNext()) {
             String tag = "ACT_" + cursor.getLong(cursor.getColumnIndexOrThrow(BaseColumns._ID));
             boolean isNew = !cards.containsKey(tag);
             int colIndex = cursor.getColumnIndex(HumanActivityData.Contract.C_ACTIVITY_TYPE);
+            long curTime = cursor.getLong(cursor.getColumnIndex(HumanActivityData.Contract.C_CREATED));
             HumanActivity.Type activity = HumanActivity.Type.valueOf(cursor.getString(colIndex));
             Card card;
             if (isNew) {
@@ -88,12 +95,8 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
                         .addAction(Constants.getStringResource(this, R.string.action_nook),
                                 Card.ACTION_NEGATIVE, Card.ACTION_NEGATIVE)
                         .build(this);
-                addCard(card, true);
                 view = card.getView();
-                if (cards.size() > Constants.MAX_CARDS) {
-                    Map.Entry<String, Card> lastCard = cards.lastEntry();
-                    removeCard(lastCard.getKey());
-                }
+                addCard(card, true);
             }
             else {
                 card = cards.get(tag);
@@ -103,9 +106,15 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
             if (activity.equals(HumanActivity.Type.UNKNOWN)) {
                 card.hideAction(Card.ACTION_POSITIVE);
             }
-            if (cards.size() >= Constants.MAX_CARDS) {
-                break;
+            if (curTime > lastTime) {
+                lastTime = curTime;
             }
+        }
+        if (lastTime > 0) {
+            cursorLoader.setSelectionArgs(new String[]{
+                    HumanActivityData.Status.DRAFT.toString() ,
+                    String.valueOf(lastTime)
+            });
         }
     }
 
@@ -162,7 +171,7 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         Date now = Calendar.getInstance().getTime();
-        Long delta = now.getTime() - 6*Constants.HOUR;
+        long delta = now.getTime() - 6 * Constants.HOUR;
         cursorLoader = new CursorLoader(this, HumanActivityData.CONTENT_URI,
                 HumanActivityData.Contract.ALL_COLUMNS,
                 HumanActivityData.Contract.C_STATUS + " = ? AND " +

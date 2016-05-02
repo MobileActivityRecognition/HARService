@@ -20,7 +20,7 @@
   <string name="description">Servicio de Reconocimiento de Actividades Humanas</string>
   <string name="model_name">org.hardroid.model.impl.WekaModelImpl</string>
   <string name="jar_url"><![CDATA[
-    https://hardroidpy.github.io/model/WekaJ48DT.jar
+    http://hardroid.pykoder.com/WekaModel.jar
   ]]></string>
   <string name="cert_url"><![CDATA[
     https://hardroidpy.github.io/hardroid.pem

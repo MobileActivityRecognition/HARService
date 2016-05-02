@@ -48,43 +48,16 @@ task dexJar << {
     }
 }
 
-import groovy.swing.SwingBuilder;
-
 task signJar << {
-    def pass = ''
-    if(System.console() == null) {
-        new SwingBuilder().edt {
-            dialog(modal: true, // Otherwise the build will continue running before you closed the dialog
-                    title: 'Enter password', // Dialog title
-                    alwaysOnTop: true, // pretty much what the name says
-                    resizable: false, // Don't allow the user to resize the dialog
-                    locationRelativeTo: null, // Place dialog in center of the screen
-                    pack: true, // We need to pack the dialog (so it will take the size of it's children)
-                    show: true // Let's show it
-            ) {
-                vbox { // Put everything below each other
-                    label(text: "Please enter key passphrase:")
-                    input = passwordField()
-                    button(defaultButton: true, text: 'OK', actionPerformed: {
-                        pass = input.password; // Set pass variable to value of input field
-                        dispose(); // Close dialog
-                    })
-                } // vbox end
-            } // dialog end
-        } // edt end
-    } else {
-        pass = System.console().readPassword("\nPlease enter key passphrase: ")
-        pass = new String(pass)
+    if (KEYSTORE_PASS == "") {
+        def pass = getPassword();
     }
 
-    if(pass.size() <= 0) {
-        throw new InvalidUserDataException("You must enter a password to proceed.")
-    }
     exec {
         commandLine "jarsigner", '-verbose', '-sigalg', 'SHA1withRSA', '-digestalg',
                 'SHA1',
-                '-keystore', KEYSTORE_FILE, '-storepass', pass.toString(),
-                "${buildDir}/libs/WekaJ48DT-${WEKA_MODEL_VERSION}.jar", 'agimenezpy'
+                '-keystore', KEYSTORE_FILE, '-storepass', KEYSTORE_PASS,
+                "${buildDir}/libs/WekaJ48DT-${WEKA_MODEL_VERSION}.jar", KEYSTORE_ALIAS
     }
 }
 

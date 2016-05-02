@@ -17,11 +17,13 @@
 
 package org.harsurvey.android.survey;
 
+import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,6 +32,8 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 
 import org.harsurvey.android.util.Constants;
 
@@ -58,9 +62,29 @@ public class SettingsActivity extends PreferenceActivity {
             addPreferencesFromResource(R.xml.prefs);
         }
         else {
-            getFragmentManager().beginTransaction()
-                    .replace(android.R.id.content, new SettingsFragment())
-                    .commit();
+            boolean showSettings = false;
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                showSettings = true;
+            }
+            else {
+                if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.GET_ACCOUNTS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.GET_ACCOUNTS},
+                            0);
+                    this.finish();
+                }
+                else {
+                    showSettings = true;
+                }
+
+            }
+            if (showSettings) {
+                getFragmentManager().beginTransaction()
+                        .replace(android.R.id.content, new SettingsFragment())
+                        .commit();
+            }
         }
     }
 

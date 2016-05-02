@@ -42,7 +42,8 @@ public class PreferenceHelper implements SharedPreferences.OnSharedPreferenceCha
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         Log.i(TAG, "Preferencias cambiadas " + s);
-        if (s.equals(Constants.getStringResource(context, R.string.pref_key_duration))) {
+        if (s.equals(Constants.getStringResource(context, R.string.pref_key_duration)) &&
+                context.hasValidAccount()) {
             context.getConnection().reconnect();
         }
     }

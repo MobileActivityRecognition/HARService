@@ -24,11 +24,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.provider.Settings.Secure;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
 import org.hardroid.common.HumanActivity.Type;
 import org.harsurvey.android.survey.R;
+
+import java.util.UUID;
 
 /**
  * Configuration Parameters
@@ -71,6 +74,7 @@ public class Constants {
 
     public static final String INTRO_CARD = "INTRO";
     public static final int MAX_CARDS = 5;
+    private static String deviceId;
 
     public static String getActivityString(Context context, Type detectedActivityType) {
         Resources resources = context.getResources();
@@ -165,4 +169,15 @@ public class Constants {
         }
     }
 
+    public static String getDeviceId(Context context) {
+        String androidId = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
+        String deviceId = "";
+        if (!"9774d56d682e549c".equals(androidId)) {
+            deviceId = UUID.nameUUIDFromBytes(androidId.getBytes()).toString();
+        }
+        else {
+            deviceId = UUID.randomUUID().toString();
+        }
+        return deviceId;
+    }
 }

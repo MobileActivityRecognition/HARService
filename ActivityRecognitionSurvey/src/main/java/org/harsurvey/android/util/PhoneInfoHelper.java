@@ -19,10 +19,8 @@ package org.harsurvey.android.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
-import android.telephony.TelephonyManager;
 
 import org.harsurvey.android.survey.R;
 import org.harsurvey.android.survey.SurveyApplication;
@@ -38,10 +36,8 @@ public class PhoneInfoHelper {
         context = application;;
         String key = Constants.getStringResource(context, R.string.pref_key_imei);
         if (preferences.getString(key, null) == null) {
-            TelephonyManager telephonyManager = (TelephonyManager)
-                    context.getSystemService(Context.TELEPHONY_SERVICE);
             preferences.edit().putString(key,
-                    telephonyManager.getDeviceId()).apply();
+                    Constants.getDeviceId(context)).apply();
         }
         key = Constants.getStringResource(context, R.string.pref_key_model);
         if (preferences.getString(key, null) == null) {

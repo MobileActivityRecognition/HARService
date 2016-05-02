@@ -17,23 +17,18 @@
 
 package org.harsurvey.android.cards;
 
-import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
-import android.provider.BaseColumns;
+import android.text.Html;
 import android.text.format.DateUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
-import org.hardroid.common.HumanActivity;
 import org.harsurvey.android.data.HumanActivityData;
-import org.harsurvey.android.survey.FeedActivity;
-import org.harsurvey.android.util.Constants;
 import org.harsurvey.android.survey.R;
+import org.harsurvey.android.util.Constants;
 
 /**
  * Adapter for cards
@@ -63,9 +58,11 @@ public class DetectedActivitiesAdapter extends CursorAdapter {
                 null,
                 null,
                 null);
-        viewDesc.setText(String.format("%s: %d %%",
-                DateUtils.getRelativeTimeSpanString(ha.created.getTime()),
-                ha.confidence));
+        long time = ha.created.getTime();
+        viewDesc.setText(Html.fromHtml(String.format("%s: %d %%<br>%s",
+                DateUtils.getRelativeTimeSpanString(time),
+                ha.confidence,
+                DateUtils.formatDateTime(context, time, DateUtils.FORMAT_SHOW_TIME))));
         viewDesc.setVisibility(View.VISIBLE);
     }
 

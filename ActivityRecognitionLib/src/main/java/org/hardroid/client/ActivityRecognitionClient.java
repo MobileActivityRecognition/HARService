@@ -17,21 +17,17 @@
 
 package org.hardroid.client;
 
-import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
-import android.net.Uri;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.hardroid.api.ActivityRecognitionApi;
 import org.hardroid.api.ConnectionApi;
-import org.hardroid.client.R;
 import org.hardroid.common.IActivityRecognitionManager;
 
 import java.util.List;
@@ -62,7 +58,6 @@ public class ActivityRecognitionClient implements ConnectionApi {
         List<ResolveInfo> matches = this.context.getPackageManager()
                 .queryIntentServices(implicit, 0);
         if (matches.size() == 0) {
-            Toast.makeText(this.context, R.string.installed_message, Toast.LENGTH_SHORT).show();
             return false;
         }
         else {
@@ -73,24 +68,9 @@ public class ActivityRecognitionClient implements ConnectionApi {
     }
 
     private void installService() {
-        String packageName = "org.hardroid.server";
-
-        String url = "";
-        Intent intent;
-
-        try {
-            url = "market://details?id=" + packageName;
-            intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
-        } catch (ActivityNotFoundException anfe) {
-            url = "https://play.google.com/store/apps/details?id=" + packageName;
-            intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
-        }
-
-
+        Intent intent = new Intent(context, InstallServiceActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 
     @Override

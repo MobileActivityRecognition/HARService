@@ -17,10 +17,16 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.hardroid.server" >
-
+    <permission android:name="org.hardroid.permission.ACTIVITY_RECOGNITION"
+                android:label="@string/activity_recognition_perm_label"
+                android:protectionLevel="signatureOrSystem"
+                android:description="@string/activity_recognition_perm_desc"/>
+    <permission android:name="org.hardroid.permission.ACTIVITY_RECOGNITION_DATA"
+                android:label="@string/activity_collection_perm_label"
+                android:protectionLevel="signatureOrSystem"
+                android:description="@string/activity_collection_perm_desc"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="org.hardroid.permission.ACTIVITY_RECOGNITION" />
     <uses-permission android:name="org.hardroid.permission.ACTIVITY_RECOGNITION_DATA" />
 
