@@ -26,8 +26,8 @@ android {
         applicationId "org.harsurvey.android.survey"
         minSdkVersion 12
         targetSdkVersion ANDROID_SDK_VERSION
-        versionCode 2
-        versionName "1.0.1"
+        versionCode 1
+        versionName "1.0.0"
     }
     signingConfigs {
         release {
