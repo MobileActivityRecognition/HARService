@@ -24,7 +24,9 @@ import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.provider.BaseColumns;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.Toast;
 
 import org.hardroid.common.HumanActivity;
 import org.harsurvey.android.cards.Card;
@@ -74,16 +76,15 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
         View view = null;
         int first = 0;
         int last = cursor.getCount();
+        long lastTime = -1;
         if (last > Constants.MAX_CARDS) {
             first = last - Constants.MAX_CARDS;
         }
         cursor.moveToPosition(first);
-        long lastTime = -1;
         while(cursor.moveToNext()) {
             String tag = "ACT_" + cursor.getLong(cursor.getColumnIndexOrThrow(BaseColumns._ID));
             boolean isNew = !cards.containsKey(tag);
             int colIndex = cursor.getColumnIndex(HumanActivityData.Contract.C_ACTIVITY_TYPE);
-            long curTime = cursor.getLong(cursor.getColumnIndex(HumanActivityData.Contract.C_CREATED));
             HumanActivity.Type activity = HumanActivity.Type.valueOf(cursor.getString(colIndex));
             Card card;
             if (isNew) {
@@ -106,8 +107,8 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
             if (activity.equals(HumanActivity.Type.UNKNOWN)) {
                 card.hideAction(Card.ACTION_POSITIVE);
             }
-            if (curTime > lastTime) {
-                lastTime = curTime;
+            if (lastTime < 0 && last >= Constants.MAX_CARDS) {
+                lastTime = cursor.getLong(cursor.getColumnIndex(HumanActivityData.Contract.C_CREATED));
             }
         }
         if (lastTime > 0) {
@@ -115,6 +116,7 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
                     HumanActivityData.Status.DRAFT.toString() ,
                     String.valueOf(lastTime)
             });
+            app.getPreference().setLastUpdateTime(lastTime);
         }
     }
 
@@ -170,17 +172,18 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        Date now = Calendar.getInstance().getTime();
-        long delta = now.getTime() - 6 * Constants.HOUR;
+        long delta = app.getPreference().getLastUpdateTime();
         cursorLoader = new CursorLoader(this, HumanActivityData.CONTENT_URI,
                 HumanActivityData.Contract.ALL_COLUMNS,
                 HumanActivityData.Contract.C_STATUS + " = ? AND " +
-                HumanActivityData.Contract.C_CREATED + " > ? ",
+                HumanActivityData.Contract.C_CREATED + " >= ? ",
                 new String[]{
                         HumanActivityData.Status.DRAFT.toString() ,
                         String.valueOf(delta)
                 },
                 HumanActivityData.Contract.C_CREATED + " ASC");
+        showInfoToast(String.format(Constants.getStringResource(this, R.string.date_info_msg),
+                Constants.formatShortDate(this, delta)));
         return cursorLoader;
     }
 
@@ -192,5 +195,11 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         adapter.swapCursor(null);
+    }
+
+    public void showInfoToast(String msg) {
+        Toast info = Toast.makeText(this, msg, Toast.LENGTH_LONG);
+        info.setGravity(Gravity.TOP | Gravity.CENTER_VERTICAL, 0, 0);
+        info.show();
     }
 }

@@ -27,6 +27,7 @@ import android.os.Build;
 import android.provider.Settings.Secure;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 
 import org.hardroid.common.HumanActivity.Type;
 import org.harsurvey.android.survey.R;
@@ -61,6 +62,10 @@ public class Constants {
     public static final String DETECTED_ACTIVITY_EXTRA = "org.harsurvey.android.DETECTED_ACTIVITY_EXTRA";
     public static final String REQUEST_SYNCRONIZATION = "org.harsurvey.android.REQUEST_SYNCRONIZATION";
     public static final String SERVICE_CHANGE = "org.harsurvey.android.SERVICE_CHANGE";
+
+    public static final int ACTION_BUTTON_REFRESH = 0;
+    public static final int ACTION_BUTTON_ACTIVE = 0;
+    public static final int ACTION_BUTTON_INACTIVE = 1;
 
     public static final String REST_URL = "%sARrecolector/webresources/com.fpuna.entities.collaborativesession";
     public static final String DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
@@ -179,5 +184,11 @@ public class Constants {
             deviceId = UUID.randomUUID().toString();
         }
         return deviceId;
+    }
+
+    public static String formatShortDate(Context context, long time) {
+        String dateStr = DateUtils.formatDateTime(context, time, DateUtils.FORMAT_SHOW_DATE |
+                DateUtils.FORMAT_SHOW_TIME);
+        return dateStr;
     }
 }

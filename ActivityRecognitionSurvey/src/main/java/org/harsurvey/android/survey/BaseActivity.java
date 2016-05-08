@@ -23,9 +23,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
-import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -105,12 +103,12 @@ public class BaseActivity extends AppCompatActivity {
 
     private void setMenuStatus() {
         if (app.getConnection().isClientConnected()) {
-            this.menu.getItem(0).setVisible(true);
-            this.menu.getItem(1).setVisible(false);
+            this.menu.getItem(Constants.ACTION_BUTTON_ACTIVE).setVisible(true);
+            this.menu.getItem(Constants.ACTION_BUTTON_INACTIVE).setVisible(false);
         }
         else {
-           this.menu.getItem(0).setVisible(false);
-           this.menu.getItem(1).setVisible(true);
+           this.menu.getItem(Constants.ACTION_BUTTON_ACTIVE).setVisible(false);
+           this.menu.getItem(Constants.ACTION_BUTTON_INACTIVE).setVisible(true);
         }
     }
 

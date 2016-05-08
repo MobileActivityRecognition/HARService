@@ -122,4 +122,6 @@
     <string name="action_service_inactive">Activar Servicio</string>
     <string name="disconnected">Servicio de actividad desconectado</string>
     <string name="pref_service_active">servicio_activo</string>
+    <string name="pref_last_update">last_update_time</string>
+    <string name="date_info_msg">Actividades a partir del %s</string>
 </resources>

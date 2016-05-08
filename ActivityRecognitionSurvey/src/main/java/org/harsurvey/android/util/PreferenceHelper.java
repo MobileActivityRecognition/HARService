@@ -17,13 +17,14 @@
 
 package org.harsurvey.android.util;
 
-import android.content.ContentValues;
 import android.content.SharedPreferences;
-import android.os.Debug;
 import android.util.Log;
 
 import org.harsurvey.android.survey.R;
 import org.harsurvey.android.survey.SurveyApplication;
+
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Preference and settings
@@ -32,6 +33,7 @@ public class PreferenceHelper implements SharedPreferences.OnSharedPreferenceCha
     private final String TAG = PreferenceHelper.class.getSimpleName();
     private final SharedPreferences preferences;
     private final SurveyApplication context;
+    private long lastUpdateTime;
 
     public PreferenceHelper(SurveyApplication application, SharedPreferences preferences) {
         context = application;
@@ -113,6 +115,19 @@ public class PreferenceHelper implements SharedPreferences.OnSharedPreferenceCha
 
     public boolean getServiceStatus() {
         return preferences.getBoolean(Constants.getStringResource(context, R.string.pref_service_active), true);
+    }
+
+    public Long getLastUpdateTime() {
+        Date now = Calendar.getInstance().getTime();
+        long delta = now.getTime() - 6 * Constants.HOUR;
+        long saved = preferences.getLong(Constants.getStringResource(context, R.string.pref_last_update),
+                delta);
+        return Math.max(saved, delta);
+    }
+
+    public void setLastUpdateTime(long lastUpdateTime) {
+        preferences.edit().putLong(Constants.getStringResource(context, R.string.pref_last_update),
+                lastUpdateTime).apply();
     }
 }
 
