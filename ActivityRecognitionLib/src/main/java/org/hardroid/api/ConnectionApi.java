@@ -20,33 +20,43 @@ package org.hardroid.api;
 import org.hardroid.client.OnClientConnectionListener;
 
 /**
- * Template interface for activity recognition service integration
+ * This interface holds the state of the connection between Client and Server processes
  */
 public interface ConnectionApi {
     /**
+     * Request a connection to be made
+     */
+    void connect();
+
+    /**
+     * Request a disconnection to be made
+     */
+    void disconnect();
+
+    /**
+     * Request a reconnection
+     */
+    void reconnect();
+
+    /**
+     * Query the connection status
      *
+     * @return true if the service is connected
      */
-    public void connect();
+    boolean isConnected();
 
     /**
+     * Query if the connection is been established
      *
+     * @return true if the service is about to be connected
      */
-    public void disconnect();
+    boolean isConnecting();
 
     /**
+     * Request an update when the service finally is connected
      *
+     * @param listener
+     *        required object that listents to connection changes
      */
-    public void reconnect();
-
-    /**
-     * @return
-     */
-    public boolean isConnected();
-
-    /**
-     * @return
-     */
-    public boolean isConnecting();
-
-    public void addOnConnectionListener(OnClientConnectionListener listener);
+    void addOnConnectionListener(OnClientConnectionListener listener);
 }

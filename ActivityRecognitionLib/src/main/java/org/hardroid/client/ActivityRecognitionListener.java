@@ -20,12 +20,17 @@ package org.hardroid.client;
 import org.hardroid.common.ActivityRecognitionResult;
 
 /**
- * Used for receiving notifications from {@link ActivityRecognitionManager}
- * when the activity has changed.
+ * This interface is a contract to receive notifications
+ * from {@link ActivityRecognitionManager} when a new result is available
+ *
+ * @author agimenez
  */
 public interface ActivityRecognitionListener {
     /**
+     * New Activity Recognition result event subscription
+     *
      * @param result
+     *        activity recognition result provided by the service
      */
-    public void onActivityChanged(ActivityRecognitionResult result);
+    void onActivityChanged(ActivityRecognitionResult result);
 }

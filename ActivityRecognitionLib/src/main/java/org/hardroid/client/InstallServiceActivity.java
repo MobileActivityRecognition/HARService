@@ -27,6 +27,8 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 
 /**
+ * Dialog Activity to Install the Service
+ *
  * @author agimenez
  */
 public class InstallServiceActivity extends Activity {

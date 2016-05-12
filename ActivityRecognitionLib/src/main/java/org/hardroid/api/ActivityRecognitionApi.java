@@ -23,43 +23,65 @@ import android.os.Looper;
 import org.hardroid.client.ActivityRecognitionListener;
 
 /**
- * The main entry point to interact with activity recognition
+ * This interface define the service contract to subscribe to recognition of activities
+ *
+ * @author agimenez
  */
 public interface ActivityRecognitionApi {
     /**
+     * Request a periodic update from the service with the specified parameters
+     *
      * @param detectionIntervalMillis
+     *        interval between updates
      * @param callbackIntent
+     *        required object to callback when the service completes
      */
-    public void requestActivityUpdates(long detectionIntervalMillis,
-                                       PendingIntent callbackIntent);
+    void requestActivityUpdates(long detectionIntervalMillis, PendingIntent callbackIntent);
 
     /**
+     * Request a periodic update from the service with the specified parameters
+     *
      * @param detectionIntervalMillis
+     *        interval between updates
      * @param listener
+     *        required object that listens when then service completes
      */
-    public void requestActivityUpdates(long detectionIntervalMillis,
-                                       ActivityRecognitionListener listener);
+    void requestActivityUpdates(long detectionIntervalMillis, ActivityRecognitionListener listener);
 
     /**
+     * Request a periodic update from the service with the specified parameters
+     *
      * @param detectionIntervalMillis
+     *        interval between updates
      * @param listener
+     *        required object that listens when the service completes
      * @param looper
+     *        main process looper on to execute
      */
-    public void requestActivityUpdates(long detectionIntervalMillis,
+    void requestActivityUpdates(long detectionIntervalMillis,
                                        ActivityRecognitionListener listener, Looper looper);
 
     /**
+     * Request a single update
+     *
      * @param callbackIntent
+     *        required object to callback when the service completes
      */
-    public void requestSingleUpdate(PendingIntent callbackIntent);
+    void requestSingleUpdate(PendingIntent callbackIntent);
 
     /**
+     * Remove a subscription associated with this callback
+     *
      * @param callbackIntent
+     *        required object to callback when the service completes
      */
-    public void removeActivityUpdates(PendingIntent callbackIntent);
+    void removeActivityUpdates(PendingIntent callbackIntent);
 
     /**
+     * Remove a subscription associated with this listener
+     *
      * @param listener
+     *        required object that listents when the service completes
      */
-    public void removeActivityUpdates(ActivityRecognitionListener listener);
+    void removeActivityUpdates(ActivityRecognitionListener listener);
 }

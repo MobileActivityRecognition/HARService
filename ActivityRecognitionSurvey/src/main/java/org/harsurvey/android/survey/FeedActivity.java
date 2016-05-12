@@ -74,13 +74,12 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
     private void addSurveyCards() {
         Cursor cursor = adapter.getCursor();
         View view = null;
-        int first = 0;
         int last = cursor.getCount();
         long lastTime = -1;
         if (last > Constants.MAX_CARDS) {
-            first = last - Constants.MAX_CARDS;
+            int first = last - Constants.MAX_CARDS;
+            cursor.moveToPosition(first - 1);
         }
-        cursor.moveToPosition(first);
         while(cursor.moveToNext()) {
             String tag = "ACT_" + cursor.getLong(cursor.getColumnIndexOrThrow(BaseColumns._ID));
             boolean isNew = !cards.containsKey(tag);
@@ -182,8 +181,10 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
                         String.valueOf(delta)
                 },
                 HumanActivityData.Contract.C_CREATED + " ASC");
-        showInfoToast(String.format(Constants.getStringResource(this, R.string.date_info_msg),
-                Constants.formatShortDate(this, delta)));
+        if (app.hasValidAccount()) {
+            showInfoToast(String.format(Constants.getStringResource(this, R.string.date_info_msg),
+                    Constants.formatShortDate(this, delta)));
+        }
         return cursorLoader;
     }
 

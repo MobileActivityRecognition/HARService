@@ -37,6 +37,8 @@ import java.util.List;
  *
  * This class is used for requesting activity updates. This method requires that Connection
  * be connected.
+ *
+ * @author agimenez
  */
 public class ActivityRecognitionClient implements ConnectionApi {
     public static final String TAG = ActivityRecognitionClient.class.getSimpleName();
@@ -121,9 +123,6 @@ public class ActivityRecognitionClient implements ConnectionApi {
         this.listener = listener;
     }
 
-    /**
-     * @return
-     */
     public ActivityRecognitionApi getService() {
         return this.apiManager;
     }

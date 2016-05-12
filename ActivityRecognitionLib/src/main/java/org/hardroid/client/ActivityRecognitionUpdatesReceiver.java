@@ -32,6 +32,8 @@ import org.hardroid.common.IActivityRecognitionResponseListener;
 /**
  * This class provides interaction with the alarm manager in order to periodically get activity
  * recognition results
+ *
+ * @author agimenez
  */
 public class ActivityRecognitionUpdatesReceiver extends IActivityRecognitionResponseListener.Stub {
     public static final String TAG = ActivityRecognitionUpdatesReceiver.class.getSimpleName();
@@ -42,6 +44,14 @@ public class ActivityRecognitionUpdatesReceiver extends IActivityRecognitionResp
     private ActivityRecognitionListener listener;
     private Handler handler;
 
+    /**
+     * Restricted constructor
+     *
+     * @param context
+     *        android context
+     * @param manager
+     *        service connection manager
+     */
     protected ActivityRecognitionUpdatesReceiver(Context context, ActivityRecognitionManager manager) {
         this.context = context;
         this.manager = manager;
@@ -76,18 +86,40 @@ public class ActivityRecognitionUpdatesReceiver extends IActivityRecognitionResp
         }
     }
 
+    /**
+     * Returns the registered callback object
+     *
+     * @return client callback
+     */
     public PendingIntent getCallback() {
         return callback;
     }
 
+    /**
+     * Register a callback object
+     *
+     * @param callback
+     *        client callback
+     */
     public void setCallback(PendingIntent callback) {
         this.callback = callback;
     }
 
+    /**
+     * Returns the registered listener object
+     *
+     * @return client listener
+     */
     public ActivityRecognitionListener getListener() {
         return listener;
     }
 
+    /**
+     * Register a listener object
+     *
+     * @param listener
+     *        client listener
+     */
     public void setListener(ActivityRecognitionListener listener) {
         this.listener = listener;
     }

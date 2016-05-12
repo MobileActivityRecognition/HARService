@@ -30,6 +30,8 @@ import java.util.List;
  *
  * Contains a list of predicted activities that the user might be doing during a period of time.
  * The Activities are sorted by most probable activities
+ *
+ * @author agimenez
  */
 public class ActivityRecognitionResult implements Parcelable {
     public static final ActivityRecognitionResultCreator CREATOR = new ActivityRecognitionResultCreator();
@@ -55,13 +57,23 @@ public class ActivityRecognitionResult implements Parcelable {
         }
     };
 
+    /**
+     * Restricted constructor
+     */
     private ActivityRecognitionResult() {
     }
 
     /**
+     * Main constructor
+     *
+     * @param modelVersion
+     *        model version
      * @param probableActivities
+     *        list of probable activities
      * @param time
+     *        recognition time
      * @param elapsedRealtimeMillis
+     *        elapsed time since recognition process started in milliseconds
      */
     public ActivityRecognitionResult(int modelVersion, List<HumanActivity> probableActivities,
                                      long time, long elapsedRealtimeMillis) {
@@ -73,11 +85,18 @@ public class ActivityRecognitionResult implements Parcelable {
     }
 
     /**
+     * Alternate constructor with features
      *
-     * @param features
+     * @param modelVersion
+     *        model version
      * @param probableActivities
-     * @param elapsedRealtimeMillis
+     *        list of probable activities
      * @param time
+     *        recognition time
+     * @param elapsedRealtimeMillis
+     *        elapsed time since recognition process started in milliseconds
+     * @param features
+     *        vector data of calculated features
      */
     public ActivityRecognitionResult(int modelVersion,
                                      List<HumanActivity> probableActivities,
@@ -88,24 +107,33 @@ public class ActivityRecognitionResult implements Parcelable {
     }
 
     /**
+     * Helper to extract results from an intent
+     *
      * @param intent
-     * @return
+     *        required intent object
+     * @return recognition result
      */
     public static ActivityRecognitionResult extractResult(Intent intent) {
         return (ActivityRecognitionResult) intent.getExtras().get(EXTRA_ACTIVITY_RESULT);
     }
 
     /**
+     * Helper to query if an intent has results
+     *
      * @param intent
-     * @return
+     *        required intent object
+     * @return true if the intent has results in its extra
      */
     public static boolean hasResult(Intent intent) {
         return intent.hasExtra(EXTRA_ACTIVITY_RESULT);
     }
 
     /**
+     * Returns the recognition confidence for an activity type
+     *
      * @param activityType
-     * @return
+     *        activity type
+     * @return confidence in the range of (0, 100)
      */
     public int getActivityConfidence(HumanActivity.Type activityType) {
         int confidence = -1;
@@ -119,34 +147,66 @@ public class ActivityRecognitionResult implements Parcelable {
     }
 
     /**
-     * @return
+     * Returns the elapsed realtime between the start and
+     * completion of the calculation and recognition
+     *
+     * @return time in milliseconds
      */
     public long getElapsedRealtimeMillis() {
         return this.elapsedRealtimeMillis;
     }
 
     /**
-     * @return
+     * Returns the recognition time
+     *
+     * @return time in milliseconds
      */
     public long getTime() {
         return this.time;
     }
 
     /**
-     * @return
+     * Returns the activity with highest confidence
+     *
+     * @return human activity
      */
     public HumanActivity getMostProbableActivity() {
         return probableActivities.get(0);
     }
 
+    /**
+     * Returns the list of activities generated during the recognition step
+     *
+     * @return list of human activity
+     */
     public List<HumanActivity> getProbableActivities() {
         return this.probableActivities;
     }
 
+    /**
+     * Returns the list of features generated during calculation step
+     *
+     * @return list of features with raw data
+     */
     public List<Feature> getFeatures() {
         return features;
     }
 
+    /**
+     * Restricted method to save list of features
+     *
+     * @param features
+     *        list of features generated during calculation step
+     */
+    protected void setFeatures(List<Feature> features) {
+        this.features = features;
+    }
+
+    /**
+     * Returns the model version that generated this result
+     *
+     * @return model version
+     */
     public int getModelVersion() {
         return modelVersion;
     }
@@ -180,9 +240,5 @@ public class ActivityRecognitionResult implements Parcelable {
                 data.writeToParcel(parcel, flags);
             }
         }
-    }
-
-    protected void setFeatures(List<Feature> features) {
-        this.features = features;
     }
 }

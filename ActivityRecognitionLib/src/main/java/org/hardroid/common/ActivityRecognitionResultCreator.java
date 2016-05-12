@@ -23,7 +23,9 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 /**
+ * Creates a Java object from android parcel
  *
+ * @author agimenez
  */
 public class ActivityRecognitionResultCreator
         implements Parcelable.Creator<ActivityRecognitionResult> {

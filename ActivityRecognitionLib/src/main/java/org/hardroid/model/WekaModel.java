@@ -18,9 +18,23 @@
 package org.hardroid.model;
 
 /**
- * Weka Classifier Contract
+ * This interface defines a Weka Classifier Contract
  */
 public interface WekaModel {
+    /**
+     * Represent the versión number
+     *
+     * @return version
+     */
     int version();
+
+    /**
+     * Classification algorithm implementation
+     *
+     * @param i
+     *       list of parameters
+     * @return recognition result
+     * @throws Exception on abnormal model execution
+     */
     double classify(Object[] i) throws Exception;
 }

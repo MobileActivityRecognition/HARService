@@ -67,6 +67,12 @@ task androidSourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
 }
 
+task androidJavadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    failOnError false
+}
+
 task assembleJar(type: Jar) {
     baseName = "hardroidlib"
     from "$buildDir/intermediates/classes/release/"
@@ -95,11 +101,11 @@ task generateRelease << {
 
 generateRelease.dependsOn(uploadArchives)
 generateRelease.dependsOn(zipRelease)
+generateRelease.dependsOn(androidJavadocs)
 
 build.finalizedBy(generateRelease)
 
 artifacts {
     //archives androidSourcesJar
     archives assembleJar
-    //archives androidJavadocsJar
 }

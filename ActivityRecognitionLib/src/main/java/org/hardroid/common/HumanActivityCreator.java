@@ -21,7 +21,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
+ * Creates a Java object from android parcel
  *
+ * @author agimenez
  */
 public class HumanActivityCreator implements  Parcelable.Creator<HumanActivity> {
     @Override

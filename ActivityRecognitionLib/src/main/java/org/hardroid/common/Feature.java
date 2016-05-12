@@ -22,38 +22,82 @@ import android.os.Parcelable;
 
 /**
  * Feature Calculation Information
+ *
+ * @author agimenez
  */
 public class Feature implements Parcelable {
     private int featureSize;
     private double[] data;
     private HumanActivity.Type activityLabel;
 
+    /**
+     * Feature data sink constructor
+     * @param activityLabel
+     *        activity label
+     * @param featureSize
+     *        list of features size
+     * @param data
+     *        vector of calculated data
+     */
     public Feature(HumanActivity.Type activityLabel, int featureSize, double[] data) {
         this.featureSize = featureSize;
         this.data = data;
         this.activityLabel = activityLabel;
     }
 
+    /**
+     * Returns the activity label
+     *
+     * @return label
+     */
     public HumanActivity.Type getActivityLabel() {
         return activityLabel;
     }
 
+    /**
+     * Sets the activity label
+     *
+     * @param activityLabel
+     *        activity label
+     */
     public void setActivityLabel(HumanActivity.Type activityLabel) {
         this.activityLabel = activityLabel;
     }
 
+    /**
+     * Returns the saved raw data
+     *
+     * @return vector data
+     */
     public double[] getData() {
         return data;
     }
 
+    /**
+     * Save raw data
+     *
+     * @param data vector data
+     */
     public void setData(double[] data) {
         this.data = data;
     }
 
+    /**
+     * List of features size
+     *
+     * @return size
+     */
     public int getFeatureSize() {
         return featureSize;
     }
 
+
+    /**
+     * Set the features size
+     *
+     * @param featureSize
+     *        size of features in vector data
+     */
     public void setFeatureSize(int featureSize) {
         this.featureSize = featureSize;
     }

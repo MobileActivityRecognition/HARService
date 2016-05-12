@@ -20,9 +20,24 @@ package org.hardroid.client;
 import org.hardroid.api.ConnectionApi;
 
 /**
- * Conection listener for connection changes
+ * This interface is a contract to listen to connection changes
+ *
+ * @author agimenez
  */
 public interface OnClientConnectionListener {
-    public void onConnect(ConnectionApi client);
-    public void onDisconnect(ConnectionApi client);
+    /**
+     * Connection established event
+     *
+     * @param client
+     *        client connection that requested the event
+     */
+    void onConnect(ConnectionApi client);
+
+    /**
+     * Connection unestablished event
+     *
+     * @param client    
+     *        client connection that requested the event
+     */
+    void onDisconnect(ConnectionApi client);
 }

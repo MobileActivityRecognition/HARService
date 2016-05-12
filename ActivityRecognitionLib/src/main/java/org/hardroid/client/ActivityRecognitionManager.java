@@ -35,6 +35,8 @@ import org.hardroid.common.IActivityRecognitionManager;
  *
  * Don't instantiate this class directly, retrieve it through
  * {@link ActivityRecognitionClient#getService()}
+ *
+ * @author agimenez
  */
 public class ActivityRecognitionManager implements ActivityRecognitionApi {
     public static final String TAG = ActivityRecognitionManager.class.getSimpleName();
@@ -43,9 +45,14 @@ public class ActivityRecognitionManager implements ActivityRecognitionApi {
     private ActivityRecognitionUpdatesReceiver updatesReceiver;
 
     /**
+     * Restricted constructor
+     *
      * @param connection
+     *        client connection
      * @param service
+     *        bounded service connection
      * @param context
+     *        android context
      */
     protected ActivityRecognitionManager(ConnectionApi connection, IBinder service, Context context) {
         this.connection = connection;
@@ -105,7 +112,9 @@ public class ActivityRecognitionManager implements ActivityRecognitionApi {
     }
 
     /**
-     * @return
+     * Get latest activity recognition results
+     *
+     * @return recognition results
      */
     public ActivityRecognitionResult getResults() {
         try {
