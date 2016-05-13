@@ -117,14 +117,6 @@ public class ActivityRecognitionManagerImpl extends IActivityRecognitionManager.
         int pid = Binder.getCallingPid();
         //String appId = this.service.getPackageManager().getPackagesForUid(pid)[0];
         String appId = String.valueOf(pid);
-        if (this.service.checkCallingPermission(
-                Constants.ACCESS_ACTIVITY_RECOGNITION)
-                == PackageManager.PERMISSION_GRANTED) {
-            return appId;
-        }
-        else{
-            Log.w(TAG, "Permision denied on ACTIVITY RECOGNITION " + appId);
-            throw new SecurityException("Permission Denied");
-        }
+        return appId;
     }
 }
