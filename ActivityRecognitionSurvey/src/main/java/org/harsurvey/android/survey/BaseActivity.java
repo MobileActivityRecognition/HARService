@@ -23,9 +23,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import org.harsurvey.android.util.Constants;
 
@@ -33,30 +37,55 @@ public class BaseActivity extends AppCompatActivity {
     public static final String TAG = BaseActivity.class.getSimpleName();
 
     public SurveyApplication app;
-    private Menu menu;
+    private FloatingActionButton actionButton;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         app = (SurveyApplication) getApplication();
+
+        setContentView(R.layout.activity_main);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        actionButton = (FloatingActionButton) findViewById(R.id.fab);
+        if (actionButton != null) {
+            actionButton.setOnClickListener(onActionButtonClick);
+            actionButton.setVisibility(View.INVISIBLE);
+        }
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Constants.SERVICE_CHANGE);
+        registerReceiver(serviceStatusReceiver, filter);
+    }
+
+    protected void setToolbarTitle(int stringResouce) {
+        if (toolbar != null) {
+            toolbar.setTitle(stringResouce);
+        }
+    }
+
+    protected void setActionButtonVisibility(boolean visible) {
+        if (visible) {
+            actionButton.setVisibility(View.VISIBLE);
+        }
+        else {
+            actionButton.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        this.menu = menu;
-        setMenuStatus();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Constants.SERVICE_CHANGE);
-        registerReceiver(hideMenuReceiver, filter);
         return true;
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(hideMenuReceiver);
+        unregisterReceiver(serviceStatusReceiver);
     }
 
     @Override
@@ -76,22 +105,11 @@ public class BaseActivity extends AppCompatActivity {
             startActivity(new Intent(Intent.ACTION_VIEW,
                     Uri.parse(Constants.getStringResource(this, R.string.help_url))));
         }
-        else if (id == R.id.action_service_active) {
-            setDetectorService(false);
-            app.getPreference().disableService();
-        }
-        else if (id == R.id.action_service_inactive) {
-            app.getPreference().enableService();
-            setDetectorService(true);
-        }
 
         return super.onOptionsItemSelected(item);
     }
 
     protected void setDetectorService(boolean active) {
-        if (!app.getPreference().getServiceStatus()) {
-            return;
-        }
         Intent intent = new Intent(this, DetectorService.class);
         if (active) {
             startService(intent);
@@ -101,22 +119,40 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    private void setMenuStatus() {
+    protected void setActionButtonStatus() {
+        String message;
         if (app.getConnection().isClientConnected()) {
-            this.menu.getItem(Constants.ACTION_BUTTON_ACTIVE).setVisible(true);
-            this.menu.getItem(Constants.ACTION_BUTTON_INACTIVE).setVisible(false);
+            message = Constants.getStringResource(this, R.string.connected);
+            actionButton.setImageResource(R.drawable.ic_stop);
         }
         else {
-           this.menu.getItem(Constants.ACTION_BUTTON_ACTIVE).setVisible(false);
-           this.menu.getItem(Constants.ACTION_BUTTON_INACTIVE).setVisible(true);
+            message = Constants.getStringResource(this, R.string.disconnected);
+            actionButton.setImageResource(R.drawable.ic_play_arrow);
         }
+        setActionButtonVisibility(true);
+        Snackbar.make(findViewById(R.id.main_content), message, Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 
-    private BroadcastReceiver hideMenuReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver serviceStatusReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equalsIgnoreCase(Constants.SERVICE_CHANGE)) {
-                BaseActivity.this.setMenuStatus();
+                BaseActivity.this.setActionButtonStatus();
+            }
+        }
+    };
+
+    private View.OnClickListener onActionButtonClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (app.getConnection().isClientConnected()) {
+                setDetectorService(false);
+                app.getPreference().disableService();
+            }
+            else {
+                app.getPreference().enableService();
+                setDetectorService(true);
             }
         }
     };

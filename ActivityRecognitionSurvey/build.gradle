@@ -74,4 +74,5 @@ dependencies {
     compile(libraries.crashlytics) {
         transitive = true;
     }
+    compile 'com.android.support:design:23.4.0'
 }

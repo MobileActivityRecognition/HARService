@@ -33,7 +33,6 @@ public class PreferenceHelper implements SharedPreferences.OnSharedPreferenceCha
     private final String TAG = PreferenceHelper.class.getSimpleName();
     private final SharedPreferences preferences;
     private final SurveyApplication context;
-    private long lastUpdateTime;
 
     public PreferenceHelper(SurveyApplication application, SharedPreferences preferences) {
         context = application;

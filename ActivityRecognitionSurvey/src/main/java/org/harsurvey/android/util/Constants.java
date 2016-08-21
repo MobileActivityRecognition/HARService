@@ -32,6 +32,8 @@ import android.text.format.DateUtils;
 import org.hardroid.common.HumanActivity.Type;
 import org.harsurvey.android.survey.R;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -79,7 +81,27 @@ public class Constants {
 
     public static final String INTRO_CARD = "INTRO";
     public static final int MAX_CARDS = 5;
-    private static String deviceId;
+
+    public static Map<Type, Integer> activityIcon = new LinkedHashMap<>();
+    public static Map<Type, Integer> activityIconSmall = new LinkedHashMap<>();
+
+    static {
+        activityIcon.put(Type.IN_VEHICLE, R.drawable.ic_activity_car);
+        activityIcon.put(Type.ON_BICYCLE, R.drawable.ic_activity_bike);
+        activityIcon.put(Type.RUNNING, R.drawable.ic_activity_run);
+        activityIcon.put(Type.STILL, R.drawable.ic_activity_still);
+        activityIcon.put(Type.TILTING, R.drawable.ic_activity_tilt);
+        activityIcon.put(Type.UNKNOWN, R.drawable.ic_activity_unk);
+        activityIcon.put(Type.WALKING, R.drawable.ic_activity_walk);
+
+        activityIconSmall.put(Type.IN_VEHICLE, R.drawable.ic_notification_car);
+        activityIconSmall.put(Type.ON_BICYCLE, R.drawable.ic_notification_bike);
+        activityIconSmall.put(Type.RUNNING, R.drawable.ic_notification_run);
+        activityIconSmall.put(Type.STILL, R.drawable.ic_notification_still);
+        activityIconSmall.put(Type.TILTING, R.drawable.ic_notification_tilt);
+        activityIconSmall.put(Type.UNKNOWN, R.drawable.ic_notification_unk);
+        activityIconSmall.put(Type.WALKING, R.drawable.ic_notification_walk);
+    }
 
     public static String getActivityString(Context context, Type detectedActivityType) {
         Resources resources = context.getResources();
@@ -105,12 +127,11 @@ public class Constants {
     }
 
     public static Drawable getActivityIcon(Context context, Type detectedActivity) {
-        return ContextCompat.getDrawable(context, getDrawableForType(detectedActivity));
+        return ContextCompat.getDrawable(context, activityIcon.get(detectedActivity));
     }
 
     public static Bitmap getBitmapIcon(Context context, Type detectedActivity) {
-        return BitmapFactory.decodeResource(context.getResources(),
-                getDrawableForType(detectedActivity));
+        return getBitmapIcon(context, activityIconSmall.get(detectedActivity));
     }
 
     public static Bitmap getBitmapIcon(Context context, int resource) {
@@ -120,27 +141,6 @@ public class Constants {
 
     public static String getStringResource(Context context, int resource) {
         return context.getResources().getString(resource);
-    }
-
-    private static int getDrawableForType(Type detectedActivity) {
-        switch (detectedActivity) {
-            case IN_VEHICLE:
-                return R.drawable.ic_activity_car;
-            case ON_BICYCLE:
-                return R.drawable.ic_activity_bike;
-            case RUNNING:
-                return R.drawable.ic_activity_run;
-            case STILL:
-                return R.drawable.ic_activity_still;
-            case TILTING:
-                return R.drawable.ic_activity_tilt;
-            case UNKNOWN:
-                return R.drawable.ic_activity_unkown;
-            case WALKING:
-                return R.drawable.ic_activity_walk;
-            default:
-                return R.drawable.ic_activity_unkown;
-        }
     }
 
     public static String getDeviceName() {
@@ -187,8 +187,7 @@ public class Constants {
     }
 
     public static String formatShortDate(Context context, long time) {
-        String dateStr = DateUtils.formatDateTime(context, time, DateUtils.FORMAT_SHOW_DATE |
+        return DateUtils.formatDateTime(context, time, DateUtils.FORMAT_SHOW_DATE |
                 DateUtils.FORMAT_SHOW_TIME);
-        return dateStr;
     }
 }

@@ -22,8 +22,6 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
-import org.harsurvey.android.util.Constants;
-
 public class DetectorService extends Service {
     private static final String TAG = DetectorService.class.getSimpleName();
     SurveyApplication app;
@@ -51,7 +49,6 @@ public class DetectorService extends Service {
     public void onDestroy() {
         Log.i(TAG, "Stopping background activity detector");
         app.getConnection().release();
-        sendBroadcast(new Intent(Constants.SERVICE_CHANGE));
         super.onDestroy();
     }
 }

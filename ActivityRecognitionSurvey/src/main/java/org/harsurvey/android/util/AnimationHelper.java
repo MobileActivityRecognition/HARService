@@ -27,6 +27,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -331,14 +332,14 @@ public class AnimationHelper {
         @Override
         public void startTransition(LayoutTransition transition, ViewGroup container, View
                 view, int transitionType) {
-            Log.d(TAG, "Start LayoutTransition animation:" + transitionType);
+            Log.v(TAG, "Start LayoutTransition animation:" + transitionType);
         }
 
         @Override
         public void endTransition(LayoutTransition transition, ViewGroup container,
                                   final View view, int transitionType) {
 
-            Log.d(TAG, "End LayoutTransition animation:" + transitionType);
+            Log.v(TAG, "End LayoutTransition animation:" + transitionType);
             if (transitionType == LayoutTransition.APPEARING) {
                 final View area = view.findViewById(R.id.card_actionarea);
                 if (area != null) {
@@ -362,7 +363,7 @@ public class AnimationHelper {
 
         @Override
         public void onChildViewAdded(final View parent, final View child) {
-            Log.d(TAG, "Card View added: " + child);
+            Log.v(TAG, "Card View added: " + child);
             ViewParent scrollView = parent.getParent();
             if (scrollView != null && scrollView instanceof ScrollView) {
                 ((ScrollView) scrollView).fullScroll(View.FOCUS_UP);
@@ -377,10 +378,31 @@ public class AnimationHelper {
 
         @Override
         public void onChildViewRemoved(View parent, View child) {
-            Log.d(TAG, "Card View removed: " + child);
+            Log.v(TAG, "Card View removed: " + child);
             fixedViewList.remove(child);
         }
     };
+
+    public static void reveal(View view) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // get the center for the clipping circle
+            int cx = view.getWidth() / 2;
+            int cy = view.getHeight() / 2;
+
+            // get the final radius for the clipping circle
+            float finalRadius = (float) Math.hypot(cx, cy);
+
+            // create the animator for this view (the start radius is zero)
+            Animator anim = ViewAnimationUtils.createCircularReveal(view, cx, cy, 0, finalRadius);
+
+            // make the view visible and start the animation
+            view.setVisibility(View.VISIBLE);
+            anim.start();
+        }
+        else {
+            view.setVisibility(View.VISIBLE);
+        }
+    }
 
     /**
      * Empty default AnimationListener

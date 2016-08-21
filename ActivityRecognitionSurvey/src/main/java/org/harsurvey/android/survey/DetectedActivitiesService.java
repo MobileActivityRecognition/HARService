@@ -72,7 +72,7 @@ public class DetectedActivitiesService extends IntentService {
                 Uri alternateUri = getContentResolver().insert(FeatureData.CONTENT_URI,
                         featureData.getValues());
                 if (alternateUri != null) {
-                    Log.d(TAG,  String.format("Saved Feature Result %s: %s data",
+                    Log.v(TAG,  String.format("Saved Feature Result %s: %s data",
                             feature.getActivityLabel(),
                             feature.getFeatureSize()));
                 }

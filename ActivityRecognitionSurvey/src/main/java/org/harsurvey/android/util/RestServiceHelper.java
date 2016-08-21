@@ -19,10 +19,7 @@ package org.harsurvey.android.util;
 
 import android.content.ContentUris;
 import android.os.AsyncTask;
-import android.os.Debug;
 import android.util.Log;
-
-import com.google.gson.Gson;
 
 import org.harsurvey.android.data.FeatureData;
 import org.harsurvey.android.data.HumanActivityData;
@@ -32,6 +29,7 @@ import org.springframework.http.ContentCodingType;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -40,7 +38,6 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -84,7 +81,7 @@ public class RestServiceHelper {
         }
 
         data.put("collaborativefeatureList", content);
-        Log.d(TAG, MappingHelper.toJson(data));
+        Log.v(TAG, MappingHelper.toJson(data));
         HttpRequestTask task = new HttpRequestTask();
         task.execute(context.getPreference().getIMEI(), data, activity);
     }
@@ -95,11 +92,16 @@ public class RestServiceHelper {
         protected HumanActivityData doInBackground(Object... payloads) {
             String imei = (String) payloads[0];
             HttpEntity<Object> request = new HttpEntity<>(payloads[1], headers);
-            ResponseEntity<String> result = null;
             try {
-                result = restTemplate.exchange(endpoint + "/" + imei,
+                ResponseEntity<String> result = restTemplate.exchange(endpoint + "/" + imei,
                         HttpMethod.PUT, request, String.class);
-                return ((HumanActivityData) payloads[2]);
+                Log.v(TAG, result.getStatusCode() + ": " + result.getBody());
+                if (result.getStatusCode() == HttpStatus.OK) {
+                    return ((HumanActivityData) payloads[2]);
+                }
+                else {
+                    return null;
+                }
             } catch (RestClientException e) {
                 Log.e(TAG, "Error al procesar los datos: " + e.getLocalizedMessage());
                 return null;

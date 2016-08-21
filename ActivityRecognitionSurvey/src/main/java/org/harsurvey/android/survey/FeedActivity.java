@@ -36,8 +36,6 @@ import org.harsurvey.android.data.HumanActivityData;
 import org.harsurvey.android.util.CardActionHelper;
 import org.harsurvey.android.util.Constants;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -56,8 +54,6 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.cardstream);
         cardActionHelper = new CardActionHelper(this);
         listView = (CardStreamLinearLayout) findViewById(R.id.card_stream);
         adapter = new DetectedActivitiesAdapter(this, null);
@@ -69,11 +65,12 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
         });
         getLoaderManager().initLoader(0, null, this);
         listView.showInitialAnimation = true;
+        setToolbarTitle(R.string.activity_title);
     }
 
     private void addSurveyCards() {
         Cursor cursor = adapter.getCursor();
-        View view = null;
+        View view;
         int last = cursor.getCount();
         long lastTime = -1;
         if (last > Constants.MAX_CARDS) {
@@ -148,10 +145,15 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
     protected void onResume() {
         super.onResume();
         if (app.hasValidAccount()) {
-            setDetectorService(true);
+            if (app.getPreference().getServiceStatus() && !app.getConnection().isClientConnected()) {
+                setDetectorService(true);
+            }
+            else {
+                setActionButtonStatus();
+            }
         }
         else {
-            setDetectorService(false);
+            setActionButtonVisibility(false);
             this.showIntroCard();
         }
         app.setOnTop(true);

@@ -19,6 +19,8 @@ package org.harsurvey.android.cards;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.view.View;
@@ -54,10 +56,14 @@ public class DetectedActivitiesAdapter extends CursorAdapter {
 
         viewTitle.setText(Constants.getActivityString(context, ha.activity));
         viewTitle.setVisibility(View.VISIBLE);
-        viewTitle.setCompoundDrawablesWithIntrinsicBounds(Constants.getActivityIcon(context, ha.activity),
-                null,
-                null,
-                null);
+
+        Drawable image = Constants.getActivityIcon(context, ha.activity);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            viewTitle.setCompoundDrawablesRelativeWithIntrinsicBounds(image, null, null, null);
+        } else {
+            viewTitle.setCompoundDrawablesWithIntrinsicBounds(image, null, null, null);
+        }
+
         long time = ha.created.getTime();
         viewDesc.setText(Html.fromHtml(String.format("%s: %d %%<br>%s",
                 DateUtils.getRelativeTimeSpanString(time),
