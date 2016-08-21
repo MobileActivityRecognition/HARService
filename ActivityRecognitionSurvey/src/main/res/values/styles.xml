@@ -24,9 +24,9 @@
         <item name="colorAccent">@color/mint_green_dark</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
     <!-- Card Stream -->
     <style name="CardStream">
@@ -99,11 +99,11 @@
 
     <declare-styleable name="CardStream">
         <attr name="animationDuration" format="enum">
-            <enum name="slow" value="1001" />
-            <enum name="normal" value="1002" />
-            <enum name="fast" value="1003" />
+            <enum name="slow" value="1001"/>
+            <enum name="normal" value="1002"/>
+            <enum name="fast" value="1003"/>
         </attr>
-        <attr name="animators" format="string" />
+        <attr name="animators" format="string"/>
     </declare-styleable>
 
     <style name="AppTheme.NoActionBar">

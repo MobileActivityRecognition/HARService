@@ -18,7 +18,8 @@
 <resources>
     <string name="application_name">Activity Survey</string>
     <string name="activity_title">Mis actividades</string>
-    <string name="action_settings">Configuración</string>
+    <string name="settings_title">Configuración</string>
+    <string name="tools_title">Herramientas</string>
 
     <string name="intro_title">Introducción al Reconocedor</string>
 
@@ -117,12 +118,15 @@
     <string name="pref_default_age">25</string>
     <string name="action_ready">ENTENDIDO</string>
     <string name="action_account_settings">Configurar Cuenta</string>
-    <string name="help">Ayuda</string>
-    <string name="action_service_active">Desactivar Servicio</string>
-    <string name="action_service_inactive">Activar Servicio</string>
     <string name="disconnected">Servicio de actividad desconectado</string>
     <string name="pref_service_active">servicio_activo</string>
     <string name="pref_last_update">last_update_time</string>
     <string name="date_info_msg">Actividades a partir del %s</string>
     <string name="title_activity_feed">Mis Actividades</string>
+
+    <string name="navigation_drawer_open">Abrir navegador</string>
+    <string name="navigation_drawer_close">Cerrar navegador</string>
+    <string name="menu_update">Actualizar</string>
+    <string name="menu_config">Ajustes</string>
+    <string name="menu_help">Ayuda</string>
 </resources>

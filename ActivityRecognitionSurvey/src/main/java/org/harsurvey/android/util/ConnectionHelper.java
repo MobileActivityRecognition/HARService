@@ -76,4 +76,10 @@ public class ConnectionHelper implements OnClientConnectionListener {
         release();
         connect();
     }
+
+    public void getSingleActivity() {
+        if (apiClient.isConnected()) {
+            apiClient.getService().requestSingleUpdate(context.getDetectedActivityService());
+        }
+    }
 }

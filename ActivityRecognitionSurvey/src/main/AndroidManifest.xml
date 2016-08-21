@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ HARService: Activity Recognition Service
   ~ Copyright (C) 2015 agimenez
   ~
@@ -15,12 +16,12 @@
   ~ limitations under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.harsurvey.android.survey">
+          package="org.harsurvey.android.survey">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="org.hardroid.permission.ACTIVITY_RECOGNITION" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="org.hardroid.permission.ACTIVITY_RECOGNITION"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
 
     <application
         android:name=".SurveyApplication"
@@ -30,18 +31,18 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/action_settings">
+            android:label="@string/settings_title">
             <intent-filter>
-                <action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
+                <action android:name="android.intent.action.MANAGE_NETWORK_USAGE"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".AccountSettings"
             android:label="@string/action_account_settings">
             <intent-filter>
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         <activity
@@ -49,43 +50,42 @@
             android:label="@string/application_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name=".MainActivity" />
+                <action android:name="android.intent.action.MAIN"/>
+                <action android:name=".MainActivity"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
         <service
             android:name=".DetectedActivitiesService"
-            android:exported="false" />
+            android:exported="false"/>
 
         <provider
             android:name="org.harsurvey.android.data.HumanActivityFeed"
             android:authorities="org.harsurvey.android.data.HumanActivityFeed"
-            android:exported="false" />
+            android:exported="false"/>
 
         <receiver android:name=".NotificationReceiver">
             <intent-filter>
-                <action android:name="org.harsurvey.android.DETECTED_ACTIVITY_BROADCAST" />
+                <action android:name="org.harsurvey.android.DETECTED_ACTIVITY_BROADCAST"/>
             </intent-filter>
         </receiver>
         <receiver android:name=".UpdateActionReceiver">
             <intent-filter>
-                <action android:name="android.net.con.CONNECTIVITY_CHANGE" />
-                <action android:name="org.harsurvey.android.REQUEST_SYNCRONIZATION" />
+                <action android:name="android.net.con.CONNECTIVITY_CHANGE"/>
+                <action android:name="org.harsurvey.android.REQUEST_SYNCRONIZATION"/>
             </intent-filter>
         </receiver>
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="d15926801ca9a13c8198bba35f102730be755dda" />
+            android:value="d15926801ca9a13c8198bba35f102730be755dda"/>
 
         <service
             android:name=".DetectorService"
             android:enabled="true"
             android:exported="false"/>
-
     </application>
 
 </manifest>

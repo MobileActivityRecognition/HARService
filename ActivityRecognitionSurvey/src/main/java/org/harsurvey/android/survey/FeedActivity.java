@@ -151,6 +151,7 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
             else {
                 setActionButtonStatus();
             }
+            setNavigationAccount(app.getPreference().getName());
         }
         else {
             setActionButtonVisibility(false);

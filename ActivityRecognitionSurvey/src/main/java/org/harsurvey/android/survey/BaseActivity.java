@@ -24,37 +24,65 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import org.harsurvey.android.util.Constants;
 
-public class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
     public static final String TAG = BaseActivity.class.getSimpleName();
 
     public SurveyApplication app;
     private FloatingActionButton actionButton;
     private Toolbar toolbar;
+    private DrawerLayout drawer;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         app = (SurveyApplication) getApplication();
 
-        setContentView(R.layout.activity_main);
+        // Main Content
+        setContentView(R.layout.activity_drawer);
+
+        // Toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Floating Action Button
         actionButton = (FloatingActionButton) findViewById(R.id.fab);
         if (actionButton != null) {
             actionButton.setOnClickListener(onActionButtonClick);
             actionButton.setVisibility(View.INVISIBLE);
         }
 
+        // Drawer
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        if (drawer != null) {
+            drawer.addDrawerListener(toggle);
+            toggle.syncState();
+        }
+
+        // Navigation View
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        if (navigationView != null) {
+            navigationView.setNavigationItemSelectedListener(this);
+        }
+
+        // Service Listener
         IntentFilter filter = new IntentFilter();
         filter.addAction(Constants.SERVICE_CHANGE);
         registerReceiver(serviceStatusReceiver, filter);
@@ -64,6 +92,11 @@ public class BaseActivity extends AppCompatActivity {
         if (toolbar != null) {
             toolbar.setTitle(stringResouce);
         }
+    }
+
+    protected void setNavigationAccount(String accountName) {
+        TextView textView = (TextView) navigationView.getHeaderView(0).findViewById(R.id.accountName);
+        textView.setText(accountName);
     }
 
     protected void setActionButtonVisibility(boolean visible) {
@@ -78,7 +111,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        //getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -96,16 +129,9 @@ public class BaseActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
-            return true;
+        if (id == R.id.menu_update) {
+            app.getConnection().getSingleActivity();
         }
-        else if (id == R.id.help) {
-            startActivity(new Intent(Intent.ACTION_VIEW,
-                    Uri.parse(Constants.getStringResource(this, R.string.help_url))));
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -156,4 +182,36 @@ public class BaseActivity extends AppCompatActivity {
             }
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_feed) {
+            // Handle the camera action
+        }
+        else if (id == R.id.nav_settings) {
+            startActivity(new Intent(this, SettingsActivity.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+        }
+        else if (id == R.id.nav_help) {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse(Constants.getStringResource(this, R.string.help_url))));
+        }
+
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 }

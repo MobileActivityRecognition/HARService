@@ -20,14 +20,12 @@ package org.harsurvey.android.cards;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import org.hardroid.common.HumanActivity;
-import org.harsurvey.android.survey.R;
 import org.harsurvey.android.util.Constants;
 
 import java.util.Arrays;
@@ -40,21 +38,19 @@ public class CardListItemAdapter extends ArrayAdapter<String> {
     List<String> items;
 
     public CardListItemAdapter(Context context, List<String> objects) {
-        super(context, -1, objects);
+        super(context, android.R.layout.simple_list_item_1, objects);
         items = objects;
     }
 
     public CardListItemAdapter(Context context, String[] objects) {
-        super(context, -1, objects);
+        super(context, android.R.layout.simple_list_item_1, objects);
         items = Arrays.asList(objects);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        View view = inflater.inflate(R.layout.listitem, null);
-        TextView textView = (TextView) view.findViewById(R.id.item_title);
         Context context = getContext();
+        TextView textView = (TextView) super.getView(position, convertView, parent);
         HumanActivity.Type type = HumanActivity.Type.valueOf(items.get(position));
         Drawable image = Constants.getActivityIcon(context, type);
         textView.setText(Constants.getActivityString(context, type));
@@ -63,6 +59,6 @@ public class CardListItemAdapter extends ArrayAdapter<String> {
         } else {
             textView.setCompoundDrawablesWithIntrinsicBounds(image, null, null, null);
         }
-        return view;
+        return textView;
     }
 }
