@@ -17,15 +17,12 @@
 
 package org.hardroid.server;
 
-import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.os.RemoteException;
-import android.util.Log;
 
 import org.hardroid.common.ActivityRecognitionResult;
 import org.hardroid.common.IActivityRecognitionManager;
 import org.hardroid.common.IActivityRecognitionResponseListener;
-import org.hardroid.utils.Constants;
 
 /**
  * IBinder activity recognition manager implementation
@@ -108,6 +105,11 @@ public class ActivityRecognitionManagerImpl extends IActivityRecognitionManager.
         return service.getResult();
     }
 
+    @Override
+    public int getVersion() throws RemoteException {
+        return this.service.getResources().getInteger(R.integer.harlib_version);
+    }
+
     /**
      * Helper to get the connected client application ID
      *
@@ -115,8 +117,6 @@ public class ActivityRecognitionManagerImpl extends IActivityRecognitionManager.
      */
     private String getClientId() throws SecurityException{
         int pid = Binder.getCallingPid();
-        //String appId = this.service.getPackageManager().getPackagesForUid(pid)[0];
-        String appId = String.valueOf(pid);
-        return appId;
+        return String.valueOf(pid);
     }
 }

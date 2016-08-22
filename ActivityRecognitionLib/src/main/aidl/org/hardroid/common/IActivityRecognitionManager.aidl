@@ -10,4 +10,5 @@ interface IActivityRecognitionManager {
     void requestSingleUpdates(in IActivityRecognitionResponseListener listener);
     void removeActivityUpdates(in IActivityRecognitionResponseListener listener);
     ActivityRecognitionResult getDetectedActivities();
+    int getVersion();
 }

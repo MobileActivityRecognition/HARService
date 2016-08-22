@@ -113,7 +113,7 @@ public class PreferenceHelper implements SharedPreferences.OnSharedPreferenceCha
     }
 
     public boolean getServiceStatus() {
-        return preferences.getBoolean(Constants.getStringResource(context, R.string.pref_service_active), true);
+        return preferences.getBoolean(Constants.getStringResource(context, R.string.pref_service_active), false);
     }
 
     public Long getLastUpdateTime() {

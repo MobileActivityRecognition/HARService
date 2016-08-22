@@ -49,9 +49,10 @@ public class InstallServiceActivity extends Activity {
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                InstallServiceActivity.super.onBackPressed();
                 String packageName = "org.hardroid.server";
-
-                String url = "";
+                String url;
                 Intent intent;
                 try {
                     url = "market://details?id=" + packageName;

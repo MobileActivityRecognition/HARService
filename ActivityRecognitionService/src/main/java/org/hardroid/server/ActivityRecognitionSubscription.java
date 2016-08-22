@@ -39,7 +39,7 @@ public class ActivityRecognitionSubscription {
         @Override
         public int compare(ActivityRecognitionSubscription lhs,
                            ActivityRecognitionSubscription rhs) {
-            return Long.valueOf(rhs.getDetectionInterval()).compareTo(rhs.getDetectionInterval());
+            return Long.valueOf(lhs.getDetectionInterval()).compareTo(rhs.getDetectionInterval());
         }
 
     }

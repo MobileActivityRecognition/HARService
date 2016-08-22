@@ -148,10 +148,12 @@ public class BaseActivity extends AppCompatActivity
     protected void setActionButtonStatus() {
         String message;
         if (app.getConnection().isClientConnected()) {
+            app.getPreference().enableService();
             message = Constants.getStringResource(this, R.string.connected);
             actionButton.setImageResource(R.drawable.ic_stop);
         }
         else {
+            app.getPreference().disableService();
             message = Constants.getStringResource(this, R.string.disconnected);
             actionButton.setImageResource(R.drawable.ic_play_arrow);
         }
@@ -174,12 +176,11 @@ public class BaseActivity extends AppCompatActivity
         public void onClick(View view) {
             if (app.getConnection().isClientConnected()) {
                 setDetectorService(false);
-                app.getPreference().disableService();
             }
             else {
-                app.getPreference().enableService();
                 setDetectorService(true);
             }
+            setActionButtonVisibility(false);
         }
     };
 

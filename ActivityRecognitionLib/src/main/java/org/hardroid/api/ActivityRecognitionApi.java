@@ -84,4 +84,11 @@ public interface ActivityRecognitionApi {
      *        required object that listents when the service completes
      */
     void removeActivityUpdates(ActivityRecognitionListener listener);
+
+    /**
+     * Get service version
+     *
+     * @return version
+     */
+    int getVersion();
 }

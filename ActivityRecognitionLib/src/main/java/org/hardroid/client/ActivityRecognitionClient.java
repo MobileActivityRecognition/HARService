@@ -55,26 +55,6 @@ public class ActivityRecognitionClient implements ConnectionApi {
         checkInstalledService();
     }
 
-    private boolean checkInstalledService() {
-        Intent implicit = new Intent(IActivityRecognitionManager.class.getName());
-        List<ResolveInfo> matches = this.context.getPackageManager()
-                .queryIntentServices(implicit, 0);
-        if (matches.size() == 0) {
-            return false;
-        }
-        else {
-            ServiceInfo svcInfo = matches.get(0).serviceInfo;
-            componentName = new ComponentName(svcInfo.applicationInfo.packageName, svcInfo.name);
-            return true;
-        }
-    }
-
-    private void installService() {
-        Intent intent = new Intent(context, InstallServiceActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-    }
-
     @Override
     public void connect() {
         if (componentName == null && !checkInstalledService()) {
@@ -123,21 +103,58 @@ public class ActivityRecognitionClient implements ConnectionApi {
         this.listener = listener;
     }
 
+    private boolean checkInstalledService() {
+        Intent implicit = new Intent(IActivityRecognitionManager.class.getName());
+        List<ResolveInfo> matches = this.context.getPackageManager()
+                .queryIntentServices(implicit, 0);
+        if (matches.size() == 0) {
+            return false;
+        }
+        else {
+            ServiceInfo svcInfo = matches.get(0).serviceInfo;
+            componentName = new ComponentName(svcInfo.applicationInfo.packageName, svcInfo.name);
+            return true;
+        }
+    }
+
+    private void installService() {
+        Intent intent = new Intent(context, InstallServiceActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
     public ActivityRecognitionApi getService() {
         return this.apiManager;
+    }
+
+    private boolean checkInstalledVersion() {
+        int currentVersion = context.getResources().getInteger(R.integer.harlib_version);
+        try {
+            int serviceVersion = apiManager.getVersion();
+            Log.i(TAG, String.format("Library version (%d), Service version (%d)", currentVersion,
+                    serviceVersion));
+            return currentVersion <= serviceVersion;
+        } catch (Exception e) {
+            Log.e(TAG, "Error checking library version: " + e.getMessage());
+            return false;
+        }
     }
 
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             Log.d(TAG, "Service IBINDER connected");
-            ActivityRecognitionClient.this.connected = true;
-            ActivityRecognitionClient.this.connecting = false;
             ActivityRecognitionClient self = ActivityRecognitionClient.this;
+            self.connected = true;
+            self.connecting = false;
             self.apiManager = new ActivityRecognitionManager(
                     self, iBinder, self.context
                     );
-            if (listener != null) {
+            if (!checkInstalledVersion()) {
+                self.disconnect();
+                self.installService();
+            }
+            else if (listener != null) {
                 listener.onConnect(ActivityRecognitionClient.this);
             }
         }

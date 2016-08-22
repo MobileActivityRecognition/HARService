@@ -98,6 +98,18 @@ public class ActivityRecognitionManager implements ActivityRecognitionApi {
     }
 
     @Override
+    public int getVersion() {
+        try {
+            return this.service.getVersion();
+        } catch (RemoteException e) {
+            if (e.getMessage() != null) {
+                Log.e(TAG, e.getMessage());
+            }
+            return -1;
+        }
+    }
+
+    @Override
     public void requestSingleUpdate(PendingIntent callbackIntent) {
         if (this.updatesReceiver.getCallback() == null) {
             this.updatesReceiver.setCallback(callbackIntent);
