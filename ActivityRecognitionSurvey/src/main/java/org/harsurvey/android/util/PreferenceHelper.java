@@ -56,7 +56,13 @@ public class PreferenceHelper implements SharedPreferences.OnSharedPreferenceCha
             return Constants.INTERVAL_DEFAULT;
         }
         else {
-            return Long.valueOf(value) * Constants.MINUTE;
+            long intValue = Long.valueOf(value);
+            if (intValue > 0) {
+                return intValue * Constants.MINUTE;
+            }
+            else {
+                return Constants.MINUTE / 2;
+            }
         }
     }
 

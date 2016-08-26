@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import org.harsurvey.android.survey.R;
@@ -44,6 +45,7 @@ public class Card {
      * Attributes
      */
     private String tag;
+    private String date;
     private String title;
     private String description;
 
@@ -51,33 +53,18 @@ public class Card {
      * Inner views
      */
     private View cardView;
+    private TextView dateView;
     private TextView titleView;
     private TextView descView;
-    private View actionAreaView;
+    private ViewGroup actionAreaView;
 
-    private List<CardAction> cardActions = new ArrayList<CardAction>();
+    private List<CardAction> cardActions = new ArrayList<>();
 
     public Card() {
     }
 
     public View getView() {
         return cardView;
-    }
-
-    public Card setTitle(String title) {
-        if (titleView != null) {
-            this.title = title;
-            titleView.setText(title);
-        }
-        return this;
-    }
-
-    public Card setDescription(String description) {
-        if (descView != null) {
-            this.description = description;
-            descView.setText(description);
-        }
-        return this;
     }
 
     private void addAction(String label, int id, int type) {
@@ -116,6 +103,11 @@ public class Card {
             card.tag = tag;
             card.clickListener = listener;
         }
+
+        public Builder setDate(String date) {
+            card.date = date;
+            return this;
+        }
         
         public Builder setTitle(String title) {
             card.title = title;
@@ -138,6 +130,14 @@ public class Card {
             ViewGroup cardView = (ViewGroup) inflater.inflate(R.layout.card,
                     (ViewGroup) activity.findViewById(R.id.card_stream), false);
 
+            View viewDate = cardView.findViewById(R.id.card_date);
+            if (card.date != null && viewDate != null) {
+                card.dateView = (TextView) viewDate;
+                card.dateView.setText(card.date);
+            } else if (viewDate != null) {
+                viewDate.setVisibility(View.GONE);
+            }
+
             // Check that the layout contains a TextView with the card_title id
             View viewTitle = cardView.findViewById(R.id.card_title);
             if (card.title != null && viewTitle != null) {
@@ -153,7 +153,7 @@ public class Card {
                 card.descView = (TextView) viewDesc;
                 card.descView.setText(Html.fromHtml(card.description));
             } else if (viewDesc != null) {
-                cardView.findViewById(R.id.card_content).setVisibility(View.GONE);
+                viewDesc.setVisibility(View.GONE);
             }
 
             ViewGroup actionArea = (ViewGroup) cardView.findViewById(R.id.card_actionarea);
@@ -175,9 +175,13 @@ public class Card {
             }
 
             // Inflate all card actions
+            float fill = 100 / card.cardActions.size();
+            final LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                                                        ViewGroup.LayoutParams.MATCH_PARENT,
+                                                        fill);
             for (final CardAction action : card.cardActions) {
 
-                int useActionLayout = 0;
+                int useActionLayout;
                 switch (action.type) {
                     case Card.ACTION_POSITIVE:
                         useActionLayout = R.layout.card_button_positive;
@@ -201,7 +205,8 @@ public class Card {
                         card.clickListener.onCardClick(action.id, card.tag);
                     }
                 });
-                actionArea.addView(action.actionView);
+                actionButton.setLayoutParams(params);
+                card.actionAreaView.addView(action.actionView);
             }
         }
     }

@@ -37,8 +37,8 @@ import android.support.v4.content.ContextCompat;
 
 import org.harsurvey.android.util.Constants;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 /**
@@ -155,7 +155,7 @@ public class SettingsActivity extends PreferenceActivity {
 
         // Trigger the listener immediately with the preference's
         // current value.
-        Object value = null;
+        Object value;
         if (preference.getKey().equalsIgnoreCase("year_age")) {
             value = PreferenceManager
                     .getDefaultSharedPreferences(preference.getContext())
@@ -173,16 +173,17 @@ public class SettingsActivity extends PreferenceActivity {
         ListPreference prefs = ((ListPreference) preference);
         AccountManager manager = (AccountManager) activity.getSystemService(ACCOUNT_SERVICE);
         Account[] list = manager.getAccounts();
-        Set<String> values = new HashSet<>();
-        int i = 0;
+        Map<String, String> entries = new LinkedHashMap<>();
+        entries.put(Constants.getStringResource(activity, R.string.anonymous), Constants.getDeviceOwner());
         for (Account account: list) {
-            if (account.name.contains("@")) {
-                values.add(account.name);
+            if (account.name.contains("@") && !entries.containsKey(account.name)) {
+                entries.put(account.name, account.name);
             }
         }
-        String[] realValues = values.toArray(new String[values.size()]);
+        String[] realValues = entries.values().toArray(new String[entries.size()]);
+        String[] labelValues = entries.keySet().toArray(new String[entries.size()]);
         prefs.setEntryValues(realValues);
-        prefs.setEntries(realValues);
+        prefs.setEntries(labelValues);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)

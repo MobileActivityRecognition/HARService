@@ -45,12 +45,6 @@ public class PhoneInfoHelper {
                     Constants.getDeviceName()).apply();
         }
 
-        key = Constants.getStringResource(context, R.string.pref_key_name);
-        if (preferences.getString(key, null) == null) {
-            preferences.edit().putString(key,
-                    Constants.getDeviceOwner()).apply();
-        }
-
         key = Constants.getStringResource(context, R.string.pref_key_sensor);
         if (preferences.getString(key, null) == null) {
             SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);

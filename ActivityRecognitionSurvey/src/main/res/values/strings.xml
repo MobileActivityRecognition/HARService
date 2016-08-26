@@ -42,12 +42,14 @@
     <string name="pref_data_usage">Configurar Uso de datos</string>
     <string name="titleFeed">Registro de Actividades</string>
     <string-array name="pref_session_duration_titles">
+        <item>30 segundos</item>
         <item>1 minuto</item>
         <item>15 minutos</item>
         <item>30 minutos</item>
         <item>1 hora</item>
     </string-array>
     <string-array name="pref_session_duration_values">
+        <item>0</item>
         <item>1</item>
         <item>15</item>
         <item>30</item>
@@ -129,4 +131,6 @@
     <string name="menu_update">Actualizar</string>
     <string name="menu_config">Ajustes</string>
     <string name="menu_help">Ayuda</string>
+    <string name="anonymous">Ninguno</string>
+    <string name="empty"/>
 </resources>

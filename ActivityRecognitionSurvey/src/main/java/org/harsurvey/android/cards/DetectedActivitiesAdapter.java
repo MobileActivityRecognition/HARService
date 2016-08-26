@@ -19,9 +19,9 @@ package org.harsurvey.android.cards;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.text.Html;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +31,8 @@ import android.widget.TextView;
 import org.harsurvey.android.data.HumanActivityData;
 import org.harsurvey.android.survey.R;
 import org.harsurvey.android.util.Constants;
+
+import at.grabner.circleprogress.CircleProgressView;
 
 /**
  * Adapter for cards
@@ -51,11 +53,11 @@ public class DetectedActivitiesAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         HumanActivityData ha = HumanActivityData.CREATOR.createSingleFromCursor(cursor);
+        TextView viewDate = (TextView) view.findViewById(R.id.card_date);
         TextView viewTitle = (TextView) view.findViewById(R.id.card_title);
         TextView viewDesc = (TextView) view.findViewById(R.id.card_content);
 
         viewTitle.setText(Constants.getActivityString(context, ha.activity));
-        viewTitle.setVisibility(View.VISIBLE);
 
         Drawable image = Constants.getActivityIcon(context, ha.activity);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -64,12 +66,19 @@ public class DetectedActivitiesAdapter extends CursorAdapter {
             viewTitle.setCompoundDrawablesWithIntrinsicBounds(image, null, null, null);
         }
 
+        CircleProgressView progressView = (CircleProgressView) view.findViewById(R.id.progressBar);
+        if (ha.confidence < 50) {
+            progressView.setBarColor(Color.parseColor(Constants.getStringResource(context, R.color.bittersweet)));
+        }
+        else if (ha.confidence < 80) {
+            progressView.setBarColor(Color.parseColor(Constants.getStringResource(context, R.color.sunflower)));
+        }
+        progressView.setValue(ha.confidence);
+        progressView.setVisibility(View.VISIBLE);
+
         long time = ha.created.getTime();
-        viewDesc.setText(Html.fromHtml(String.format("%s: %d %%<br>%s",
-                DateUtils.getRelativeTimeSpanString(time),
-                ha.confidence,
-                DateUtils.formatDateTime(context, time, DateUtils.FORMAT_SHOW_TIME))));
-        viewDesc.setVisibility(View.VISIBLE);
+        viewDate.setText(DateUtils.formatDateTime(context, time, DateUtils.FORMAT_SHOW_TIME));
+        viewDesc.setText(DateUtils.getRelativeTimeSpanString(time));
     }
 
 }

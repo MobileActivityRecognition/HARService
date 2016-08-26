@@ -15,51 +15,102 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
-<org.harsurvey.android.cards.CardLayout
-    android:id="@+id/card_layout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<org.harsurvey.android.cards.CardLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/Card"
+    android:layout_gravity="center"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp">
 
     <LinearLayout
-        android:id="@+id/card_contentarea"
-        style="@style/CardContentArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
-
-        <TextView
-            android:id="@+id/card_title"
-            style="@style/CardTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:id="@+id/card_content"
-            style="@style/CardContent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/card_actionarea"
-        style="@style/CardActionArea"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/card_contentarea"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/card_separator"
-            android:layout_width="fill_parent"
+        <LinearLayout
+            android:id="@+id/card_contentarea"
+            style="@style/CardContentArea"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/card_separator" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/card_date"
+                style="@style/CardDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="100">
+
+                <TextView
+                    android:id="@+id/card_title"
+                    style="@style/CardTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="30"/>
+
+                <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_weight="70"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <at.grabner.circleprogress.CircleProgressView
+                        xmlns:CircleProgressView="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/progressBar"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:visibility="gone"
+                        CircleProgressView:cpv_value="0"
+                        CircleProgressView:cpv_maxValue="100"
+                        CircleProgressView:cpv_barColor="@color/grass"
+                        CircleProgressView:cpv_rimColor="@color/light_gray"
+                        CircleProgressView:cpv_textColor="@color/medium_gray_dark"
+                        CircleProgressView:cpv_fillColor="@android:color/white"
+                        CircleProgressView:cpv_unitColor="@color/medium_gray_dark"
+                        CircleProgressView:cpv_spinColor="@color/mint_green_dark"
+                        CircleProgressView:cpv_barWidth="7dp"
+                        CircleProgressView:cpv_rimWidth="10dp"
+                        CircleProgressView:cpv_contourSize="0dp"
+                        CircleProgressView:cpv_autoTextSize="false"
+                        CircleProgressView:cpv_textSize="14dp"
+                        CircleProgressView:cpv_unitSize="7dp"
+                        CircleProgressView:cpv_unit="%"
+                        CircleProgressView:cpv_unitPosition="right_top"
+                        CircleProgressView:cpv_unitScale="1"
+                        CircleProgressView:cpv_textScale="1"
+                        CircleProgressView:cpv_showUnit="true"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
+            <TextView
+                android:id="@+id/card_content"
+                style="@style/CardContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/card_actionarea"
+            style="@style/CardActionArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="100">
+
+        </LinearLayout>
 
     </LinearLayout>
 
-
 </org.harsurvey.android.cards.CardLayout>
+
+

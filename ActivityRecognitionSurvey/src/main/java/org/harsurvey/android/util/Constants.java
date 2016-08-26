@@ -22,10 +22,18 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.provider.Settings.Secure;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.ColorUtils;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 
@@ -85,7 +93,12 @@ public class Constants {
     public static Map<Type, Integer> activityIcon = new LinkedHashMap<>();
     public static Map<Type, Integer> activityIconSmall = new LinkedHashMap<>();
 
+    public static float[] NOTIFICATION_COLOR = new float[3];
+
+
     static {
+        ColorUtils.RGBToHSL(0xCC, 0xCC, 0xCC, NOTIFICATION_COLOR);
+
         activityIcon.put(Type.IN_VEHICLE, R.drawable.ic_activity_car);
         activityIcon.put(Type.ON_BICYCLE, R.drawable.ic_activity_bike);
         activityIcon.put(Type.RUNNING, R.drawable.ic_activity_run);
@@ -131,7 +144,32 @@ public class Constants {
     }
 
     public static Bitmap getBitmapIcon(Context context, Type detectedActivity) {
-        return getBitmapIcon(context, activityIconSmall.get(detectedActivity));
+        return getCircularBitmapIcon(context, activityIconSmall.get(detectedActivity));
+    }
+
+    private static Bitmap getCircularBitmapIcon(Context context, Integer resource) {
+        Bitmap bitmap = getBitmapIcon(context, resource);
+
+        final Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(output);
+
+        final int color = Color.RED;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        final RectF rectF = new RectF(rect);
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawOval(rectF, paint);
+
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+
+        bitmap.recycle();
+
+        return output;
     }
 
     public static Bitmap getBitmapIcon(Context context, int resource) {

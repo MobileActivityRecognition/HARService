@@ -65,7 +65,6 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
         });
         getLoaderManager().initLoader(0, null, this);
         listView.showInitialAnimation = true;
-        setToolbarTitle(R.string.activity_title);
     }
 
     private void addSurveyCards() {
@@ -87,6 +86,7 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
                 card = new Card.Builder(cardActionHelper, tag)
                         .setTitle("")
                         .setDescription("")
+                        .setDate("")
                         .addAction(Constants.getStringResource(this, R.string.action_ok),
                                 Card.ACTION_POSITIVE, Card.ACTION_POSITIVE)
                         .addAction(Constants.getStringResource(this, R.string.action_nook),
@@ -158,6 +158,7 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
             this.showIntroCard();
         }
         app.setOnTop(true);
+        setToolbarTitle(R.string.activity_title);
     }
 
     @Override

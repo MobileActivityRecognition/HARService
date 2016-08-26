@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import org.hardroid.common.HumanActivity;
+import org.harsurvey.android.survey.R;
 import org.harsurvey.android.util.Constants;
 
 import java.util.Arrays;
@@ -38,12 +39,12 @@ public class CardListItemAdapter extends ArrayAdapter<String> {
     List<String> items;
 
     public CardListItemAdapter(Context context, List<String> objects) {
-        super(context, android.R.layout.simple_list_item_1, objects);
+        super(context, R.layout.listitem, objects);
         items = objects;
     }
 
     public CardListItemAdapter(Context context, String[] objects) {
-        super(context, android.R.layout.simple_list_item_1, objects);
+        super(context, R.layout.listitem, objects);
         items = Arrays.asList(objects);
     }
 

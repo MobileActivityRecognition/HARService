@@ -22,12 +22,12 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 
 /**
  * Custom Button with a special 'pressed' effect for touch events.
  */
-public class CardLayout extends RelativeLayout {
+public class CardLayout extends LinearLayout {
 
     private boolean mSwiping = false;
     private float mDownX = 0.f;

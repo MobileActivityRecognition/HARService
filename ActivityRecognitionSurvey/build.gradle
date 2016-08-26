@@ -26,8 +26,8 @@ android {
         applicationId "org.harsurvey.android.survey"
         minSdkVersion 12
         targetSdkVersion ANDROID_SDK_VERSION
-        versionCode 2
-        versionName "1.0.1"
+        versionCode 3
+        versionName "1.0.2"
     }
     signingConfigs {
         release {
@@ -75,4 +75,5 @@ dependencies {
         transitive = true;
     }
     compile libraries.android_support_design
+    compile 'com.github.jakob-grabner:Circle-Progress-View:v1.2.9'
 }

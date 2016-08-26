@@ -16,7 +16,7 @@
   -->
 
 <resources>
-    <item name="ic_menu_feed" type="drawable">@android:drawable/ic_menu_slideshow</item>
-    <item name="ic_menu_settings" type="drawable">@android:drawable/ic_menu_preferences</item>
-    <item name="ic_menu_help" type="drawable">@android:drawable/ic_menu_help</item>
+    <item name="ic_menu_feed" type="drawable">@drawable/ic_menu_feed</item>
+    <item name="ic_menu_settings" type="drawable">@drawable/ic_menu_settings</item>
+    <item name="ic_menu_help" type="drawable">@drawable/ic_menu_help</item>
 </resources>

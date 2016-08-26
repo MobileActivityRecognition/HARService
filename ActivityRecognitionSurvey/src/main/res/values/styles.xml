@@ -22,6 +22,7 @@
         <item name="colorPrimary">@color/mint_green</item>
         <item name="colorPrimaryDark">@color/mint_green_dark</item>
         <item name="colorAccent">@color/mint_green_dark</item>
+        <item name="android:colorForeground">@android:color/black</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
@@ -42,13 +43,11 @@
     </style>
 
     <style name="CardContentArea">
-        <item name="android:paddingBottom">@dimen/card_padding</item>
+        <item name="android:layout_margin">@dimen/card_margin</item>
     </style>
 
     <style name="CardActionArea">
         <item name="android:background">@color/card_action_bg</item>
-        <item name="android:orientation">vertical</item>
-        <item name="android:paddingBottom">@dimen/card_action_margin</item>
     </style>
 
     <style name="CardElement">
@@ -62,10 +61,18 @@
         <item name="android:textSize">@dimen/card_content_title</item>
     </style>
 
-    <style name="CardTitle" parent="@style/CardTitleBase"/>
+    <style name="CardDate">
+        <item name="android:textSize">@dimen/card_content_small</item>
+        <item name="android:textColor">@color/medium_gray_dark</item>
+        <item name="android:gravity">right</item>
+    </style>
+
+    <style name="CardTitle" parent="@style/CardTitleBase">
+        <item name="android:drawablePadding">@dimen/card_action_padding</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
 
     <style name="CardContentBase" parent="@style/CardElement">
-        <item name="android:paddingTop">@dimen/card_padding</item>
         <item name="android:textSize">@dimen/card_content_text</item>
         <item name="android:textColor">@color/card_content_textcolor</item>
     </style>
@@ -95,6 +102,12 @@
     <style name="CardActionPositive" parent="@style/CardAction">
         <item name="android:background">@drawable/card_action_bg_positive</item>
         <item name="android:textColor">@drawable/card_action_text_positive</item>
+    </style>
+
+    <style name="CardListItem">
+        <item name="android:textAppearance">?android:attr/textAppearanceListItemSmall</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:minHeight">?android:attr/listPreferredItemHeightSmall</item>
     </style>
 
     <declare-styleable name="CardStream">
