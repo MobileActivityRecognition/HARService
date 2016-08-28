@@ -34,6 +34,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import org.harsurvey.android.util.Constants;
@@ -47,6 +48,7 @@ public class BaseActivity extends AppCompatActivity
     private Toolbar toolbar;
     private DrawerLayout drawer;
     private NavigationView navigationView;
+    private NotificationSettingsPopup notifications;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +84,8 @@ public class BaseActivity extends AppCompatActivity
             navigationView.setNavigationItemSelectedListener(this);
         }
 
+        notifications = new NotificationSettingsPopup(this);
+
         // Service Listener
         IntentFilter filter = new IntentFilter();
         filter.addAction(Constants.SERVICE_CHANGE);
@@ -102,8 +106,10 @@ public class BaseActivity extends AppCompatActivity
     protected void setActionButtonVisibility(boolean visible) {
         if (visible) {
             actionButton.setVisibility(View.VISIBLE);
+            actionButton.startAnimation(AnimationUtils.makeInAnimation(this, false));
         }
         else {
+            actionButton.startAnimation(AnimationUtils.makeOutAnimation(this, false));
             actionButton.setVisibility(View.GONE);
         }
     }
@@ -158,6 +164,10 @@ public class BaseActivity extends AppCompatActivity
             actionButton.setImageResource(R.drawable.ic_play_arrow);
         }
         setActionButtonVisibility(true);
+        showMessage(message);
+    }
+
+    public void showMessage(String message) {
         Snackbar.make(findViewById(R.id.main_content), message, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
@@ -201,7 +211,10 @@ public class BaseActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_feed) {
-            // Handle the camera action
+            // Nothing
+        }
+        if (id == R.id.nav_not) {
+            notifications.show();
         }
         else if (id == R.id.nav_settings) {
             startActivity(new Intent(this, SettingsActivity.class)

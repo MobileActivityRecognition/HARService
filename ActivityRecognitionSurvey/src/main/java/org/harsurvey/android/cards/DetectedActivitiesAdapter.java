@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
+import org.hardroid.common.HumanActivity;
 import org.harsurvey.android.data.HumanActivityData;
 import org.harsurvey.android.survey.R;
 import org.harsurvey.android.util.Constants;
@@ -47,6 +48,7 @@ public class DetectedActivitiesAdapter extends CursorAdapter {
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
+
         return null;
     }
 
@@ -67,14 +69,17 @@ public class DetectedActivitiesAdapter extends CursorAdapter {
         }
 
         CircleProgressView progressView = (CircleProgressView) view.findViewById(R.id.progressBar);
-        if (ha.confidence < 50) {
-            progressView.setBarColor(Color.parseColor(Constants.getStringResource(context, R.color.bittersweet)));
+        progressView.setVisibility(View.GONE);
+        if (!ha.activity.equals(HumanActivity.Type.UNKNOWN)) {
+            if (ha.confidence < 50) {
+                progressView.setBarColor(Color.parseColor(Constants.getStringResource(context, R.color.bittersweet)));
+            }
+            else if (ha.confidence < 80) {
+                progressView.setBarColor(Color.parseColor(Constants.getStringResource(context, R.color.sunflower)));
+            }
+            progressView.setValue(ha.confidence);
+            progressView.setVisibility(View.VISIBLE);
         }
-        else if (ha.confidence < 80) {
-            progressView.setBarColor(Color.parseColor(Constants.getStringResource(context, R.color.sunflower)));
-        }
-        progressView.setValue(ha.confidence);
-        progressView.setVisibility(View.VISIBLE);
 
         long time = ha.created.getTime();
         viewDate.setText(DateUtils.formatDateTime(context, time, DateUtils.FORMAT_SHOW_TIME));

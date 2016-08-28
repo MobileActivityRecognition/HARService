@@ -37,11 +37,6 @@
     </style>
 
     <!-- Main card -->
-    <style name="Card">
-        <item name="android:background">@drawable/card_bg</item>
-        <item name="android:layout_margin">@dimen/card_margin</item>
-    </style>
-
     <style name="CardContentArea">
         <item name="android:layout_margin">@dimen/card_margin</item>
     </style>

@@ -40,6 +40,7 @@ import android.text.format.DateUtils;
 import org.hardroid.common.HumanActivity.Type;
 import org.harsurvey.android.survey.R;
 
+import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -181,6 +182,10 @@ public class Constants {
         return context.getResources().getString(resource);
     }
 
+    public static String[] getListResources(Context context, int resource) {
+        return context.getResources().getStringArray(resource);
+    }
+
     public static String getDeviceName() {
         String manufacturer = Build.MANUFACTURER;
         String model = Build.MODEL;
@@ -227,5 +232,9 @@ public class Constants {
     public static String formatShortDate(Context context, long time) {
         return DateUtils.formatDateTime(context, time, DateUtils.FORMAT_SHOW_DATE |
                 DateUtils.FORMAT_SHOW_TIME);
+    }
+
+    public static long getCurrentTime() {
+        return Calendar.getInstance().getTime().getTime();
     }
 }

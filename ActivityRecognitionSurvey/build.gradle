@@ -75,5 +75,6 @@ dependencies {
         transitive = true;
     }
     compile libraries.android_support_design
+    compile libraries.cardview
     compile 'com.github.jakob-grabner:Circle-Progress-View:v1.2.9'
 }

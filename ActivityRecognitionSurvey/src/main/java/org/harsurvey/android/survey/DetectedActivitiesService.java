@@ -45,7 +45,6 @@ public class DetectedActivitiesService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         ActivityRecognitionResult result = ActivityRecognitionResult.extractResult(intent);
-        Intent localIntent = new Intent(Constants.DETECTED_ACTIVITY_BROADCAST);
 
         HumanActivity activity = result.getMostProbableActivity();
 
@@ -79,9 +78,32 @@ public class DetectedActivitiesService extends IntentService {
             }
         }
 
-        localIntent.putExtra(Constants.DETECTED_ACTIVITY_EXTRA, activity);
-        sendBroadcast(localIntent);
+        SurveyApplication app = (SurveyApplication) this.getApplicationContext();
+        int notificationOption = app.getPreference().getNotificationOption();
+        long now = Constants.getCurrentTime();
+        if (doNotification(app, notificationOption, now)) {
+            Intent localIntent = new Intent(Constants.DETECTED_ACTIVITY_BROADCAST);
+            localIntent.putExtra(Constants.DETECTED_ACTIVITY_EXTRA, activity);
+            sendBroadcast(localIntent);
+            app.getPreference().setNotificationLastTime(now);
+            if (notificationOption != -1) {
+                app.getPreference().setNotificationOption(-1);
+            }
+        }
 
+    }
+
+    private boolean doNotification(SurveyApplication context, int notificationOption, long now) {
+        if (notificationOption == -1) {
+            return true;
+        }
+        else if (notificationOption == 0) {
+            return false;
+        }
+        else {
+            long time = context.getPreference().getLastNotificationTime();
+            return (now - time) >= notificationOption*Constants.HOUR;
+        }
     }
 
 }

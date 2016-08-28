@@ -130,9 +130,30 @@ public class PreferenceHelper implements SharedPreferences.OnSharedPreferenceCha
         return Math.max(saved, delta);
     }
 
+    public int getNotificationOption() {
+        return preferences.getInt(Constants.getStringResource(context, R.string.pref_notification_option),
+                -1);
+    }
+
+    public long getLastNotificationTime() {
+        long now = Constants.getCurrentTime();
+        return preferences.getLong(Constants.getStringResource(context, R.string.pref_not_last_time),
+                now);
+    }
+
     public void setLastUpdateTime(long lastUpdateTime) {
         preferences.edit().putLong(Constants.getStringResource(context, R.string.pref_last_update),
                 lastUpdateTime).apply();
+    }
+
+    public void setNotificationOption(int notificationOption) {
+        preferences.edit().putInt(Constants.getStringResource(context, R.string.pref_notification_option),
+                notificationOption).apply();
+    }
+
+    public void setNotificationLastTime(long time) {
+        preferences.edit().putLong(Constants.getStringResource(context, R.string.pref_not_last_time),
+                time).apply();
     }
 }
 

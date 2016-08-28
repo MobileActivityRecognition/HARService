@@ -93,7 +93,7 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
                                 Card.ACTION_NEGATIVE, Card.ACTION_NEGATIVE)
                         .build(this);
                 view = card.getView();
-                addCard(card, true);
+                addCard(card, activity.equals(HumanActivity.Type.UNKNOWN));
             }
             else {
                 card = cards.get(tag);
@@ -120,12 +120,16 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
         boolean isNew = !cards.containsKey(Constants.INTRO_CARD);
         if (isNew) {
             Card card = new Card.Builder(cardActionHelper, Constants.INTRO_CARD)
-                    .setTitle(getString(R.string.intro_title))
+                    .setTitle(getString(R.string.title_intro))
                     .setDescription(getString(R.string.intro_message))
                     .addAction(Constants.getStringResource(this, R.string.action_ready),
                             Card.ACTION_NEUTRAL, Card.ACTION_NEUTRAL)
                     .build(this);
             addCard(card, false);
+        }
+        else {
+            View cardView = this.listView.findViewWithTag(Constants.INTRO_CARD);
+            cardView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -145,6 +149,7 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
     protected void onResume() {
         super.onResume();
         if (app.hasValidAccount()) {
+            this.removeCard(Constants.INTRO_CARD);
             if (app.getPreference().getServiceStatus() && !app.getConnection().isClientConnected()) {
                 setDetectorService(true);
             }
@@ -158,7 +163,7 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
             this.showIntroCard();
         }
         app.setOnTop(true);
-        setToolbarTitle(R.string.activity_title);
+        setToolbarTitle(R.string.title_activity_feed);
     }
 
     @Override

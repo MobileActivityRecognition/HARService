@@ -18,23 +18,28 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="none">
         <item
             android:id="@+id/nav_feed"
             android:icon="@drawable/ic_menu_feed"
             android:title="@string/title_activity_feed"/>
+
+        <item
+            android:id="@+id/nav_not"
+            android:icon="@drawable/ic_menu_not"
+            android:title="@string/title_notification"/>
     </group>
 
-    <item android:title="@string/tools_title">
+    <item android:title="@string/title_tools">
         <menu>
             <item
                 android:id="@+id/nav_settings"
                 android:icon="@drawable/ic_menu_settings"
-                android:title="@string/menu_config"/>
+                android:title="@string/title_config"/>
             <item
                 android:id="@+id/nav_help"
                 android:icon="@drawable/ic_menu_help"
-                android:title="@string/menu_help"/>
+                android:title="@string/title_help"/>
         </menu>
 
     </item>

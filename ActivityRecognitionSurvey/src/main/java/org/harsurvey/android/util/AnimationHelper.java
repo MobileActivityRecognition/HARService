@@ -227,7 +227,6 @@ public class AnimationHelper {
         float fractionCovered = deltaXAbs / (float) child.getWidth();
 
         child.setTranslationX(deltaX);
-        child.setAlpha(1.f - fractionCovered);
 
         if (deltaX > 0)
             child.setRotationY(-15.f * fractionCovered);

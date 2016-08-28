@@ -19,15 +19,15 @@
 package org.harsurvey.android.cards;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
-import android.widget.LinearLayout;
 
 /**
  * Custom Button with a special 'pressed' effect for touch events.
  */
-public class CardLayout extends LinearLayout {
+public class CardLayout extends CardView {
 
     private boolean mSwiping = false;
     private float mDownX = 0.f;
