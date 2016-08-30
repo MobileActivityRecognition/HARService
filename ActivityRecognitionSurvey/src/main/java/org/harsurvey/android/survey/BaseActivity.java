@@ -109,7 +109,7 @@ public class BaseActivity extends AppCompatActivity
             actionButton.startAnimation(AnimationUtils.makeInAnimation(this, false));
         }
         else {
-            actionButton.startAnimation(AnimationUtils.makeOutAnimation(this, false));
+            actionButton.startAnimation(AnimationUtils.makeOutAnimation(this, true));
             actionButton.setVisibility(View.GONE);
         }
     }

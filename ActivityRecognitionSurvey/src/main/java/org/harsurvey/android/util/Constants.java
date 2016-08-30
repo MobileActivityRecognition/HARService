@@ -90,6 +90,7 @@ public class Constants {
 
     public static final String INTRO_CARD = "INTRO";
     public static final int MAX_CARDS = 5;
+    public static final String INFO_VIEW = "INFO";
 
     public static Map<Type, Integer> activityIcon = new LinkedHashMap<>();
     public static Map<Type, Integer> activityIconSmall = new LinkedHashMap<>();
@@ -230,8 +231,8 @@ public class Constants {
     }
 
     public static String formatShortDate(Context context, long time) {
-        return DateUtils.formatDateTime(context, time, DateUtils.FORMAT_SHOW_DATE |
-                DateUtils.FORMAT_SHOW_TIME);
+        return DateUtils.formatDateTime(context, time, DateUtils.FORMAT_SHOW_DATE) + ", " +
+               DateUtils.formatDateTime(context, time, DateUtils.FORMAT_SHOW_TIME);
     }
 
     public static long getCurrentTime() {

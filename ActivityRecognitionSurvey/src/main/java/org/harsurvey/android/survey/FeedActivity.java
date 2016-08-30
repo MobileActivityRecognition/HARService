@@ -56,6 +56,7 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
         super.onCreate(savedInstanceState);
         cardActionHelper = new CardActionHelper(this);
         listView = (CardStreamLinearLayout) findViewById(R.id.card_stream);
+        listView.setOnDismissListener(cardActionHelper);
         adapter = new DetectedActivitiesAdapter(this, null);
         adapter.registerDataSetObserver(new DataSetObserver() {
             @Override
@@ -93,7 +94,7 @@ public class FeedActivity extends BaseActivity implements LoaderManager.LoaderCa
                                 Card.ACTION_NEGATIVE, Card.ACTION_NEGATIVE)
                         .build(this);
                 view = card.getView();
-                addCard(card, activity.equals(HumanActivity.Type.UNKNOWN));
+                addCard(card, true);
             }
             else {
                 card = cards.get(tag);
