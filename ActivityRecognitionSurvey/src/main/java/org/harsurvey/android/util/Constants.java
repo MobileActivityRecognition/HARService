@@ -89,7 +89,7 @@ public class Constants {
     };
 
     public static final String INTRO_CARD = "INTRO";
-    public static final int MAX_CARDS = 5;
+    public static final int MAX_CARDS = 15;
     public static final String INFO_VIEW = "INFO";
 
     public static Map<Type, Integer> activityIcon = new LinkedHashMap<>();
