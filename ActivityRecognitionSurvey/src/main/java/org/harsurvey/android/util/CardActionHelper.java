@@ -25,7 +25,6 @@ import android.util.Log;
 
 import org.harsurvey.android.cards.Card;
 import org.harsurvey.android.cards.CardListItemAdapter;
-import org.harsurvey.android.cards.OnCardClickListener;
 import org.harsurvey.android.data.HumanActivityData;
 import org.harsurvey.android.survey.AccountSettings;
 import org.harsurvey.android.survey.FeedActivity;
@@ -34,7 +33,7 @@ import org.harsurvey.android.survey.R;
 /**
  * Contiene la logica para manejo de Cards en la aplicación
  */
-public class CardActionHelper implements OnCardClickListener {
+public class CardActionHelper implements Card.OnClickListener, Card.OnDismissListener {
     private static final String TAG = CardActionHelper.class.getSimpleName();
 
     private FeedActivity feed;
@@ -46,7 +45,7 @@ public class CardActionHelper implements OnCardClickListener {
     }
 
     @Override
-    public void onCardClick(int action, String tag) {
+    public void onClick(int action, String tag) {
         if (tag.startsWith("ACT_")) {
             handleSurveyCard(action, tag);
         }
@@ -58,8 +57,19 @@ public class CardActionHelper implements OnCardClickListener {
         }
     }
 
+    @Override
+    public void onDismiss(String tag) {
+        if (tag.startsWith("ACT_")) {
+            HumanActivityData activityData = new HumanActivityData(getIdFromTag(tag));
+            activityData.status = HumanActivityData.Status.CANCEL;
+            activityData.feedback = false;
+            feed.removeCard(tag);
+            saveAndSync(activityData, false);
+        }
+    }
+
     public void handleSurveyCard(int action, final String tag) {
-        Long id = Long.valueOf(tag.split("_")[1]);
+        Long id = getIdFromTag(tag);
         boolean checkButtom = (action == Card.ACTION_POSITIVE);
         final HumanActivityData activityData = new HumanActivityData(id);
         if (checkButtom) {
@@ -97,17 +107,21 @@ public class CardActionHelper implements OnCardClickListener {
         }
     }
 
-    public void saveAndSync(HumanActivityData activityData, boolean sync) {
+    private void saveAndSync(HumanActivityData activityData, boolean sync) {
         int updated = feed.getContentResolver().update(
                 ContentUris.withAppendedId(HumanActivityData.CONTENT_URI, activityData.getId()),
                 activityData.getValues(), null, null);
         if (updated > 0) {
-            Log.d(TAG, String.format("Saved activity %s as %s", activityData.getId(),
-                    activityData.feedback));
+            Log.d(TAG, String.format("Saved activity %s as %s, status %s", activityData.getId(),
+                    activityData.feedback, activityData.status));
             if (feed.app.isOnline() && sync) {
                 Intent localIntent = new Intent(Constants.REQUEST_SYNCRONIZATION);
                 feed.sendBroadcast(localIntent);
             }
         }
+    }
+
+    private Long getIdFromTag(String tag) {
+        return Long.valueOf(tag.split("_")[1]);
     }
 }

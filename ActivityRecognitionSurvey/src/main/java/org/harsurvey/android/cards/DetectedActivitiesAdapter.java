@@ -40,15 +40,12 @@ import at.grabner.circleprogress.CircleProgressView;
  */
 public class DetectedActivitiesAdapter extends CursorAdapter {
 
-    private OnCardClickListener listener;
-
     public DetectedActivitiesAdapter(Context context, Cursor c) {
         super(context, c, 0);
     }
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
-
         return null;
     }
 

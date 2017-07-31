@@ -270,11 +270,11 @@ public class AnimationHelper {
             animator.addListener(new EndAnimationWrapper() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    context.removeCard(child);
+                    context.dismissCard(child);
                 }
             });
         } else {
-            context.removeCard(child);
+            context.dismissCard(child);
         }
 
         if( animator != null ){

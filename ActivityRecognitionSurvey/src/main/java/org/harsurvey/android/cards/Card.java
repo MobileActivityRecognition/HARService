@@ -39,7 +39,7 @@ public class Card {
     public static final int ACTION_NEGATIVE = 2;
     public static final int ACTION_NEUTRAL = 3;
 
-    private OnCardClickListener clickListener;
+    private OnClickListener clickListener;
 
     /**
      * Attributes
@@ -98,7 +98,7 @@ public class Card {
     public static class Builder {
         private Card card;
 
-        public Builder(OnCardClickListener listener, String tag) {
+        public Builder(OnClickListener listener, String tag) {
             card = new Card();
             card.tag = tag;
             card.clickListener = listener;
@@ -161,6 +161,7 @@ public class Card {
             // Inflate all action views.
             initializeActionViews(inflater, cardView, actionArea);
 
+            cardView.setTag(card.tag);
             card.cardView = cardView;
 
             return card;
@@ -202,12 +203,26 @@ public class Card {
                 actionButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        card.clickListener.onCardClick(action.id, card.tag);
+                        card.clickListener.onClick(action.id, card.tag);
                     }
                 });
                 actionButton.setLayoutParams(params);
                 card.actionAreaView.addView(action.actionView);
             }
         }
+    }
+
+    /**
+     * Click Listener
+     */
+    public interface OnClickListener {
+        void onClick(int id, String tag);
+    }
+
+    /**
+     * Click Listener
+     */
+    public interface OnDismissListener {
+        void onDismiss(String tag);
     }
 }

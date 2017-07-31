@@ -41,6 +41,7 @@ public class CardStreamLinearLayout extends LinearLayout {
     private Rect childRect = new Rect();
     private String firstVisibleCardTag = null;
     private boolean layouted = false;
+    private Card.OnDismissListener onDismissListener;
 
     public CardStreamLinearLayout(Context context) {
         super(context);
@@ -108,7 +109,7 @@ public class CardStreamLinearLayout extends LinearLayout {
         for (int index = 0; index < count; ++index) {
             //check the position of each view.
             View child = getChildAt(index);
-            if (child.getGlobalVisibleRect(childRect) == true)
+            if (child.getGlobalVisibleRect(childRect))
                 return (String) child.getTag();
         }
 
@@ -127,8 +128,14 @@ public class CardStreamLinearLayout extends LinearLayout {
     }
 
     public void removeCard(View cardView) {
-        String tag = (String) cardView.getTag();
         this.removeView(cardView);
+    }
+
+    public void dismissCard(View cardView) {
+        String tag = (String) cardView.getTag();
+        if (this.onDismissListener != null) {
+            this.onDismissListener.onDismiss(tag);
+        }
     }
 
     private void scrollToCard(String tag) {
@@ -146,5 +153,9 @@ public class CardStreamLinearLayout extends LinearLayout {
                 return;
             }
         }
+    }
+
+    public void setOnDismissListener(Card.OnDismissListener dismissListener) {
+        this.onDismissListener = dismissListener;
     }
 }
