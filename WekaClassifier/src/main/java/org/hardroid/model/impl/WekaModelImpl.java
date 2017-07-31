@@ -25,11 +25,11 @@ import org.hardroid.model.WekaModel;
 public class WekaModelImpl implements WekaModel {
     @Override
     public int version() {
-        return WekaWrapperV1001.VERSION;
+        return WekaWrapperV1002.VERSION;
     }
 
     @Override
     public double classify(Object[] i) throws Exception {
-        return WekaWrapperV1001.classify(i);
+        return WekaWrapperV1002.classify(i);
     }
 }

@@ -1,7 +1,7 @@
 package org.hardroid.model.impl;
 
 public class WekaWrapperV1001 {
-    public static final int VERSION = 1001;
+  public static final int VERSION = 1001;
 
   public static double classify(Object[] i)
     throws Exception {

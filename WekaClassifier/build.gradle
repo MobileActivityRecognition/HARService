@@ -23,7 +23,7 @@ targetCompatibility = 1.7
 task assembleDexJar(type: Jar, dependsOn: build) {
     from "$buildDir/classes/main/"
     baseName = "classes"
-    exclude '**/WekaWrapperV1000.class'
+    exclude '**/WekaWrapperV1000.class','**/WekaWrapperV1001.class'
 }
 
 import org.apache.tools.ant.taskdefs.condition.Os
