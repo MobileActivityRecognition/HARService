@@ -28,7 +28,7 @@ import android.os.Parcelable;
 public class HumanActivityCreator implements  Parcelable.Creator<HumanActivity> {
     @Override
     public HumanActivity createFromParcel(Parcel parcel) {
-        HumanActivity.Type type = HumanActivity.Type.values()[parcel.readInt()];
+        HumanActivityType type = HumanActivityType.values()[parcel.readInt()];
         int confidence = parcel.readInt();
         return new HumanActivity(type, confidence);
     }

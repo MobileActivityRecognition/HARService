@@ -17,19 +17,35 @@
 
 package org.hardroid.model.impl;
 
+import org.hardroid.common.HumanActivityType;
 import org.hardroid.model.WekaModel;
 
 /**
  * WekaClassifier implementation
  */
 public class WekaModelImpl implements WekaModel {
+    private HumanActivityType[] detectedActivity = new HumanActivityType[]{
+        HumanActivityType.RUNNING,
+        HumanActivityType.WALKING,
+        HumanActivityType.ON_BICYCLE,
+        HumanActivityType.IN_VEHICLE,
+        HumanActivityType.STILL,
+        HumanActivityType.TILTING
+    };
+
     @Override
     public int version() {
         return WekaWrapperV1002.VERSION;
     }
 
     @Override
-    public double classify(Object[] i) throws Exception {
-        return WekaWrapperV1002.classify(i);
+    public HumanActivityType classify(Object[] i) throws Exception {
+        int result = (int) WekaWrapperV1002.classify(i);
+        if (result >= 0 && result < detectedActivity.length) {
+            return detectedActivity[result];
+        }
+        else {
+            return HumanActivityType.UNKNOWN;
+        }
     }
 }

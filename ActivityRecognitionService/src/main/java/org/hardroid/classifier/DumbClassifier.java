@@ -19,7 +19,7 @@ package org.hardroid.classifier;
 
 import android.util.Log;
 
-import org.hardroid.common.HumanActivity;
+import org.hardroid.common.HumanActivityType;
 
 /**
  * Implements a random classifier
@@ -38,7 +38,7 @@ public class DumbClassifier extends ActivityClassifier {
     }
 
     @Override
-    public HumanActivity.Type classify(double[] featureData) {
-        return HumanActivity.Type.UNKNOWN;
+    public HumanActivityType classify(double[] featureData) {
+        return HumanActivityType.UNKNOWN;
     }
 }

@@ -17,9 +17,7 @@
 
 package org.hardroid.utils;
 
-import android.os.Environment;
-
-import org.hardroid.common.HumanActivity;
+import org.hardroid.common.HumanActivityType;
 
 /**
  * Sampling default values
@@ -45,7 +43,7 @@ public class Constants {
     public static final int Y = 1;
     public static final int Z = 2;
 
-    public static final int ACTIVITY_COUNT = HumanActivity.Type.values().length;
+    public static final int ACTIVITY_COUNT = HumanActivityType.values().length;
     public static final String ACCESS_ACTIVITY_RECOGNITION =
             "org.hardroid.permission.ACTIVITY_RECOGNITION";
     public static final String SEND_ACTIVITY_RECOGNITION =
@@ -57,8 +55,6 @@ public class Constants {
         MAG;
 
     }
-
-
 
     public enum FeatureType {
         MEAN,

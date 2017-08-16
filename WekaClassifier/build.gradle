@@ -37,27 +37,24 @@ task dexJar << {
         ext.androidSdkDir = localProps['sdk.dir']
     }
     // Make sure no existing jar file exists as this will cause dx to fail
-    new File("$buildDir/libs/WekaJ48DT.jar").delete();
+    new File("$buildDir/libs/WekaModel-${WEKA_MODEL_VERSION}.jar").delete();
     // Use command line dx utility to convert *.class files into classes.dex inside jar archive
     String cmdExt = Os.isFamily(Os.FAMILY_WINDOWS) ? '.bat' : ''
 
     exec {
         commandLine "$androidSdkDir/build-tools/${ANDROID_BUILD_TOOLS}/dx${cmdExt}", '--verbose', '--dex',
-                "--output=$buildDir/libs/WekaJ48DT-${WEKA_MODEL_VERSION}.jar",
+                "--output=$buildDir/libs/WekaModel-${WEKA_MODEL_VERSION}.jar",
                 "$buildDir/libs/classes.jar"
     }
 }
 
 task signJar << {
-    if (KEYSTORE_PASS == "") {
-        def pass = getPassword();
-    }
 
     exec {
         commandLine "jarsigner", '-verbose', '-sigalg', 'SHA1withRSA', '-digestalg',
                 'SHA1',
                 '-keystore', KEYSTORE_FILE, '-storepass', KEYSTORE_PASS,
-                "${buildDir}/libs/WekaJ48DT-${WEKA_MODEL_VERSION}.jar", KEYSTORE_ALIAS
+                "${buildDir}/libs/WekaModel-${WEKA_MODEL_VERSION}.jar", KEYSTORE_ALIAS
     }
 }
 

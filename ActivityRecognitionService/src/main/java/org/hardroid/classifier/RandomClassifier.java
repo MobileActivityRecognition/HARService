@@ -1,7 +1,7 @@
 package org.hardroid.classifier;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
-import org.hardroid.common.HumanActivity;
+import org.hardroid.common.HumanActivityType;
 
 import java.util.Random;
 
@@ -10,7 +10,7 @@ import java.util.Random;
  */
 public class RandomClassifier extends ActivityClassifier {
     private final Random generator = new Random();
-    private static final HumanActivity.Type[] activityList = HumanActivity.Type.values();
+    private static final HumanActivityType[] activityList = HumanActivityType.values();
 
     @Override
     public int version() {
@@ -18,7 +18,7 @@ public class RandomClassifier extends ActivityClassifier {
     }
 
     @Override
-    public HumanActivity.Type classify(double[] featureData) {
+    public HumanActivityType classify(double[] featureData) {
         DescriptiveStatistics stats = new DescriptiveStatistics(featureData);
         generator.setSeed((long) stats.getSum());
         return activityList[generator.nextInt(activityList.length)];

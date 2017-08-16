@@ -135,7 +135,7 @@ public class ActivityRecognitionResult implements Parcelable {
      *        activity type
      * @return confidence in the range of (0, 100)
      */
-    public int getActivityConfidence(HumanActivity.Type activityType) {
+    public int getActivityConfidence(HumanActivityType activityType) {
         int confidence = -1;
         for (HumanActivity detectedActivity: this.probableActivities) {
             if (detectedActivity.getType() == activityType) {

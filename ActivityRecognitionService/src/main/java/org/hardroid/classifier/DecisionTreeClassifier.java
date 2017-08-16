@@ -19,21 +19,13 @@ package org.hardroid.classifier;
 
 import android.util.Log;
 
-import org.hardroid.common.HumanActivity.Type;
+import org.hardroid.common.HumanActivityType;
 import org.hardroid.model.WekaModel;
 
 /**
  * Implements a decision tree classifier
  */
 public class DecisionTreeClassifier extends ActivityClassifier {
-    private Type[] detectedActivity = new Type[]{
-            Type.UNKNOWN,
-            Type.WALKING,
-            Type.RUNNING,
-            Type.STILL,
-            Type.TILTING,
-            Type.ON_BICYCLE,
-    };
     private static final String TAG = DecisionTreeClassifier.class.getSimpleName();
 
     private WekaModel classifier;
@@ -49,24 +41,21 @@ public class DecisionTreeClassifier extends ActivityClassifier {
     }
 
     @Override
-    public Type classify(double[] featureData) {
-        int result = -1;
+    public HumanActivityType classify(double[] featureData) {
+        HumanActivityType result = HumanActivityType.UNKNOWN;
         Double[] sendData = new Double[featureData.length];
         try {
             int i = 0;
             for (double feature : featureData) {
                 sendData[i++] = feature;
             }
-            result = (int) classifier.classify(sendData);
-            if (result > 0 && result < detectedActivity.length) {
-                return detectedActivity[result];
-            }
-            else {
-                Log.e(TAG, "Error al detectar actividad, resultado invalido: " + result);
+            result = classifier.classify(sendData);
+            if (result == null) {
+                Log.e(TAG, "Error al detectar actividad, resultado invalido: null");
             }
         } catch (Exception e) {
-            Log.e(TAG, "Error al detectar actividad: " + e.getMessage());
+            Log.e(TAG, "Error al detectar actividad: " + e.getMessage(), e);
         }
-        return Type.UNKNOWN;
+        return result;
     }
 }

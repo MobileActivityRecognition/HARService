@@ -24,6 +24,7 @@ import org.hardroid.classifier.DumbClassifier;
 import org.hardroid.common.ActivityRecognitionResult;
 import org.hardroid.common.Feature;
 import org.hardroid.common.HumanActivity;
+import org.hardroid.common.HumanActivityType;
 import org.hardroid.features.FeatureProcessing;
 import org.hardroid.sampling.MonitoredSensor;
 import org.hardroid.sampling.SensorDataFinishListener;
@@ -31,6 +32,7 @@ import org.hardroid.utils.Constants;
 import org.hardroid.utils.Constants.VariableType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -111,14 +113,15 @@ public class ActivityRecognitionWorker implements SensorDataFinishListener {
                     i + SLICE_SIZE,
                     SLICE_SIZE,
                     sensorData, VariableType.MAG);
-            HumanActivity.Type result = activityClassifier.classify(featureData);
+            HumanActivityType result = activityClassifier.classify(featureData);
             results[result.ordinal()] += 1.0/slices;
             Log.d(TAG, String.format("Activity detected %s (%.2f)", result.toString(),
                     results[result.ordinal()]*100));
+            Log.d(TAG, "Feature data " + Arrays.toString(featureData));
             features.add(new Feature(result, featureData.length, featureData));
         }
         ArrayList<HumanActivity> detected = new ArrayList<>();
-        for (HumanActivity.Type act : HumanActivity.Type.values()) {
+        for (HumanActivityType act : HumanActivityType.values()) {
             int confidence = (int) Math.round(results[act.ordinal()]*100);
             HumanActivity de = new HumanActivity(act, confidence);
             detected.add(de);

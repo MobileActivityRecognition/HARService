@@ -28,7 +28,7 @@ import android.os.Parcelable;
 public class Feature implements Parcelable {
     private int featureSize;
     private double[] data;
-    private HumanActivity.Type activityLabel;
+    private HumanActivityType activityLabel;
 
     /**
      * Feature data sink constructor
@@ -39,7 +39,7 @@ public class Feature implements Parcelable {
      * @param data
      *        vector of calculated data
      */
-    public Feature(HumanActivity.Type activityLabel, int featureSize, double[] data) {
+    public Feature(HumanActivityType activityLabel, int featureSize, double[] data) {
         this.featureSize = featureSize;
         this.data = data;
         this.activityLabel = activityLabel;
@@ -50,7 +50,7 @@ public class Feature implements Parcelable {
      *
      * @return label
      */
-    public HumanActivity.Type getActivityLabel() {
+    public HumanActivityType getActivityLabel() {
         return activityLabel;
     }
 
@@ -60,7 +60,7 @@ public class Feature implements Parcelable {
      * @param activityLabel
      *        activity label
      */
-    public void setActivityLabel(HumanActivity.Type activityLabel) {
+    public void setActivityLabel(HumanActivityType activityLabel) {
         this.activityLabel = activityLabel;
     }
 
@@ -117,7 +117,7 @@ public class Feature implements Parcelable {
     public static final Parcelable.Creator<Feature> CREATOR = new Creator<Feature>() {
         @Override
         public Feature createFromParcel(Parcel parcel) {
-            HumanActivity.Type type = HumanActivity.Type.values()[parcel.readInt()];
+            HumanActivityType type = HumanActivityType.values()[parcel.readInt()];
             int featureSize = parcel.readInt();
             double[] data = new double[featureSize];
             parcel.readDoubleArray(data);

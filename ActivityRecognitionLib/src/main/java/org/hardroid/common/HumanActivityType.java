@@ -15,28 +15,39 @@
  * limitations under the License.
  */
 
-package org.hardroid.model;
-
-import org.hardroid.common.HumanActivityType;
+package org.hardroid.common;
 
 /**
- * This interface defines a Weka Classifier Contract
+ * Constant enum Type used to specify the recognized activity
  */
-public interface WekaModel {
+public enum HumanActivityType {
     /**
-     * Represent the versión number
-     *
-     * @return version
+     * Unknown activity
      */
-    int version();
+    UNKNOWN,
+    /**
+     * Human is Still
+     */
+    STILL,
+    /**
+     * Human is Walking/Standing
+     */
+    WALKING,
+    /**
+     * Human is Running
+     */
+    RUNNING,
+    /**
+     * Human is In a vehicle
+     */
+    IN_VEHICLE,
+    /**
+     * Human is On a bicycle
+     */
+    ON_BICYCLE,
+    /**
+     * The device is tilting/shaking
+     */
+    TILTING
 
-    /**
-     * Classification algorithm implementation
-     *
-     * @param i
-     *       list of parameters
-     * @return recognition result
-     * @throws Exception on abnormal model execution
-     */
-    HumanActivityType classify(Object[] i) throws Exception;
 }

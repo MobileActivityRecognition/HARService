@@ -36,42 +36,7 @@ public class HumanActivity implements Parcelable {
 
     public static final HumanActivityCreator CREATOR = new HumanActivityCreator();
 
-    /**
-     * Constant enum Type used to specify the recognized activity
-     */
-    public enum Type {
-        /**
-         * Unknown activity
-         */
-        UNKNOWN,
-        /**
-         * Human is Still
-         */
-        STILL,
-        /**
-         * Human is Walking/Standing
-         */
-        WALKING,
-        /**
-         * Human is Running
-         */
-        RUNNING,
-        /**
-         * Human is In a vehicle
-         */
-        IN_VEHICLE,
-        /**
-         * Human is On a bicycle
-         */
-        ON_BICYCLE,
-        /**
-         * The device is tilting/shaking
-         */
-        TILTING
-
-    }
-
-    private Type type;
+    private HumanActivityType type;
     private int confidence;
 
     /**
@@ -87,7 +52,7 @@ public class HumanActivity implements Parcelable {
      * @param activityType Activity type
      * @param confidence Confidence level
      */
-    public HumanActivity(Type activityType, int confidence) {
+    public HumanActivity(HumanActivityType activityType, int confidence) {
         this.type = activityType;
         this.confidence = confidence;
     }
@@ -107,7 +72,7 @@ public class HumanActivity implements Parcelable {
      *
      * @return Activity type
      */
-    public Type getType(){
+    public HumanActivityType getType(){
         return type;
     }
 

@@ -23,6 +23,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.SystemClock;
+import android.util.Log;
 
 import org.hardroid.features.SignalProcessing;
 
@@ -67,15 +68,30 @@ public class MonitoredSensor {
         return (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
     }
 
+    /**
+     * Posible DELAY values
+     * - SENSOR_DELAY_NORMAL : 200.000 microsec
+     * - SENSOR_DELAY_GAME : 20.000 microsec  <----- 60 Hz
+     * - SENSOR_DELAY_UI : 60.000 microsec
+     * - SENSOR_DELAY_FASTEST : 2.500 (NEXUS 5X),
+     *                          5.000 (Huawei M9),
+     *                          8.333 (Oneplus One) microsec
+     * If SAMPLE_SIZE = 512 and SLICE_SIZE = SAMPLE_SIZE / 4 = 128
+     * then
+     *    SLICE_SIZE * SENSOR_DELAY_GAME = 2.56 seconds
+     */
     public void startListening() {
-        this.sensorListener = new onSensorEventListener();
+        sensorListener = new onSensorEventListener();
         listening = true;
         getSensorManager().registerListener(sensorListener, this.sensor,
-                SensorManager.SENSOR_DELAY_FASTEST);
+                SensorManager.SENSOR_DELAY_GAME);
+        Log.d(TAG, "Sensor Event Listener started at " + sensorListener.startTime);
     }
 
     public void stopListening() {
         getSensorManager().unregisterListener(sensorListener);
+        long currentTime = SystemClock.elapsedRealtime();
+        Log.d(TAG, "Sensor Event Listener stopped at " + currentTime + " elapsed " + (currentTime - sensorListener.startTime));
         sensorListener = null;
     }
 
